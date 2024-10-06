@@ -1,0 +1,45 @@
+# Ignore build outputs
+target/
+build/
+
+# Spring Boot specific ignores
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# STS (Spring Tool Suite) and Eclipse ignores
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+# IntelliJ IDEA ignores
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# NetBeans ignores
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code ignores
+.vscode/
+
+# Backend specific ignores
+backend/target/
+*.log
+*.class
+
+# Frontend specific ignores
+frontend/node_modules/
+frontend/build/
+frontend/.env
+
+App_Planning.txt
