@@ -1,19 +1,18 @@
-package com.example.demo.Models;
+package com.example.demo.DBModels;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "events")
+@Table(name = "news")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Event {
+public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,22 +20,16 @@ public class Event {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false, length = 2000)
-    private String Description;
-
     @Column(nullable = false)
-    private String Location;
-
-    @Column(nullable = false)
-    private LocalDateTime Date;
+    private String content;
 
     @ManyToOne
-    @JoinColumn(name = "created_by",nullable = false)
+    @JoinColumn(name = "creator_id")
     private User createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "cateegory_id")
-    private Category category;
+    @JoinColumn(name = "event_id")
+    private Event event;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
