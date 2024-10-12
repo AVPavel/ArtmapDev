@@ -21,7 +21,7 @@ public class Event {
     private String title;
 
     @Column(nullable = false, length = 2000)
-    private String Description;
+    private String description;
 
     @Column(nullable = false)
     private String Location;
@@ -39,4 +39,15 @@ public class Event {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    private void onCreated(){
+        createdAt = LocalDateTime.now();
+        updatedAt = createdAt;
+    }
+
+    @PreUpdate
+    private void onUpdated(){
+        updatedAt = LocalDateTime.now();
+    }
 }

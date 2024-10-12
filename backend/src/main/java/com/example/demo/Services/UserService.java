@@ -2,6 +2,7 @@ package com.example.demo.Services;
 
 import com.example.demo.DBModels.User;
 import com.example.demo.Exceptions.DuplicateResourceException;
+import com.example.demo.Exceptions.UserNotFoundException;
 import com.example.demo.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,19 +29,18 @@ public class UserService {
     //Inregistrare utilizator
     @Transactional
     public User registerUser(User user) {
-
         //Caut un user similar deja existent
-        if(userRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new DuplicateResourceException("Email already exists");
         }
-        if(userRepository.findByUsername(user.getUsername()).isPresent()) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new DuplicateResourceException("Username already exists");
         }
 
         //hash pentru parola
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        if(user.getRole() == null){
+        if (user.getRole() == null || user.getRole().toString().trim().isEmpty()) {
             user.setRole(User.Role.USER);
         }
 
@@ -49,13 +49,13 @@ public class UserService {
     }
 
 
-    public User getUserById(Long id){
+    public User getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
 
-    public User getUserByUsername(String username){
+    public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
@@ -63,22 +63,22 @@ public class UserService {
     public User updateUser(Long id, User updatedUser) {
         User existingUser = getUserById(id);
 
-        if(updatedUser.getUsername() != null && !updatedUser.getUsername().equals(existingUser.getUsername())) {
-            if(userRepository.findByUsername(updatedUser.getUsername()).isPresent()){
+        if (updatedUser.getUsername() != null && !updatedUser.getUsername().equals(existingUser.getUsername())) {
+            if (userRepository.findByUsername(updatedUser.getUsername()).isPresent()) {
                 throw new RuntimeException("Username already exists");
             }
         }
-        if(updatedUser.getEmail() != null && updatedUser.getEmail().equals(existingUser.getEmail())) {
-            if(userRepository.findByEmail(updatedUser.getEmail()).isPresent()){
+        if (updatedUser.getEmail() != null && updatedUser.getEmail().equals(existingUser.getEmail())) {
+            if (userRepository.findByEmail(updatedUser.getEmail()).isPresent()) {
                 throw new RuntimeException("Email already exists");
             }
         }
 
-        if(updatedUser.getPassword() != null){
+        if (updatedUser.getPassword() != null) {
             existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
 
-        if(updatedUser.getRole() != null){
+        if (updatedUser.getRole() != null) {
             existingUser.setRole(updatedUser.getRole());
         }
 
@@ -86,14 +86,14 @@ public class UserService {
     }
 
 
-    public void deleteUser(Long id){
-        User existingUser =  getUserById(id);
+    public void deleteUser(Long id) {
+        User existingUser = getUserById(id);
         userRepository.delete(existingUser);
     }
 
 
-    public Page<User> searchUsers(String searchTerm, User.Role role, int page, int size, String sortBy, String sortDir){
-        Pageable pageable = PageRequest.of(page,size,
+    public Page<User> searchUsers(String searchTerm, User.Role role, int page, int size, String sortBy, String sortDir) {
+        Pageable pageable = PageRequest.of(page, size,
                 sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending());
 
         if (searchTerm != null && !searchTerm.isEmpty()) {

@@ -1,17 +1,18 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.DBModels.User;
-import com.example.demo.DTOs.UserDTO;
+import com.example.demo.DTOs.Users.UserRegistrationDTO;
+import com.example.demo.DTOs.Users.UserResponseDTO;
+import com.example.demo.Exceptions.DuplicateResourceException;
+import com.example.demo.Exceptions.UserNotFoundException;
 import com.example.demo.Services.Mappers.UserMapper;
 import com.example.demo.Services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/users")
@@ -26,36 +27,67 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody User user){
-        User registerdUser = userService.registerUser(user);
-        UserDTO userDTO = userMapper.toDTO(registerdUser);
-        return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
+    public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO){
+        try{
+            User user = userMapper.toEntity(userRegistrationDTO);
+            User registerdUser = userService.registerUser(user);
+            UserResponseDTO userDTO = userMapper.toResponseDTO(registerdUser);
+            return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
+        } catch (DuplicateResourceException exception) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        catch (IllegalArgumentException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception ex){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id){
-        User user = userService.getUserById(id);
-        UserDTO userDTO = userMapper.toDTO(user);
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id){
+        try{
+            User user = userService.getUserById(id);
+            UserResponseDTO userDTO = userMapper.toResponseDTO(user);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        }
+        catch(UserNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
-        userService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try{
+            userService.deleteUser(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        catch(UserNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<UserDTO>> searchUsers(
+    public ResponseEntity<Page<UserResponseDTO>> searchUsers(
             @RequestParam(required = true) String searchTerm,
             @RequestParam(required = false) User.Role role,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "username") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir){
-        Page<User> usersPage = userService.searchUsers(searchTerm, role, page, size, sortBy, sortDir);
-        Page<UserDTO> userDTOPage = usersPage.map(userMapper::toDTO);
-        return new ResponseEntity<>(userDTOPage, HttpStatus.OK);
+        try{
+            Page<User> usersPage = userService.searchUsers(searchTerm, role, page, size, sortBy, sortDir);
+            Page<UserResponseDTO> userDTOPage = usersPage.map(userMapper::toResponseDTO);
+            return new ResponseEntity<>(userDTOPage, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
 }
