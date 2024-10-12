@@ -59,7 +59,7 @@ public class UserMapper {
                 throw new IllegalArgumentException("Invalid role provided");
             }
         } else {
-            user.setRole(User.Role.USER); // Default role
+            user.setRole(User.Role.USER);
         }
 
         return user;
