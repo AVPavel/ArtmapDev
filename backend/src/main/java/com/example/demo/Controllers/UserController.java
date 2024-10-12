@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class UserController {
 
     @GetMapping("/search")
     public ResponseEntity<Page<UserDTO>> searchUsers(
-            @RequestParam(required = false) String searchTerm,
+            @RequestParam(required = true) String searchTerm,
             @RequestParam(required = false) User.Role role,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,

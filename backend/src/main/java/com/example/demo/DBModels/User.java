@@ -32,13 +32,12 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    //Relatii
-
-    //Un organizator poate crea mai multe evenimente
+    //DB Relations
+    //One organiser can create multiple events
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Event> eventsCreated;
 
-    //Participari la mai multe evenimente (Many to Many)
+    //Participating to multiple events (Many to Many)
     @ManyToMany
     @JoinTable(
             name = "user_events",
@@ -50,6 +49,16 @@ public class User {
     @ManyToMany(mappedBy = "members")
     private Set<Group> groups;
 
+    @PrePersist
+    private void onCreate(){
+        createdAt = LocalDateTime.now();
+        updatedAt = createdAt;
+    }
+
+    @PreUpdate
+    private void onUpdate(){
+        updatedAt = LocalDateTime.now();
+    }
 
 
     public enum Role{

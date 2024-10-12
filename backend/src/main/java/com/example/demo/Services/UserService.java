@@ -1,6 +1,7 @@
 package com.example.demo.Services;
 
 import com.example.demo.DBModels.User;
+import com.example.demo.Exceptions.DuplicateResourceException;
 import com.example.demo.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,10 +31,10 @@ public class UserService {
 
         //Caut un user similar deja existent
         if(userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists");
+            throw new DuplicateResourceException("Email already exists");
         }
         if(userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists");
+            throw new DuplicateResourceException("Username already exists");
         }
 
         //hash pentru parola
@@ -47,19 +48,18 @@ public class UserService {
 
     }
 
-    @Transactional(readOnly = true)
+
     public User getUserById(Long id){
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    @Transactional(readOnly = true)
+
     public User getUserByUsername(String username){
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    @Transactional
     public User updateUser(Long id, User updatedUser) {
         User existingUser = getUserById(id);
 
@@ -85,13 +85,13 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
-    @Transactional
+
     public void deleteUser(Long id){
         User existingUser =  getUserById(id);
         userRepository.delete(existingUser);
     }
 
-    @Transactional(readOnly = true)
+
     public Page<User> searchUsers(String searchTerm, User.Role role, int page, int size, String sortBy, String sortDir){
         Pageable pageable = PageRequest.of(page,size,
                 sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending());
