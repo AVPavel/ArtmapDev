@@ -5,7 +5,7 @@ import com.example.demo.DBModels.User;
 import com.example.demo.DTOs.UserDTO;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Services.Mappers.UserMapper;
-import com.example.demo.Services.UserService;
+import com.example.demo.Services.DBServices.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

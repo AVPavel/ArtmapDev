@@ -4,7 +4,7 @@ import com.example.demo.DBModels.Event;
 import com.example.demo.DBModels.User;
 import com.example.demo.DTOs.Events.EventRegisterDTO;
 import com.example.demo.DTOs.Events.EventResponseDTO;
-import com.example.demo.Services.UserService;
+import com.example.demo.Services.DBServices.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.example.demo.Services;
+package com.example.demo.Services.DBServices;
 
 import com.example.demo.DBModels.User;
 import com.example.demo.Exceptions.DuplicateResourceException;

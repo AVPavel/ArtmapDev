@@ -1,6 +1,8 @@
 package com.example.demo.Repositories;
 
 import com.example.demo.DBModels.Event;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,13 +18,10 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "(LOWER(e.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(e.description) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(e.location) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    List<Event> searchEventsByKeyword(@Param("keyword") String keyword);
+    Page<Event> searchEventsByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
-    Optional<Event> searchEventsByName(String name);
+    @Query("SELECT e FROM Event e Where " +
+            "LOWER(e.title) = LOWER(CONCAT('%', :title, '%'))")
+    Optional<Event> searchEventByName(@Param("title") String title);
 
-    Optional<Event> searchEventsByDescription(String description);
-
-    Optional<Event> searchEventsByLocation(String location);
-
-    Optional<Event> searchEventsByDate(LocalDateTime date);
 }

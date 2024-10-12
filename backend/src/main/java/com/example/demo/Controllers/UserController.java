@@ -6,7 +6,7 @@ import com.example.demo.DTOs.Users.UserResponseDTO;
 import com.example.demo.Exceptions.DuplicateResourceException;
 import com.example.demo.Exceptions.UserNotFoundException;
 import com.example.demo.Services.Mappers.UserMapper;
-import com.example.demo.Services.UserService;
+import com.example.demo.Services.DBServices.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
