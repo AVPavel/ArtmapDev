@@ -1,7 +1,7 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.DBModels.User;
-import com.example.demo.DTOs.Users.UserRegistrationDTO;
+import com.example.demo.DTOs.Users.UserRegisterDTO;
 import com.example.demo.DTOs.Users.UserResponseDTO;
 import com.example.demo.Exceptions.DuplicateResourceException;
 import com.example.demo.Exceptions.UserNotFoundException;
@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO){
+    public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserRegisterDTO userRegistrationDTO){
         try{
             User user = userMapper.toEntity(userRegistrationDTO);
             User registerdUser = userService.registerUser(user);

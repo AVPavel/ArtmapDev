@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventRegisterDTO {
+public class EventRegisterDTO extends EventDTOBase{
     @NotBlank(message = "Description is mandatory")
     private String description;
 

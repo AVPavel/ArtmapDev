@@ -1,4 +1,4 @@
-package com.example.demo.Services;
+package com.example.demo.Services.Customs;
 
 import com.example.demo.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
