@@ -48,18 +48,19 @@ public class UserService {
 
     }
 
-
+    @Transactional(readOnly = true)
     public User getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
-
+    @Transactional(readOnly = true)
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    @Transactional()
     public User updateUser(Long id, User updatedUser) {
         User existingUser = getUserById(id);
 
@@ -85,13 +86,13 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
-
+    @Transactional()
     public void deleteUser(Long id) {
         User existingUser = getUserById(id);
         userRepository.delete(existingUser);
     }
 
-
+    @Transactional(readOnly = true)
     public Page<User> searchUsers(String searchTerm, User.Role role, int page, int size, String sortBy, String sortDir) {
         Pageable pageable = PageRequest.of(page, size,
                 sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending());
@@ -104,6 +105,13 @@ public class UserService {
             return userRepository.findByRole(role, pageable);
         }
 
+        return userRepository.findAll(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<User> getAllUsers(int page, int size, String sortBy, String sortDir) {
+        Pageable pageable = PageRequest.of(page, size,
+                sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending());
         return userRepository.findAll(pageable);
     }
 }
