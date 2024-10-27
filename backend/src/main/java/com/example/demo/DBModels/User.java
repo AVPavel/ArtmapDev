@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -18,12 +19,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
+
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false)
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(name = "preferred_budget", precision = 10, scale = 2)
+    private BigDecimal preferredBudget;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -32,12 +38,13 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    //DB Relations
-    //One organiser can create multiple events
+    // DB Relations
+
+    // One organizer can create multiple events
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Event> eventsCreated;
 
-    //Participating to multiple events (Many to Many)
+    // Participating to multiple events (Many to Many)
     @ManyToMany
     @JoinTable(
             name = "user_events",
@@ -46,7 +53,13 @@ public class User {
     )
     private Set<Event> eventsParticipating;
 
-    @ManyToMany(mappedBy = "members")
+    // Many-to-Many relationship with Group
+    @ManyToMany
+    @JoinTable(
+            name = "user_groups",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id")
+    )
     private Set<Group> groups;
 
     @PrePersist
@@ -59,7 +72,6 @@ public class User {
     private void onUpdate(){
         updatedAt = LocalDateTime.now();
     }
-
 
     public enum Role{
         USER,

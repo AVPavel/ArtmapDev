@@ -72,7 +72,7 @@ public class UserController {
             @RequestParam(required = true) String searchTerm,
             @RequestParam(required = false) User.Role role,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "200") int size,
+            @RequestParam(defaultValue = "50") int size,
             @RequestParam(defaultValue = "username") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir) {
         try {

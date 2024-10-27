@@ -1,6 +1,6 @@
 package com.example.demo.Exceptions;
 
-import com.example.demo.CommonModels.ErrorResponse;
+import com.example.demo.Models.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
