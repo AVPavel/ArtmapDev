@@ -17,9 +17,12 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column
     private String description;
+
+    @Column
+    private boolean hasGenre = false;
 }
