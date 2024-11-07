@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -43,21 +44,17 @@ public class Event {
     private BigDecimal longitude;
 
     @ManyToOne
+    @ToString.Exclude
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
 
     @ManyToOne
+    @ToString.Exclude
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @Column(nullable = false, length = 50)
-    private String genre;
-
-    @Column(nullable = false)
-    private Integer popularity;
-
-    @Column(columnDefinition = "JSON")
     @Convert(converter = TicketPricesConverter.class)
+    @Column(columnDefinition = "JSON")
     private TicketPrices ticketPrices;
 
     @Column(name = "cheapest_ticket", precision = 10, scale = 2)
@@ -66,18 +63,27 @@ public class Event {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    // Event-Genre relationship
+    @ManyToMany
+    @ToString.Exclude
+    @JoinTable(
+            name = "event_genres",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private Set<Genre> genres;
+
     @PrePersist
-    private void onCreated(){
+    private void onCreated() {
         createdAt = LocalDateTime.now();
         updatedAt = createdAt;
     }
 
     @PreUpdate
-    private void onUpdated(){
+    private void onUpdated() {
         updatedAt = LocalDateTime.now();
     }
 
-    // Relația Many-to-Many cu User pentru interacțiuni
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserEventInteraction> interactions;
 }

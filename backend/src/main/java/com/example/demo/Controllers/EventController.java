@@ -2,10 +2,13 @@ package com.example.demo.Controllers;
 
 import com.example.demo.DBModels.Category;
 import com.example.demo.DBModels.Event;
+import com.example.demo.DTOs.Events.EventRegisterDTO;
 import com.example.demo.DTOs.Events.EventResponseDTO;
+import com.example.demo.Exceptions.DuplicateResourceException;
 import com.example.demo.Exceptions.EventNotFoundException;
 import com.example.demo.Services.DBServices.EventService;
 import com.example.demo.Services.Mappers.EventMapper;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -16,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/events")
+@RequestMapping("/api/events")
 public class EventController {
 
     private final EventService eventService;
@@ -29,7 +32,7 @@ public class EventController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<EventResponseDTO> getEventById(@PathVariable Long id){
+    public ResponseEntity<EventResponseDTO> getEventById(@PathVariable Long id) {
         try {
             Event event = eventService.getEventById(id);
             EventResponseDTO responseDTO = eventMapper.toResponseDTO(event);
@@ -47,10 +50,28 @@ public class EventController {
             @RequestParam(defaultValue = "50") int size,
             @RequestParam(defaultValue = "date") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDirection
-            ) {
+    ) {
+        try {
+            Page<Event> events = eventService.searchEvents(searchTerm, category, page, size, sortBy, sortDirection);
+            Page<EventResponseDTO> responseEventsPage = events.map(eventMapper::toResponseDTO);
+            return new ResponseEntity<>(responseEventsPage, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
-        Page<Event> events = eventService.searchEvents(searchTerm, category, page,size,sortBy,sortDirection);
-
-        return null;
+    @PostMapping("/add")
+    public ResponseEntity<EventResponseDTO> addEvent(@RequestBody EventRegisterDTO eventRegisterDTO) {
+        try {
+            Event event = eventMapper.toEntity(eventRegisterDTO);
+            Event savedEvent = eventService.addEvent(event);
+            EventResponseDTO responseDTO = eventMapper.toResponseDTO(savedEvent);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        } catch (DuplicateResourceException ex) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -2,40 +2,52 @@ package com.example.demo.Services.Mappers;
 
 import com.example.demo.DBModels.Category;
 import com.example.demo.DBModels.Event;
+import com.example.demo.DBModels.Genre;
 import com.example.demo.DBModels.User;
 import com.example.demo.DTOs.Events.EventRegisterDTO;
 import com.example.demo.DTOs.Events.EventResponseDTO;
 import com.example.demo.Models.TicketPrices;
 import com.example.demo.Services.DBServices.CategoryService;
+import com.example.demo.Services.DBServices.GenreService;
 import com.example.demo.Services.DBServices.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EventMapper {
 
     private final UserService userService;
     private final CategoryService categoryService;
+    private final GenreService genreService;
 
     @Autowired
-    public EventMapper(UserService userService, CategoryService categoryService) {
+    public EventMapper(UserService userService, CategoryService categoryService, GenreService genreService) {
         this.userService = userService;
         this.categoryService = categoryService;
+        this.genreService = genreService;
     }
 
     public Event toEntity(EventRegisterDTO eventRegisterDTO) {
         Event event = new Event();
 
-        // Setare câmpuri obligatorii
+        // Set required fields
         event.setTitle(eventRegisterDTO.getTitle());
         event.setDescription(eventRegisterDTO.getDescription());
         event.setLocation(eventRegisterDTO.getLocation());
         event.setAddress(eventRegisterDTO.getAddress());
         event.setDate(eventRegisterDTO.getDate());
-        event.setGenre(eventRegisterDTO.getGenre());
 
-        // Setare câmpuri opționale
+        // Retrieve and set genres by IDs
+        Set<Genre> genres = eventRegisterDTO.getGenreId().stream()
+                .map(genreService::getGenreById)
+                .collect(Collectors.toSet());
+        event.setGenres(genres);
+
+        // Set optional fields
         if (eventRegisterDTO.getLatitude() != null) {
             event.setLatitude(eventRegisterDTO.getLatitude());
         }
@@ -57,7 +69,7 @@ public class EventMapper {
             event.setCheapestTicket(eventRegisterDTO.getCheapestTicket());
         }
 
-        // Setare relații Many-to-One
+        // Set relationships
         User organizer = userService.getUserById(eventRegisterDTO.getOrganizerId());
         event.setCreatedBy(organizer);
 
@@ -70,16 +82,21 @@ public class EventMapper {
     public EventResponseDTO toResponseDTO(Event event) {
         EventResponseDTO dto = new EventResponseDTO();
 
-        // Setare câmpuri obligatorii
+        // Set required fields
         dto.setId(event.getId());
         dto.setTitle(event.getTitle());
         dto.setDescription(event.getDescription());
         dto.setLocation(event.getLocation());
         dto.setAddress(event.getAddress());
         dto.setDate(event.getDate());
-        dto.setGenre(event.getGenre());
 
-        // Setare câmpuri opționale
+        // Map genre names from the Genre entities
+        Set<String> genreNames = event.getGenres().stream()
+                .map(Genre::getName)
+                .collect(Collectors.toSet());
+        dto.setGenreName(genreNames);
+
+        // Set optional fields
         if (event.getLatitude() != null) {
             dto.setLatitude(event.getLatitude());
         }
@@ -100,11 +117,11 @@ public class EventMapper {
             dto.setCheapestTicket(event.getCheapestTicket());
         }
 
-        // Setare informații despre creat și actualizat
+        // Set timestamps
         dto.setCreatedAt(event.getCreatedAt());
         dto.setUpdatedAt(event.getUpdatedAt());
 
-        // Setare informații despre relații Many-to-One
+        // Set relationships
         dto.setOrganizerId(event.getCreatedBy().getId());
         dto.setOrganizerUsername(event.getCreatedBy().getUsername());
 

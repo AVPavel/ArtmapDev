@@ -1,5 +1,6 @@
 package com.example.demo.DTOs.Events;
 
+import com.example.demo.DBModels.Event;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -40,7 +42,7 @@ public class EventRegisterDTO {
     private Long categoryId;
 
     @NotBlank(message = "Genre is mandatory")
-    private String genre;
+    private Set<Long> genreId;
 
     private String ticketPrices; // JSON string
 

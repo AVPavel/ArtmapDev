@@ -4,6 +4,7 @@ import com.example.demo.DBModels.User;
 import com.example.demo.DTOs.Users.UserRegisterDTO;
 import com.example.demo.DTOs.Users.UserResponseDTO;
 import com.example.demo.Exceptions.DuplicateResourceException;
+import com.example.demo.Exceptions.ResourceNotFoundException;
 import com.example.demo.Exceptions.UserNotFoundException;
 import com.example.demo.Services.Mappers.UserMapper;
 import com.example.demo.Services.DBServices.UserService;
@@ -40,8 +41,25 @@ public class UserController {
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
-
+    @GetMapping("/organizers")
+    public ResponseEntity<Page<UserResponseDTO>> getOrganizers(
+            @RequestParam User.Role role,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(defaultValue = "username") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir
+    ) {
+        try {
+            Page<User> organizers = userService.getUsersByRole(role, page, size, sortBy, sortDir);
+            Page<UserResponseDTO> organizersDTO = organizers.map(userMapper::toResponseDTO);
+            return new ResponseEntity<>(organizersDTO, HttpStatus.OK);
+        } catch (ResourceNotFoundException | UserNotFoundException exception) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{id}")
@@ -69,7 +87,7 @@ public class UserController {
 
     @GetMapping("/search")
     public ResponseEntity<Page<UserResponseDTO>> searchUsers(
-            @RequestParam(required = true) String searchTerm,
+            @RequestParam String searchTerm,
             @RequestParam(required = false) User.Role role,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "50") int size,
@@ -91,8 +109,8 @@ public class UserController {
             @RequestParam(defaultValue = "200") int size,
             @RequestParam(defaultValue = "username") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir) {
-        try{
-            Page<User> usersPage = userService.getAllUsers(page,size, sortBy, sortDir);
+        try {
+            Page<User> usersPage = userService.getAllUsers(page, size, sortBy, sortDir);
             Page<UserResponseDTO> userDTOPage = usersPage.map(userMapper::toResponseDTO);
             return new ResponseEntity<>(userDTOPage, HttpStatus.OK);
         } catch (Exception e) {

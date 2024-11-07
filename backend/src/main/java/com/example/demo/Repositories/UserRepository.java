@@ -18,6 +18,10 @@ public interface UserRepository extends JpaRepository<User,Long>, JpaSpecificati
 
     Page<User> findByRole(User.Role role, Pageable pageable);
 
+    Optional<User> findByUsernameAndRole(String username, User.Role role);
+
+    Optional<User> findByIdAndRole(Long id, User.Role role);
+
     @Query("SELECT u from User u where LOWER(u.username) like LOWER(CONCAT('%',:searchTerm,'%'))" +
             "OR LOWER(u.email) like LOWER(CONCAT('%',:searchTerm,'%')) ")
     Page<User> searchUsers(@Param("searchTerm")String searchTerm, Pageable pageable);

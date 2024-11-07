@@ -4,7 +4,6 @@ import com.example.demo.DBModels.Category;
 import com.example.demo.DBModels.Event;
 import com.example.demo.Exceptions.DuplicateResourceException;
 import com.example.demo.Exceptions.EventNotFoundException;
-import com.example.demo.Exceptions.ResourceNotFoundException;
 import com.example.demo.Repositories.EventRepository;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Services.Mappers.EventMapper;
@@ -15,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 public class EventService {
@@ -40,9 +37,10 @@ public class EventService {
 
     @Transactional
     public Event addEvent(Event event) {
-        if (eventRepository.searchEventByName(event.getTitle()).isPresent()) {
+        if (eventRepository.searchEventByTitle(event.getTitle()).isPresent()) {
             throw new DuplicateResourceException("Event with title: " + event.getTitle() + " already exists");
         }
+
 
         return eventRepository.save(event);
     }

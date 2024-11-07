@@ -1,11 +1,13 @@
 package com.example.demo.DTOs.Events;
 
+import com.example.demo.DBModels.Event;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -23,7 +25,7 @@ public class EventResponseDTO {
     private String organizerUsername;
     private Long categoryId;
     private String categoryName;
-    private String genre;
+    private Set<String> genreName;
     private Integer popularity;
     private String ticketPrices; // JSON string
     private BigDecimal cheapestTicket;

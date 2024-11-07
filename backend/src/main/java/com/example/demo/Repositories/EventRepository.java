@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
@@ -26,7 +24,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e Where " +
             "LOWER(e.title) = LOWER(CONCAT('%', :title, '%'))")
-    Optional<Event> searchEventByName(@Param("title") String title);
+    Optional<Event> searchEventByTitle(@Param("title") String title);
 
     Page<Event> findAllByCategory(Category category, Pageable pageable);
 

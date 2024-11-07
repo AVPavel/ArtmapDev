@@ -35,7 +35,6 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    @Transactional
     public Category addCategory(Category category) {
         if (categoryRepository.findByName(category.getName()).isPresent()) {
             throw new DuplicateResourceException("Category with name '" + category.getName() + "' already exists");
