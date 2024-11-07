@@ -72,7 +72,6 @@ public class User {
     private void onUpdate(){
         updatedAt = LocalDateTime.now();
     }
-
     public enum Role{
         USER,
         ORGANIZER,

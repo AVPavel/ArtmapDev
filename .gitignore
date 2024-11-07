@@ -36,6 +36,7 @@ build/
 backend/target/
 *.log
 *.class
+*.sql
 
 # Frontend specific ignores
 frontend/node_modules/

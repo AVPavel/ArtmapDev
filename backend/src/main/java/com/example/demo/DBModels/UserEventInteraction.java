@@ -1,5 +1,6 @@
 package com.example.demo.DBModels;
 
+import com.example.demo.enums.InteractionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,16 +39,7 @@ public class UserEventInteraction {
     private LocalDateTime timestamp;
 
     @PrePersist
-    private void onCreate(){
+    private void onCreate() {
         timestamp = LocalDateTime.now();
-    }
-    public enum InteractionType {
-        WANT_TO_ATTEND,      // „Vreau să particip”
-        SAVED,               // „Salvare”
-        ATTENDING,           // „Particip”
-        INTERESTED,          // „Interesat”
-        NOT_INTERESTED,      // „Nu mă interesează”
-        LIKED,               // „Apreciere”
-        DISLIKED             // „Nu mi-a plăcut”
     }
 }
