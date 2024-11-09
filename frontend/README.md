@@ -68,3 +68,41 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+initial structure:
+
+frontend
+│
+├─── public               # Static assets (e.g., images, manifest files)
+│      └── index.html     # HTML template for React to render into
+├─── src                  # All JavaScript, CSS, and components
+│   ├─── assets           # Static assets referenced in the code (e.g., images, fonts)
+│   │    └── images       # Images specifically for the application
+│   │    └── fonts        # Custom fonts (if any)
+│   ├─── components       # Reusable components
+│   │    ├─── Login       # Each component gets its own folder (e.g., Login component)
+│   │    │     ├── Login.js
+│   │    │     ├── Login.module.css   # Scoped CSS (if using CSS modules)
+│   │    │     └── index.js           # Optional, for easier imports
+│   │    ├─── Header
+│   │    └─── Footer
+│   ├─── contexts         # Context API providers (if you’re using React Context for state management)
+│   ├─── hooks            # Custom React hooks
+│   ├─── pages            # Pages or main views for your app (e.g., Home, Login, Dashboard)
+│   │    ├─── Home
+│   │    ├─── Dashboard
+│   │    └─── Login
+│   ├─── services         # API services or utility functions for data handling
+│   │    └── api.js       # File for backend API calls, like login, registration
+│   ├─── styles           # Global stylesheets (optional, good for base/global styles)
+│   │    ├── reset.css    # CSS reset or normalize styles
+│   │    └── global.css   # Global CSS, like body, h1, button defaults
+│   ├─── App.js           # Root component
+│   ├─── App.css          # Styling for the root component (or convert to App.module.css if using CSS modules)
+│   └─── index.js         # Entry point for the app
+│
+├── .gitignore            # Specifies files to be ignored by Git
+├── package.json          # Dependencies and scripts
+└── README.md             # Project documentation
