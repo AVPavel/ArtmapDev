@@ -1,6 +1,7 @@
 package com.example.demo.Models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import lombok.Data;
@@ -14,7 +15,10 @@ public class TicketPrices {
 
     public static TicketPrices fromJson(String json) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(json, TicketPrices.class);
+        Map<String, Double> pricesMap = mapper.readValue(json, new TypeReference<>() {});
+        TicketPrices ticketPrices = new TicketPrices();
+        ticketPrices.setPrices(pricesMap);
+        return ticketPrices;
     }
 
     public String toJson() throws JsonProcessingException {

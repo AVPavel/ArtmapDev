@@ -2,12 +2,16 @@ package com.example.demo.Controllers;
 
 import com.example.demo.DBModels.Category;
 import com.example.demo.Exceptions.DuplicateResourceException;
+import com.example.demo.Models.ErrorResponse;
 import com.example.demo.Services.DBServices.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -34,20 +38,32 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-
-        try{
+    public ResponseEntity<?> createCategory(@RequestBody Category category) {
+        try {
             Category newCategory = categoryService.addCategory(category);
-            return new ResponseEntity<>(newCategory, HttpStatus.CREATED);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(newCategory.getId())
+                    .toUri();
+            return ResponseEntity.created(location).body(newCategory);
+        } catch (DuplicateResourceException ex) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.CONFLICT.value(),
+                    "Resource already exists: " + ex.getMessage(),
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+        } catch (Exception ex) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Internal server error: " + ex.getMessage(),
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
-        catch (DuplicateResourceException ex){
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-        catch (Exception ex){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
     }
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category updatedCategory) {
