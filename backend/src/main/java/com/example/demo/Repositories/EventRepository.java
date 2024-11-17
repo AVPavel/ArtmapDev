@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
-    Optional<Event> findById(long id);
 
     @Query("SELECT e FROM Event e WHERE " +
             "(LOWER(e.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +

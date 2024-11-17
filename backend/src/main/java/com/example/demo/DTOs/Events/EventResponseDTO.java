@@ -1,6 +1,5 @@
 package com.example.demo.DTOs.Events;
 
-import com.example.demo.DBModels.Event;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

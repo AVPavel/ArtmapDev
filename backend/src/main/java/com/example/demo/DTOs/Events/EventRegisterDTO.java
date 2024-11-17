@@ -1,6 +1,5 @@
 package com.example.demo.DTOs.Events;
 
-import com.example.demo.DBModels.Event;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
