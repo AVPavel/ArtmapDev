@@ -1,11 +1,11 @@
 package com.example.demo.Security;
 
+import com.example.demo.Globals.GlobalLogger;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -21,7 +21,7 @@ public class JwtTokenProvider {
     /**
      * logger variable
      */
-    private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
+    private static final Logger logger = GlobalLogger.getLogger(JwtTokenProvider.class);
 
     /**
      * Expiration time in milliseconds

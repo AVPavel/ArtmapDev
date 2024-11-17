@@ -8,15 +8,11 @@ import com.example.demo.Exceptions.DuplicateResourceException;
 import com.example.demo.Exceptions.EventNotFoundException;
 import com.example.demo.Services.DBServices.EventService;
 import com.example.demo.Services.Mappers.EventMapper;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/events")
@@ -44,7 +40,7 @@ public class EventController {
 
     @GetMapping("/search")
     public ResponseEntity<Page<EventResponseDTO>> searchEvents(
-            @RequestParam(required = true) String searchTerm,
+            @RequestParam() String searchTerm,
             @RequestParam(required = false, defaultValue = "") Category category,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "50") int size,
@@ -70,7 +66,7 @@ public class EventController {
         } catch (DuplicateResourceException ex) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         } catch (Exception ex) {
-            ex.printStackTrace();
+
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
