@@ -187,4 +187,7 @@ public class JwtTokenProvider {
     }
 
 
+    public long getExpirationFromToken(String jwt) {
+        return getClaimsFromToken(jwt).getExpiration().getTime();
+    }
 }
