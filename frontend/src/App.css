@@ -1,0 +1,5 @@
+img {
+    margin: 0;
+    padding: -100px;
+    display: block; /* Remove inline spacing */
+}
