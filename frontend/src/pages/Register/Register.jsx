@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './Register.module.css';
+import {Link} from "react-router-dom";
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -52,7 +53,7 @@ const Register = () => {
             {success && <p>{success}</p>}
             <form onSubmit={handleSubmit}>
                 <label>Username:
-                    <input 
+                    <input
                         type="text"
                         name="username"
                         value={formData.username}
@@ -61,8 +62,8 @@ const Register = () => {
                     />
                 </label>
                 <label>Email:
-                    <input 
-                        type="text" 
+                    <input
+                        type="text"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
@@ -70,24 +71,25 @@ const Register = () => {
                     />
                 </label>
                 <label>Password:
-                    <input 
-                        type="text" 
-                        name="password" 
+                    <input
+                        type="text"
+                        name="password"
                         value={formData.password}
                         onChange={handleChange}
                         required
                     />
                 </label>
                 <label>Preferred Budget:
-                    <input 
-                        type="text" 
-                        name="preferredBudget" 
+                    <input
+                        type="text"
+                        name="preferredBudget"
                         value={formData.preferredBudget}
                         onChange={handleChange}
                     />
                 </label>
                 <button type="submit">Submit</button>
             </form>
+            <p>Go back to Home Page: <Link to="/">Home</Link></p>
         </div>
     );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import styles from './Login.module.css'; // Scoped CSS
+import styles from './Login.module.css';
+import {Link} from "react-router-dom"; // Scoped CSS
 
 const Login = () => {
     // State to manage form inputs
@@ -78,6 +79,7 @@ const Login = () => {
                 </label>
                 <button type="submit">Login</button>
             </form>
+            <p>Go back to Home Page: <Link to="/">Home</Link></p>
         </div>
     );
 };
