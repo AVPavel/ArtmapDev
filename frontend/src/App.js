@@ -2,7 +2,6 @@ import './App.css';
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home";
-import myPhoto from "./assets/images/LOGO_artmap-01.svg"
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
 function App() {
