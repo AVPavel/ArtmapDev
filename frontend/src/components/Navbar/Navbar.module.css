@@ -1,36 +1,67 @@
 .navbar{
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     padding: 10px 20px;
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 100;
 }
 
-.logoContainer{
-    height: 50px;
-}
-
-.logoImage{
-    height: 100%;
-}
-
-.navLinks{
-    list-style: none;
+.navSection {
+    flex: 1;
     display: flex;
-    gap:15px;
+    padding: 0% 2%;
+}
+.navSection:first-of-type{
+    justify-content: flex-start;
+}
+.navSection:last-of-type{
+    justify-content: flex-end;
+    margin-left: auto;
+}
+.navLinks{
+    display: flex;
+    gap:25px;
+    list-style: none;
 }
 
 .navLinks li{
-    display: inline;
+    display: flex;
+    align-items: center;
 }
 
-.navLinks a{
+.navLinks li a{
     text-decoration: none;
     color: #333;
-    font-weight: 500;
 }
 
-.navLinks a:hover{
+.navLinks li a:hover{
     color: #007bff
+}
+
+.logoContainer{
+    flex: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logoImage{
+    height: 75px;
+    width: auto;
+}
+
+.signInButton{
+    font-family: 'Roboto Flex', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    background-color: #e21818;
+    color: white;
+    border-radius: 30px;
+    border:none;
+    padding: 7px 25px;
+    cursor: pointer; /* Show pointer on hover */
+    vertical-align: middle;
 }
