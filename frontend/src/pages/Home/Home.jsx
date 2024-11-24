@@ -1,17 +1,13 @@
 import React from 'react';
 import styles from './Home.module.css'
-import {Link} from "react-router-dom";
+import HeroSection from '../../components/PresentationSection/HeroSection'
 import Navbar from "../../components/Navbar/Navbar";
 
 const Home = () =>{
     return (
         <div className={styles.container}>
-            <div>
                 <Navbar/>
-            </div>
-            <div>
-
-            </div>
+                <HeroSection/>
         </div>
 
     )

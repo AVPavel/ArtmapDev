@@ -1,0 +1,29 @@
+/*
+.imageContainer {
+    position: relative;
+    flex: 1;
+    height: 100%; !* Ensures images fill the container *!
+}
+
+.image {
+    width: 50%;
+    height: 50%;
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    z-index: 2;
+}
+
+.centered .overlay h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+*/
