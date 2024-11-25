@@ -1,0 +1,10 @@
+.mapContainer {
+  border: 2px solid blue;
+  width: 60vw;
+  height: 50vh;
+}
+
+.mapContainer img {
+  object-fit: contain;
+  width: 50vw;
+}

@@ -3,7 +3,7 @@ import styles from "./MapAddon.module.css";
 
 const MapAddon = () => {
   return (
-    <div>
+    <div className={styles.mapAddonContainer}>
       <h1>hey</h1>
     </div>
   );
