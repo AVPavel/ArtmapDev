@@ -1,0 +1,7 @@
+.cards {
+    background-color: #efeeee;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    height: 100vh;
+}
