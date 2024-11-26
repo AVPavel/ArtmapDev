@@ -5,6 +5,7 @@
   gap: 0; /* Ensures no unwanted spacing between items */
   overflow: hidden; /* Prevents overflow issues */
   position: relative;
+  margin-top: 10px;
 }
 
 .heroItem {

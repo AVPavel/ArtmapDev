@@ -4,7 +4,9 @@ import styles from "./MapAddon.module.css";
 const MapAddon = () => {
   return (
     <div className={styles.mapAddonContainer}>
-      <h1>hey</h1>
+      <h2>Gaseste evenimente aproape de tine</h2>
+        <p>Inregistreaza-te si vei putea obtine</p>
+        <p>Informatii personalizate</p>
     </div>
   );
 };

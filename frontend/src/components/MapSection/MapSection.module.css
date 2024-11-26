@@ -1,6 +1,6 @@
 .sectionContainer {
-  border: 2px solid black;
+  /*border: 2px solid black;*/
   display: flex;
   justify-content: space-evenly;
-  margin: 10px, 20px;
+  margin: 15vh 60px;
 }
