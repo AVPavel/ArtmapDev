@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Map.module.css";
-import GoogleMapPhoto from "../../assets/images/GoogleMaps.png";
+import GoogleMapPhoto from "../../assets/images/HomePage/GoogleMaps.png";
 
 const Map = () => {
     return (

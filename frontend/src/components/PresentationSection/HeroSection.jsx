@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from './HeroSection.module.css'
 import ImageComponent from '../ImageComponent/ImageComponent'
-import ballet from '../../assets/images/balletPhoto.jpeg'
-import concert from '../../assets/images/concert.jpeg'
-import painting from '../../assets/images/Paintings.jpeg'
+import ballet from '../../assets/images/HomePage/balletPhoto.jpeg'
+import concert from '../../assets/images/HomePage/concert.jpeg'
+import painting from '../../assets/images/HomePage/Paintings.jpeg'
 
 
 const HeroSection = () => {
