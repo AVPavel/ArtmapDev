@@ -2,6 +2,7 @@ import './App.css';
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home";
+import PageNotReady from "./pages/PageNotReady/PageNotReady";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
 function App() {
@@ -19,6 +20,24 @@ function App() {
 
               {/* 404 Page Not Found */}
               <Route path="*" element={<h1>404 Not Found</h1>} />
+
+              {/* Redirect Messages */}
+              <Route path="/messages" element={<PageNotReady />} />
+
+              {/* Redirect Recommendations */}
+              <Route path="/recommendations" element={<PageNotReady />} />
+
+              {/* Redirect Favorites */}
+              <Route path="/favorites" element={<PageNotReady />} />
+
+              {/* Redirect About */}
+              <Route path="/about" element={<PageNotReady />} />
+
+              {/* Redirect Contact */}
+              <Route path="/contact" element={<PageNotReady />} />
+
+              {/* Redirect News */}
+              <Route path="/news" element={<PageNotReady />} />
           </Routes>
       </Router>
   );

@@ -9,13 +9,13 @@ const Navbar = () => {
             <div className={styles.navSection}>
                 <ul className={styles.navLinks}>
                     <li>
-                        <Link to="/">Messages</Link>
+                        <Link to="/messages">Messages</Link>
                     </li>
                     <li>
-                        <Link to="/">Recommendations</Link>
+                        <Link to="/recommendations">Recommendations</Link>
                     </li>
                     <li>
-                        <Link to="/">Favorites</Link>
+                        <Link to="/favorites">Favorites</Link>
                     </li>
                 </ul>
             </div>
@@ -27,13 +27,13 @@ const Navbar = () => {
             <div className={styles.navSection}>
                 <ul className={styles.navLinks}>
                     <li>
-                        <Link to="/">About</Link>
+                        <Link to="/about">About</Link>
                     </li>
                     <li>
-                        <Link to="/Contact">Contact</Link> {/* Updated path */}
+                        <Link to="/contact">Contact</Link> {/* Updated path */}
                     </li>
                     <li>
-                        <Link to="/">News</Link>
+                        <Link to="/news">News</Link>
                     </li>
                     <li>
                         <Link to="/Login">
