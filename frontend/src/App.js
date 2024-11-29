@@ -4,6 +4,9 @@ import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home";
 import PageNotReady from "./pages/PageNotReady/PageNotReady";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import UnauthorizedPage from "./pages/UnauthorizedPage/UnauthorizedPage";
+import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
+
 
 function App() {
   return (
@@ -30,14 +33,21 @@ function App() {
               {/* Redirect Favorites */}
               <Route path="/favorites" element={<PageNotReady />} />
 
-              {/* Redirect About */}
-              <Route path="/about" element={<PageNotReady />} />
+              {/* Redirect to Protected About Page */}
+              <Route path="/about"
+                     element={
+                        <ProtectedRoute element={<PageNotReady/>} />
+                     }
+              />
 
               {/* Redirect Contact */}
               <Route path="/contact" element={<PageNotReady />} />
 
               {/* Redirect News */}
               <Route path="/news" element={<PageNotReady />} />
+
+              {/* Unauthorized */}
+              <Route path="/unauthorized" element={<UnauthorizedPage />} />
           </Routes>
       </Router>
   );
