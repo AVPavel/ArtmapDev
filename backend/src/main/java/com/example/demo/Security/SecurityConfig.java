@@ -38,6 +38,17 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/login").permitAll()
                         .requestMatchers("/api/events/addEvent").hasRole("ADMIN")
                         .requestMatchers("/api/genres").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/static/**",
+                                "/favicon.ico",
+                                "/**/*.js",
+                                "/**/*.css",
+                                "/**/*.png",
+                                "/**/*.jpg",
+                                "/**/*.svg"
+                        ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
