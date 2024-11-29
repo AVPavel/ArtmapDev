@@ -16,6 +16,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "cpy \"build/**/*\" \"../backend/src/main/resources/static\" --parents",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -36,5 +37,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cpy-cli": "^5.0.0"
   }
 }
