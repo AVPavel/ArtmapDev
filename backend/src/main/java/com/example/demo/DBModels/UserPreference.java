@@ -19,8 +19,9 @@ public class UserPreference {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "event_type", length = 50, nullable = false)
-    private String eventType;
+    @JoinColumn(name = "category_id", nullable = false)
+    @ManyToOne
+    private Category category;
 
     @Column(name = "genre", length = 50, nullable = false)
     private String genre;
