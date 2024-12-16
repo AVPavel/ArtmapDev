@@ -9,6 +9,7 @@ const MessageHistory = () => {
                 className={styles.readOnlyBox}
                 readOnly
                 value="Message history will appear here..."
+                disabled={true}
             />
         </div>
     );

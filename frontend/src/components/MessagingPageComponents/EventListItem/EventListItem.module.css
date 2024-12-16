@@ -4,6 +4,9 @@
     transition: background-color 0.2s ease;
     text-align: left;
     padding-left: 1rem;
+    border: 1px solid lightgrey;
+    margin-bottom: 2rem;
+    border-radius: 25px;
 }
 
 .eventItem:hover {
