@@ -3,9 +3,10 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    margin: 5px;
+    margin: 0px;
     flex-wrap: wrap-reverse;
-    background-color: #ffffff;
+    /*background-color: #00235b;*/
+    background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
     z-index: 100;
@@ -15,7 +16,7 @@
 .navSection {
     flex: 1;
     display: flex;
-    padding: 0% 2%;
+    padding: 0 2%;
 }
 .navSection:first-of-type{
     justify-content: flex-start;

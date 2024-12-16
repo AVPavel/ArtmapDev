@@ -1,0 +1,16 @@
+.eventItem {
+    padding: 0.5rem 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: left;
+    padding-left: 1rem;
+}
+
+.eventItem:hover {
+    background-color: #e0e0e0;
+}
+
+.selected {
+    background-color: #d0d0ff;
+    font-weight: bold;
+}

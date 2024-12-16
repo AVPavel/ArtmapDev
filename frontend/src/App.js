@@ -6,6 +6,7 @@ import PageNotReady from "./pages/PageNotReady/PageNotReady";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import UnauthorizedPage from "./pages/UnauthorizedPage/UnauthorizedPage";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
+import MessagingPage from "./pages/Messaging/MessagingPage";
 
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
               <Route path="*" element={<h1>404 Not Found</h1>} />
 
               {/* Redirect Messages */}
-              <Route path="/messages" element={<PageNotReady />} />
+              <Route path="/messages" element={<MessagingPage />} />
 
               {/* Redirect Recommendations */}
               <Route path="/recommendations" element={<PageNotReady />} />

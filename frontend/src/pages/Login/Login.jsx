@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styles from './Login.module.css';
 import {Link} from "react-router-dom"; // Scoped CSS
 
@@ -15,7 +15,7 @@ const Login = () => {
 
     // Handle input changes
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setCredentials({
             ...credentials,
             [name]: value,
@@ -52,34 +52,36 @@ const Login = () => {
     };
 
     return (
-        <div className={styles.loginContainer}>
-            <h2>Login</h2>
-            {error && <p className={styles.error}>{error}</p>}
-            {success && <p className={styles.success}>{success}</p>}
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Username:
-                    <input
-                        type="text"
-                        name="username"
-                        value={credentials.username}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
-                <label>
-                    Password:
-                    <input
-                        type="password"
-                        name="password"
-                        value={credentials.password}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
-                <button type="submit">Login</button>
-            </form>
-            <p>Go back to Home Page: <Link to="/">Home</Link></p>
+        <div className={styles.loginPage}>
+            <div className={styles.loginContainer}>
+                <h2>Login</h2>
+                {error && <p className={styles.error}>{error}</p>}
+                {success && <p className={styles.success}>{success}</p>}
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        Username:
+                        <input
+                            type="text"
+                            name="username"
+                            value={credentials.username}
+                            onChange={handleChange}
+                            required
+                        />
+                    </label>
+                    <label>
+                        Password:
+                        <input
+                            type="password"
+                            name="password"
+                            value={credentials.password}
+                            onChange={handleChange}
+                            required
+                        />
+                    </label>
+                    <button type="submit">Login</button>
+                </form>
+                <p>Go back to Home Page: <Link to="/">Home</Link></p>
+            </div>
         </div>
     );
 };
