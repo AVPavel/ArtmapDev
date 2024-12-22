@@ -1,4 +1,4 @@
-package com.example.demo.Config;
+package com.example.demo.WSConfig;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;

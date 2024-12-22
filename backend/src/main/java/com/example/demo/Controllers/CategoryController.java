@@ -50,6 +50,7 @@ public class CategoryController {
             ErrorResponse errorResponse = new ErrorResponse(
                     HttpStatus.CONFLICT.value(),
                     "Resource already exists: " + ex.getMessage(),
+                    "Category",
                     LocalDateTime.now()
             );
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
@@ -57,6 +58,7 @@ public class CategoryController {
             ErrorResponse errorResponse = new ErrorResponse(
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "Internal server error: " + ex.getMessage(),
+                    "Category",
                     LocalDateTime.now()
             );
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);

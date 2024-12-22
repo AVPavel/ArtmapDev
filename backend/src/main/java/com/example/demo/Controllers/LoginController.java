@@ -56,6 +56,7 @@ public class LoginController {
             ErrorResponse errorResponse = new ErrorResponse(
                     401,
                     "Invalid username or password",
+                    "Authentication",
                     LocalDateTime.now()
             );
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
