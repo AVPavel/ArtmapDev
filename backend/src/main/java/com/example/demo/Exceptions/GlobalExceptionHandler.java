@@ -1,5 +1,7 @@
 package com.example.demo.Exceptions;
 
+import com.example.demo.Exceptions.Models.DuplicateResourceException;
+import com.example.demo.Exceptions.Models.EntityNotFoundException;
 import com.example.demo.Models.ErrorResponse;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,15 +18,16 @@ public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException ex) {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
-                "Resource not found",
+                ex.getMessage(),
+                ex.getEntityName(),
                 LocalDateTime.now()
         );
-        logger.error("Resource not found: {}", ex.getMessage(), ex);
+
+        logger.error("{} not found: {}", ex.getEntityName(), ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
@@ -32,9 +35,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDuplicateResource(DuplicateResourceException ex) {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.CONFLICT.value(),
-                "Resource already exists",
+                ex.getMessage(),
+                "Resource",
                 LocalDateTime.now()
         );
+
         logger.warn("Duplicate resource: {}", ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
@@ -44,6 +49,7 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.FORBIDDEN.value(),
                 "Access is denied.",
+                "Access",
                 LocalDateTime.now()
         );
         logger.warn("Access denied: {}", ex.getMessage());
@@ -55,9 +61,12 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "An unexpected error occurred. Please contact support.",
+                "Global",
                 LocalDateTime.now()
         );
         logger.error("Internal server error: {}", ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 }
