@@ -1,7 +1,7 @@
 package com.example.demo.Services;
 
 import com.example.demo.DBModels.User;
-import com.example.demo.Exceptions.DuplicateResourceException;
+import com.example.demo.Exceptions.Models.DuplicateResourceException;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Services.DBServices.UserService;
 import org.junit.jupiter.api.BeforeEach;

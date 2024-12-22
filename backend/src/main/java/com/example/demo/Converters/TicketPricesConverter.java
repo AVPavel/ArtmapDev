@@ -18,7 +18,7 @@ public class TicketPricesConverter implements AttributeConverter<TicketPrices, S
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException("Error converting TicketPrices to JSON", e);
         }
-    }
+    } 
 
     @Override
     public TicketPrices convertToEntityAttribute(String dbData) {

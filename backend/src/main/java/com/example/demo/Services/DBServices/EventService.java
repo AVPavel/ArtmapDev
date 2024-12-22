@@ -2,8 +2,8 @@ package com.example.demo.Services.DBServices;
 
 import com.example.demo.DBModels.Category;
 import com.example.demo.DBModels.Event;
-import com.example.demo.Exceptions.DuplicateResourceException;
-import com.example.demo.Exceptions.EventNotFoundException;
+import com.example.demo.Exceptions.Models.DuplicateResourceException;
+import com.example.demo.Exceptions.Models.EventNotFoundException;
 import com.example.demo.Repositories.EventRepository;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Services.Mappers.EventMapper;

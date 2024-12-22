@@ -1,8 +1,8 @@
 package com.example.demo.Services.DBServices;
 
 import com.example.demo.DBModels.User;
-import com.example.demo.Exceptions.DuplicateResourceException;
-import com.example.demo.Exceptions.UserNotFoundException;
+import com.example.demo.Exceptions.Models.DuplicateResourceException;
+import com.example.demo.Exceptions.Models.UserNotFoundException;
 import com.example.demo.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -69,7 +69,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     @Transactional

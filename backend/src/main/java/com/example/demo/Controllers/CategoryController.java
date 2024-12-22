@@ -1,7 +1,7 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.DBModels.Category;
-import com.example.demo.Exceptions.DuplicateResourceException;
+import com.example.demo.Exceptions.Models.DuplicateResourceException;
 import com.example.demo.Models.ErrorResponse;
 import com.example.demo.Services.DBServices.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.example.demo.Services.DBServices;
 
 import com.example.demo.DBModels.Genre;
-import com.example.demo.Exceptions.DuplicateResourceException;
-import com.example.demo.Exceptions.ResourceNotFoundException;
+import com.example.demo.Exceptions.Models.DuplicateResourceException;
+import com.example.demo.Exceptions.Models.ResourceNotFoundException;
 import com.example.demo.Repositories.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
