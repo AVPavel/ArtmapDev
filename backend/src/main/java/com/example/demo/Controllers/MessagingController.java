@@ -3,6 +3,7 @@ package com.example.demo.Controllers;
 import com.example.demo.DBModels.Message;
 import com.example.demo.DBModels.User;
 import com.example.demo.DTOs.Messages.MessageDTO;
+import com.example.demo.Exceptions.Models.UserNotFoundException;
 import com.example.demo.Globals.GlobalLogger;
 import com.example.demo.Services.DBServices.MessageService;
 import com.example.demo.Services.DBServices.UserService;
@@ -36,13 +37,18 @@ public class MessagingController {
 
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(MessageDTO messageDTO, Principal principal) {
-        User sender = userService.getUserByUsername(principal.getName());
+        try {
+            User sender = userService.getUserByUsername(principal.getName());
 
-        Long eventId = messageDTO.getEventId();
+            Long eventId = messageDTO.getEventId();
 
-        Message savedMessage = messageService.saveMessage(messageDTO.getContent(),eventId,sender);
+            Message savedMessage = messageService.saveMessage(messageDTO.getContent(), eventId, sender);
 
-        messageTemplate.convertAndSend("/topic/events/" + eventId, messageMapper.toDTO(savedMessage));
+            messageTemplate.convertAndSend("/topic/events/" + eventId, messageMapper.toDTO(savedMessage));
+        }
+        catch(UserNotFoundException | IllegalArgumentException ex){
+            logger.error(ex.getMessage());
+        }
     }
 
 }

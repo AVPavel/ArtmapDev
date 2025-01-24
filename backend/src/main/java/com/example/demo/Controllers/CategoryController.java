@@ -1,6 +1,7 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.DBModels.Category;
+import com.example.demo.Exceptions.Models.CategoryNotFoundException;
 import com.example.demo.Exceptions.Models.DuplicateResourceException;
 import com.example.demo.Models.ErrorResponse;
 import com.example.demo.Services.DBServices.CategoryService;
@@ -26,8 +27,20 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
-        Category category = categoryService.getCategoryById(id);
+    public ResponseEntity<?> getCategoryById(@PathVariable Long id) {
+        Category category;
+        try{
+             category = categoryService.getCategoryById(id);
+        }
+        catch (CategoryNotFoundException e){
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.NOT_FOUND.value(),
+                    e.getMessage(),
+                    "Category",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
         return ResponseEntity.ok(category);
     }
 
@@ -38,7 +51,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCategory(@RequestBody Category category) {
+    public ResponseEntity<?> createCategory(@RequestBody Category category) { 
         try {
             Category newCategory = categoryService.addCategory(category);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()

@@ -2,7 +2,7 @@ package com.example.demo.Services.DBServices;
 
 import com.example.demo.DBModels.Genre;
 import com.example.demo.Exceptions.Models.DuplicateResourceException;
-import com.example.demo.Exceptions.Models.ResourceNotFoundException;
+import com.example.demo.Exceptions.Models.GenreNotFoundException;
 import com.example.demo.Repositories.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +23,13 @@ public class GenreService {
     @Transactional(readOnly = true)
     public Genre getGenreById(Long id) {
         return genreRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Genre not found with id: " + id));
+                .orElseThrow(() -> new GenreNotFoundException("Genre not found with id: " + id));
     }
 
     @Transactional(readOnly = true)
     public Genre getGenreByName(String name) {
         return genreRepository.findByName(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Genre not found with name: " + name));
+                .orElseThrow(() -> new GenreNotFoundException("Genre not found with name: " + name));
     }
 
     @Transactional(readOnly = true)
