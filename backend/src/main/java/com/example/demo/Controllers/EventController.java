@@ -10,6 +10,8 @@ import com.example.demo.Models.ErrorResponse;
 import com.example.demo.Services.DBServices.EventService;
 import com.example.demo.Services.Mappers.EventMapper;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -21,7 +23,7 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
-
+    private final static Logger LOGGER = LoggerFactory.getLogger(EventController.class);
     private final EventService eventService;
     private final EventMapper eventMapper;
 
@@ -35,6 +37,7 @@ public class EventController {
         try {
             Event event = eventService.getEventById(id);
             EventResponseDTO responseDTO = eventMapper.toResponseDTO(event);
+            LOGGER.info("getEventById - event found:{}", event);
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         } catch (EventNotFoundException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -43,6 +46,7 @@ public class EventController {
                     "Event",
                     LocalDateTime.now()
             );
+            LOGGER.error("getEventById - event not found:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
          catch (IllegalArgumentException e) {
@@ -52,6 +56,7 @@ public class EventController {
                     "Prices or mapWrapper",
                     LocalDateTime.now()
             );
+            LOGGER.error("getEventById - Unexpected error:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
          }
     }
@@ -68,16 +73,18 @@ public class EventController {
         try {
             Page<Event> events = eventService.searchEvents(searchTerm, category, page, size, sortBy, sortDirection);
             Page<EventResponseDTO> responseEventsPage = events.map(eventMapper::toResponseDTO);
+            LOGGER.info("searchEvents - events found:{}", events);
             return new ResponseEntity<>(responseEventsPage, HttpStatus.OK);
         }
         catch (IllegalArgumentException e){
             ErrorResponse errorResponse = new ErrorResponse(
-                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    HttpStatus.BAD_REQUEST.value(),
                     e.getMessage(),
                     "Prices or mapWrapper",
                     LocalDateTime.now()
             );
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            LOGGER.error("searchEvents - request not valid :{}", errorResponse);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -86,6 +93,7 @@ public class EventController {
                     "Event",
                     LocalDateTime.now()
             );
+            LOGGER.error("searchEvents - event not found:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
@@ -96,6 +104,7 @@ public class EventController {
             Event event = eventMapper.toEntity(eventRegisterDTO);
             Event savedEvent = eventService.addEvent(event);
             EventResponseDTO responseDTO = eventMapper.toResponseDTO(savedEvent);
+            LOGGER.info("addEvent - event found:{}", event);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (DuplicateResourceException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -104,15 +113,17 @@ public class EventController {
                     "Event",
                     LocalDateTime.now()
             );
+            LOGGER.error("addEvent - duplicate event:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         } catch (IllegalArgumentException e){
             ErrorResponse errorResponse = new ErrorResponse(
-                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    HttpStatus.BAD_REQUEST.value(),
                     e.getMessage(),
                     "Prices of mapWrapper",
                     LocalDateTime.now()
             );
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            LOGGER.error("addEvent - request not valid:{}", errorResponse);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -121,6 +132,7 @@ public class EventController {
                     "Error",
                     LocalDateTime.now()
             );
+            LOGGER.error("addEvent - unexpected error:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -132,6 +144,7 @@ public class EventController {
         try {
             Event updatedEvent = eventService.updateEvent(id, eventRegisterDTO);
             EventResponseDTO responseDTO = eventMapper.toResponseDTO(updatedEvent);
+            LOGGER.info("updateEvent - event found:{}", updatedEvent);
             return ResponseEntity.ok(responseDTO);
         } catch (EventNotFoundException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -140,6 +153,7 @@ public class EventController {
                     "Event",
                     LocalDateTime.now()
             );
+            LOGGER.error("updateEvent - duplicate event:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         } catch (IllegalArgumentException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -148,6 +162,7 @@ public class EventController {
                     "Event",
                     LocalDateTime.now()
             );
+            LOGGER.error("updateEvent - request not valid:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -156,6 +171,7 @@ public class EventController {
                     "Event",
                     LocalDateTime.now()
             );
+            LOGGER.error("updateEvent - unexpected error:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
