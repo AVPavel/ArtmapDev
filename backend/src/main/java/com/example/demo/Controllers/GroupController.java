@@ -8,6 +8,8 @@ import com.example.demo.Services.Mappers.GroupMapper;
 import com.example.demo.Models.*;
 import com.example.demo.Services.DBServices.GroupService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/groups")
 public class GroupController {
-
+    private final static Logger LOGGER = LoggerFactory.getLogger(GroupController.class);
     private final GroupService groupService;
     private final GroupMapper groupMapper;
 
@@ -42,6 +44,7 @@ public class GroupController {
         try {
             Group createdGroup = groupService.createGroup(dto);
             GroupResponseDTO responseDTO = groupMapper.toResponseDTO(createdGroup);
+            LOGGER.info("createGroup - group created: {}", responseDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (IllegalArgumentException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -50,6 +53,7 @@ public class GroupController {
                     "Group",
                     LocalDateTime.now()
             );
+            LOGGER.error("createGroup - request not valid:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         catch (EventNotFoundException e){
@@ -59,6 +63,7 @@ public class GroupController {
                     "Group",
                     LocalDateTime.now()
             );
+            LOGGER.error("createGroup - group not found:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
         catch (Exception e) {
@@ -68,6 +73,7 @@ public class GroupController {
                     "Group",
                     LocalDateTime.now()
             );
+            LOGGER.error("createGroup - unexpected error:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -83,6 +89,7 @@ public class GroupController {
         try {
             Group group = groupService.getGroupById(id);
             GroupResponseDTO responseDTO = groupMapper.toResponseDTO(group);
+            LOGGER.info("getGroupById - group found: {}", responseDTO);
             return ResponseEntity.ok(responseDTO);
         } catch (GroupNotFoundException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -91,6 +98,7 @@ public class GroupController {
                     "Group",
                     LocalDateTime.now()
             );
+            LOGGER.error("getGroupById - group not found:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         } catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -99,6 +107,7 @@ public class GroupController {
                     "Group",
                     LocalDateTime.now()
             );
+            LOGGER.error("getGroupById - unexpected error:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -115,6 +124,7 @@ public class GroupController {
             List<GroupResponseDTO> responseDTOs = groups.stream()
                     .map(groupMapper::toResponseDTO)
                     .collect(Collectors.toList());
+            LOGGER.info("getAllGroups - groups found: {}", responseDTOs);
             return ResponseEntity.ok(responseDTOs);
         } catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -123,6 +133,7 @@ public class GroupController {
                     "Group",
                     LocalDateTime.now()
             );
+            LOGGER.error("getAllGroups - unexpected error:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -139,6 +150,7 @@ public class GroupController {
         try {
             Group updatedGroup = groupService.updateGroup(id, dto);
             GroupResponseDTO responseDTO = groupMapper.toResponseDTO(updatedGroup);
+            LOGGER.info("updateGroup - group updated: {}", responseDTO);
             return ResponseEntity.ok(responseDTO);
         } catch (GroupNotFoundException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -147,6 +159,7 @@ public class GroupController {
                     "Group",
                     LocalDateTime.now()
             );
+            LOGGER.error("updateGroup - group not found:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         } catch (IllegalArgumentException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -155,6 +168,7 @@ public class GroupController {
                     "Group",
                     LocalDateTime.now()
             );
+            LOGGER.error("updateGroup - request not valid:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -163,6 +177,7 @@ public class GroupController {
                     "Group",
                     LocalDateTime.now()
             );
+            LOGGER.error("updateGroup - unexpected error:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -177,6 +192,7 @@ public class GroupController {
     public ResponseEntity<?> deleteGroup(@PathVariable Long id) {
         try {
             groupService.deleteGroup(id);
+            LOGGER.info("deleteGroup - group deleted: {}", id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (GroupNotFoundException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -185,6 +201,7 @@ public class GroupController {
                     "Group",
                     LocalDateTime.now()
             );
+            LOGGER.error("deleteGroup - group not found:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         } catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -193,6 +210,7 @@ public class GroupController {
                     "Group",
                     LocalDateTime.now()
             );
+            LOGGER.error("deleteGroup - unexpected error:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
