@@ -5,6 +5,8 @@ import com.example.demo.Exceptions.Models.DuplicateResourceException;
 import com.example.demo.Exceptions.Models.GenreNotFoundException;
 import com.example.demo.Models.ErrorResponse;
 import com.example.demo.Services.DBServices.GenreService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/genres")
 public class GenreController {
-
+    private final static Logger LOGGER = LoggerFactory.getLogger(GenreController.class);
     private final GenreService genreService;
 
     @Autowired
@@ -28,6 +30,7 @@ public class GenreController {
     @GetMapping
     public ResponseEntity<List<Genre>> getAllGenres() {
         List<Genre> genres = genreService.getAllGenres();
+        LOGGER.info("getAllGenres - genres found: {}", genres);
         return new ResponseEntity<>(genres, HttpStatus.OK);
     }
 
@@ -43,8 +46,10 @@ public class GenreController {
                     "Genre",
                     LocalDateTime.now()
             );
+            LOGGER.error("getGenreById - genre not found: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
+        LOGGER.info("getGenreById - genre found: {}", genre);
         return new ResponseEntity<>(genre, HttpStatus.OK);
     }
 
@@ -60,8 +65,10 @@ public class GenreController {
                     "Genre",
                     LocalDateTime.now()
             );
+            LOGGER.error("createGenre - genre already exists: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         }
+        LOGGER.info("createGenre - genre found: {}", newGenre);
         return ResponseEntity.status(HttpStatus.CREATED).body(newGenre);
     }
 
@@ -78,8 +85,10 @@ public class GenreController {
                     "Genre",
                     LocalDateTime.now()
             );
+            LOGGER.error("updateGenre - genre not found: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
+        LOGGER.info("updateGenre - genre found: {}", updatedGenre);
         return ResponseEntity.status(HttpStatus.OK).body(updatedGenre);
     }
 
@@ -95,8 +104,10 @@ public class GenreController {
                     "Genre",
                     LocalDateTime.now()
             );
+            LOGGER.error("deleteGenre - genre not found: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
+        LOGGER.info("deleteGenre - genre found: {}", id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }
