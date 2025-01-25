@@ -175,7 +175,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
         try{
             User newUser = userService.updateUser(id, user);
