@@ -129,5 +129,76 @@ public class EventMapper {
         dto.setCategoryName(event.getCategory().getName());
 
         return dto;
+    } /**
+     * Updates an existing Event entity with values from an EventRegisterDTO.
+     *
+     * @param eventRegisterDTO The DTO containing updated event data.
+     * @param event            The existing Event entity to update.
+     */
+    public void updateEntityFromDTO(EventRegisterDTO eventRegisterDTO, Event event) {
+
+        if (eventRegisterDTO.getTitle() != null) {
+            event.setTitle(eventRegisterDTO.getTitle());
+        }
+
+        if (eventRegisterDTO.getDescription() != null) {
+            event.setDescription(eventRegisterDTO.getDescription());
+        }
+
+        if (eventRegisterDTO.getLocation() != null) {
+            event.setLocation(eventRegisterDTO.getLocation());
+        }
+
+        if (eventRegisterDTO.getAddress() != null) {
+            event.setAddress(eventRegisterDTO.getAddress());
+        }
+
+        if (eventRegisterDTO.getDate() != null) {
+            event.setDate(eventRegisterDTO.getDate());
+        }
+
+        if (eventRegisterDTO.getGenreId() != null && !eventRegisterDTO.getGenreId().isEmpty()) {
+            Set<Genre> genres = eventRegisterDTO.getGenreId().stream()
+                    .map(genreService::getGenreById)
+                    .collect(Collectors.toSet());
+            event.setGenres(genres);
+        }
+
+        if (eventRegisterDTO.getLatitude() != null) {
+            event.setLatitude(eventRegisterDTO.getLatitude());
+        }
+
+        if (eventRegisterDTO.getLongitude() != null) {
+            event.setLongitude(eventRegisterDTO.getLongitude());
+        }
+
+        if (eventRegisterDTO.getTicketPrices() != null) {
+            if (!eventRegisterDTO.getTicketPrices().isEmpty()) {
+                try {
+                    TicketPrices ticketPrices = TicketPrices.fromJson(eventRegisterDTO.getTicketPrices());
+                    event.setTicketPrices(ticketPrices);
+                } catch (JsonProcessingException e) {
+                    throw new IllegalArgumentException("Invalid ticketPrices JSON format", e);
+                }
+            } else {
+                event.setTicketPrices(null);
+            }
+        }
+
+        if (eventRegisterDTO.getCheapestTicket() != null) {
+            event.setCheapestTicket(eventRegisterDTO.getCheapestTicket());
+        }
+
+        if (eventRegisterDTO.getOrganizerId() != null) {
+            User organizer = userService.getUserById(eventRegisterDTO.getOrganizerId());
+            event.setCreatedBy(organizer);
+        }
+
+        if (eventRegisterDTO.getCategoryId() != null) {
+            Category category = categoryService.getCategoryById(eventRegisterDTO.getCategoryId());
+            event.setCategory(category);
+        }
+
+        event.setUpdatedAt(java.time.LocalDateTime.now());
     }
 }
