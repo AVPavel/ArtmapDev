@@ -114,18 +114,24 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
             userService.deleteUser(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.NOT_FOUND.value(),
+                    e.getMessage(),
+                    "User",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
 
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<UserResponseDTO>> searchUsers(
+    public ResponseEntity<?> searchUsers(
             @RequestParam String searchTerm,
             @RequestParam(required = false) User.Role role,
             @RequestParam(defaultValue = "0") int page,
