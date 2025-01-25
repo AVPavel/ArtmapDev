@@ -6,6 +6,7 @@ import com.example.demo.DTOs.Users.UserResponseDTO;
 import com.example.demo.Exceptions.Models.DuplicateResourceException;
 import com.example.demo.Exceptions.Models.ResourceNotFoundException;
 import com.example.demo.Exceptions.Models.UserNotFoundException;
+import com.example.demo.Models.ErrorResponse;
 import com.example.demo.Services.Mappers.UserMapper;
 import com.example.demo.Services.DBServices.UserService;
 import jakarta.validation.Valid;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("api/users")
@@ -28,18 +31,36 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserRegisterDTO userRegistrationDTO) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDTO userRegistrationDTO) {
         try {
             User user = userMapper.toEntity(userRegistrationDTO);
             User registerdUser = userService.registerUser(user);
             UserResponseDTO userDTO = userMapper.toResponseDTO(registerdUser);
-            return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
         } catch (DuplicateResourceException exception) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.CONFLICT.value(),
+                    exception.getMessage(),
+                    "User",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         } catch (IllegalArgumentException exception) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.BAD_REQUEST.value(),
+                    exception.getMessage(),
+                    "User",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    ex.getMessage(),
+                    "User",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
