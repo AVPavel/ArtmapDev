@@ -5,6 +5,8 @@ import com.example.demo.Exceptions.Models.CategoryNotFoundException;
 import com.example.demo.Exceptions.Models.DuplicateResourceException;
 import com.example.demo.Models.ErrorResponse;
 import com.example.demo.Services.DBServices.CategoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
-
+    private final static Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
     private final CategoryService categoryService;
 
     @Autowired
@@ -39,14 +41,17 @@ public class CategoryController {
                     "Category",
                     LocalDateTime.now()
             );
+            LOGGER.error("getCategoryById - category not found:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
+        LOGGER.info("getCategoryById - Category found with id {}", id);
         return ResponseEntity.ok(category);
     }
 
     @GetMapping
     public ResponseEntity<List<Category>> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
+        LOGGER.info("getAllCategories - Categories found");
         return ResponseEntity.ok(categories);
     }
 
@@ -54,11 +59,8 @@ public class CategoryController {
     public ResponseEntity<?> createCategory(@RequestBody Category category) { 
         try {
             Category newCategory = categoryService.addCategory(category);
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(newCategory.getId())
-                    .toUri();
-            return ResponseEntity.created(location).body(newCategory);
+            LOGGER.info("createCategory - Category added with id {}", newCategory.getId());
+            return ResponseEntity.status(HttpStatus.OK).body(newCategory);
         } catch (DuplicateResourceException ex) {
             ErrorResponse errorResponse = new ErrorResponse(
                     HttpStatus.CONFLICT.value(),
@@ -66,6 +68,7 @@ public class CategoryController {
                     "Category",
                     LocalDateTime.now()
             );
+            LOGGER.error("createCategory - Category already exists: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         } catch (Exception ex) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -74,6 +77,7 @@ public class CategoryController {
                     "Category",
                     LocalDateTime.now()
             );
+            LOGGER.error("createCategory - unexpected error: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -93,8 +97,10 @@ public class CategoryController {
                     "Category",
                     LocalDateTime.now()
             );
+            LOGGER.error("updateCategory - Category not found:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
+        LOGGER.info("updateCategory - Category found with id {}", id);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(category);
     }
 
@@ -110,8 +116,10 @@ public class CategoryController {
                     "Category",
                     LocalDateTime.now()
             );
+            LOGGER.error("deleteCategory - Category not found:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
+        LOGGER.info("deleteCategory - Category found with id {}", id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }
