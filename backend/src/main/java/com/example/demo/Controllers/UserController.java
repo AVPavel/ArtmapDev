@@ -65,7 +65,7 @@ public class UserController {
     }
 
     @GetMapping("/organizers")
-    public ResponseEntity<Page<UserResponseDTO>> getOrganizers(
+    public ResponseEntity<?> getOrganizers(
             @RequestParam User.Role role,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "50") int size,
@@ -75,11 +75,23 @@ public class UserController {
         try {
             Page<User> organizers = userService.getUsersByRole(role, page, size, sortBy, sortDir);
             Page<UserResponseDTO> organizersDTO = organizers.map(userMapper::toResponseDTO);
-            return new ResponseEntity<>(organizersDTO, HttpStatus.OK);
+            return ResponseEntity.status(HttpStatus.OK).body(organizersDTO);
         } catch (ResourceNotFoundException | UserNotFoundException exception) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.NOT_FOUND.value(),
+                    exception.getMessage(),
+                    "User",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    ex.getMessage(),
+                    "User",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
