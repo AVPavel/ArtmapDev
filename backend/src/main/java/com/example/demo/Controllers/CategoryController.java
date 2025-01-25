@@ -81,9 +81,21 @@ public class CategoryController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category updatedCategory) {
-        Category category = categoryService.updateCategory(id, updatedCategory);
-        return ResponseEntity.ok(category);
+    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody Category updatedCategory) {
+        Category category = null;
+        try{
+            category = categoryService.updateCategory(id, updatedCategory);
+        }
+        catch (CategoryNotFoundException e){
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.NOT_FOUND.value(),
+                    e.getMessage(),
+                    "Category",
+                    LocalDateTime.now()
+            );
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(category);
     }
 
     @DeleteMapping("/{id}")
