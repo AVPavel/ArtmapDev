@@ -78,12 +78,12 @@ public class UserService {
 
         if (updatedUser.getUsername() != null && !updatedUser.getUsername().equals(existingUser.getUsername())) {
             if (userRepository.findByUsername(updatedUser.getUsername()).isPresent()) {
-                throw new RuntimeException("Username already exists");
+                throw new DuplicateResourceException("Username already exists");
             }
         }
         if (updatedUser.getEmail() != null && updatedUser.getEmail().equals(existingUser.getEmail())) {
             if (userRepository.findByEmail(updatedUser.getEmail()).isPresent()) {
-                throw new RuntimeException("Email already exists");
+                throw new DuplicateResourceException("Email already exists");
             }
         }
 

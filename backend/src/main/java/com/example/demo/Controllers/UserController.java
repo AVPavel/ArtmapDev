@@ -175,4 +175,30 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
+        try{
+            User newUser = userService.updateUser(id, user);
+            return ResponseEntity.status(HttpStatus.OK).body(newUser);
+        }
+        catch(UserNotFoundException e){
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.NOT_FOUND.value(),
+                    e.getMessage(),
+                    "User",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+        catch (DuplicateResourceException e){
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.CONFLICT.value(),
+                    e.getMessage(),
+                    "User",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+        }
+    }
+
 }
