@@ -155,7 +155,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Page<UserResponseDTO>> getAllUsers(
+    public ResponseEntity<?> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "200") int size,
             @RequestParam(defaultValue = "username") String sortBy,
@@ -163,9 +163,15 @@ public class UserController {
         try {
             Page<User> usersPage = userService.getAllUsers(page, size, sortBy, sortDir);
             Page<UserResponseDTO> userDTOPage = usersPage.map(userMapper::toResponseDTO);
-            return new ResponseEntity<>(userDTOPage, HttpStatus.OK);
+            return ResponseEntity.status(HttpStatus.OK).body(userDTOPage);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.NOT_FOUND.value(),
+                    e.getMessage(),
+                    "User",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
 
