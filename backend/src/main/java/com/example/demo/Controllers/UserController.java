@@ -96,13 +96,19 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
         try {
             User user = userService.getUserById(id);
             UserResponseDTO userDTO = userMapper.toResponseDTO(user);
-            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+            return ResponseEntity.status(HttpStatus.OK).body(userDTO);
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.NOT_FOUND.value(),
+                    e.getMessage(),
+                    "User",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
 
     }
