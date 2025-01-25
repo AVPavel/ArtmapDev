@@ -8,6 +8,8 @@ import com.example.demo.Services.Mappers.NewsMapper;
 import com.example.demo.Models.ErrorResponse;
 import com.example.demo.Services.DBServices.NewsService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/news")
 public class NewsController {
-
+    private final static Logger LOGGER = LoggerFactory.getLogger(NewsController.class);
     private final NewsService newsService;
     private final NewsMapper newsMapper;
 
@@ -39,6 +41,7 @@ public class NewsController {
         try {
             News createdNews = newsService.createNews(dto);
             NewsResponseDTO responseDTO = newsMapper.toResponseDTO(createdNews);
+            LOGGER.info("createNews - News created: {}", responseDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (IllegalArgumentException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -47,6 +50,7 @@ public class NewsController {
                     "News",
                     LocalDateTime.now()
             );
+            LOGGER.error("createNews - invalid news: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -55,6 +59,7 @@ public class NewsController {
                     "News",
                     LocalDateTime.now()
             );
+            LOGGER.error("createNews - unexpected error: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -70,6 +75,7 @@ public class NewsController {
         try {
             News news = newsService.getNewsById(id);
             NewsResponseDTO responseDTO = newsMapper.toResponseDTO(news);
+            LOGGER.info("getNewsById - News found: {}", responseDTO);
             return ResponseEntity.ok(responseDTO);
         } catch (NewsNotFoundException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -78,6 +84,7 @@ public class NewsController {
                     "News",
                     LocalDateTime.now()
             );
+            LOGGER.error("getNewsById - news not found: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         } catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -86,6 +93,7 @@ public class NewsController {
                     "News",
                     LocalDateTime.now()
             );
+            LOGGER.error("getNewsById - Unexpected Error: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -102,6 +110,7 @@ public class NewsController {
             List<NewsResponseDTO> responseDTOs = newsList.stream()
                     .map(newsMapper::toResponseDTO)
                     .collect(Collectors.toList());
+            LOGGER.info("getAllNews - News found: {}", responseDTOs);
             return ResponseEntity.ok(responseDTOs);
         } catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -110,6 +119,7 @@ public class NewsController {
                     "News",
                     LocalDateTime.now()
             );
+            LOGGER.error("getAllNews - Unexpected Error: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -126,6 +136,7 @@ public class NewsController {
         try {
             News updatedNews = newsService.updateNews(id, dto);
             NewsResponseDTO responseDTO = newsMapper.toResponseDTO(updatedNews);
+            LOGGER.info("updateNews - News updated: {}", responseDTO);
             return ResponseEntity.ok(responseDTO);
         } catch (NewsNotFoundException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -134,6 +145,7 @@ public class NewsController {
                     "News",
                     LocalDateTime.now()
             );
+            LOGGER.error("updateNews - news not found: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         } catch (IllegalArgumentException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -142,6 +154,7 @@ public class NewsController {
                     "News",
                     LocalDateTime.now()
             );
+            LOGGER.error("updateNews - request not valid: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -150,6 +163,7 @@ public class NewsController {
                     "News",
                     LocalDateTime.now()
             );
+            LOGGER.error("updateNews - unexpected error: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -164,6 +178,7 @@ public class NewsController {
     public ResponseEntity<?> deleteNews(@PathVariable Long id) {
         try {
             newsService.deleteNews(id);
+            LOGGER.info("deleteNews - News deleted: {}", id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (NewsNotFoundException e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -172,6 +187,7 @@ public class NewsController {
                     "News",
                     LocalDateTime.now()
             );
+            LOGGER.error("deleteNews - news not found: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         } catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse(
@@ -180,6 +196,7 @@ public class NewsController {
                     "News",
                     LocalDateTime.now()
             );
+            LOGGER.error("deleteNews - Unexpected error: {}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
