@@ -1,6 +1,5 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.DBModels.Event;
 import com.example.demo.DBModels.Group;
 import com.example.demo.DTOs.Groups.*;
 import com.example.demo.Exceptions.Models.EventNotFoundException;

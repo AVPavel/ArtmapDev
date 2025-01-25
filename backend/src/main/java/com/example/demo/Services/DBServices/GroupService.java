@@ -3,10 +3,8 @@ package com.example.demo.Services.DBServices;
 import com.example.demo.DBModels.Group;
 import com.example.demo.DTOs.Groups.*;
 import com.example.demo.Exceptions.Models.*;
-import com.example.demo.Globals.GlobalLogger;
 import com.example.demo.Services.Mappers.GroupMapper;
 import com.example.demo.Repositories.GroupRepository;
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

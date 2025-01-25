@@ -6,7 +6,6 @@ import com.example.demo.DTOs.Events.EventRegisterDTO;
 import com.example.demo.Exceptions.Models.DuplicateResourceException;
 import com.example.demo.Exceptions.Models.EventNotFoundException;
 import com.example.demo.Repositories.EventRepository;
-import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Services.Mappers.EventMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,13 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class EventService {
 
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
     private final EventMapper eventMapper;
 
     @Autowired
-    public EventService(EventRepository eventRepository, UserRepository userRepository, EventMapper eventMapper) {
+    public EventService(EventRepository eventRepository, EventMapper eventMapper) {
         this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
         this.eventMapper = eventMapper;
     }
 

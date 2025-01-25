@@ -54,7 +54,7 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
-    @Transactional(readOnly = true)
+    /*@Transactional(readOnly = true)
     public User getUserByIdAndRole(Long id, User.Role role) {
         return userRepository.findByIdAndRole(id, role)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -64,7 +64,7 @@ public class UserService {
     public User getUserByUsernameAndRole(String username, User.Role role) {
         return userRepository.findByUsernameAndRole(username, role)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
-    }
+    }*/
 
     @Transactional(readOnly = true)
     public User getUserByUsername(String username) {
