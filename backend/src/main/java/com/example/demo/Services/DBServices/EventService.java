@@ -2,6 +2,7 @@ package com.example.demo.Services.DBServices;
 
 import com.example.demo.DBModels.Category;
 import com.example.demo.DBModels.Event;
+import com.example.demo.DTOs.Events.EventRegisterDTO;
 import com.example.demo.Exceptions.Models.DuplicateResourceException;
 import com.example.demo.Exceptions.Models.EventNotFoundException;
 import com.example.demo.Repositories.EventRepository;
@@ -56,6 +57,17 @@ public class EventService {
             return eventRepository.findAllByCategory(category, pageable);
         }
         return eventRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public Event updateEvent(Long id, EventRegisterDTO eventRegisterDTO) {
+        Event existingEvent = eventRepository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException("Could not find event with id: " + id));
+
+        eventMapper.updateEntityFromDTO(eventRegisterDTO, existingEvent);
+
+        return eventRepository.save(existingEvent);
+
     }
 
 }

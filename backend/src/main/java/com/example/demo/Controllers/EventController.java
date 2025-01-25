@@ -9,6 +9,7 @@ import com.example.demo.Exceptions.Models.EventNotFoundException;
 import com.example.demo.Models.ErrorResponse;
 import com.example.demo.Services.DBServices.EventService;
 import com.example.demo.Services.Mappers.EventMapper;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -118,6 +119,41 @@ public class EventController {
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     e.getMessage(),
                     "Error",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateEvent(
+            @PathVariable Long id,
+            @Valid @RequestBody EventRegisterDTO eventRegisterDTO) {
+        try {
+            Event updatedEvent = eventService.updateEvent(id, eventRegisterDTO);
+            EventResponseDTO responseDTO = eventMapper.toResponseDTO(updatedEvent);
+            return ResponseEntity.ok(responseDTO);
+        } catch (EventNotFoundException e) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.NOT_FOUND.value(),
+                    e.getMessage(),
+                    "Event",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        } catch (IllegalArgumentException e) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.BAD_REQUEST.value(),
+                    e.getMessage(),
+                    "Event",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        } catch (Exception e) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    e.getMessage(),
+                    "Event",
                     LocalDateTime.now()
             );
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
