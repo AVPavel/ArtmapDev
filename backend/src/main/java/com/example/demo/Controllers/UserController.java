@@ -141,9 +141,15 @@ public class UserController {
         try {
             Page<User> usersPage = userService.searchUsers(searchTerm, role, page, size, sortBy, sortDir);
             Page<UserResponseDTO> userDTOPage = usersPage.map(userMapper::toResponseDTO);
-            return new ResponseEntity<>(userDTOPage, HttpStatus.OK);
+            return ResponseEntity.status(HttpStatus.OK).body(userDTOPage);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.NOT_FOUND.value(),
+                    e.getMessage(),
+                    "User",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
 
     }
