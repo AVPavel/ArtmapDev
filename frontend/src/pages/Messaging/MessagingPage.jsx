@@ -16,10 +16,11 @@ const MessagingPage = () => {
         setSelectedEvent(eventName);
     }
 
+
     return (
         <div className={styles.container}>
             <Navbar/>
-            <div className={styles.body}>
+            <div className={styles.body}>z
                 <aside className={styles.sidebar}>
                     <ul className={styles.eventList}>
                         {initialEvents.map((eventName, index) => (
