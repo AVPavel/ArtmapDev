@@ -56,3 +56,21 @@
   outline: none;
   box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
 }
+
+/* Map.module.css */
+.info-window {
+  padding: 12px;
+  min-width: 200px;
+}
+
+.info-window h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.info-window a {
+  color: #007bff;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 8px;
+}

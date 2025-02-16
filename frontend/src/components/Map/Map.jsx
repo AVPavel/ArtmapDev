@@ -4,33 +4,62 @@ import styles from './Map.module.css';
 const Map = () => {
     const mapRef = useRef(null);
     const [map, setMap] = useState(null);
+    const [ui, setUi] = useState(null);
+    const [userLocation, setUserLocation] = useState(null);
+    const [mapViewType, setMapViewType] = useState('vector.normal.map');
     const apiKey = process.env.REACT_APP_HERE_API_KEY;
 
-    useEffect(() => {
-        if (!window.H || !mapRef.current) return;
-
-        const platform = new window.H.service.Platform({
-            apikey: apiKey,
-        });
-
-        const defaultLayers = platform.createDefaultLayers();
-
-        const hMap = new window.H.Map(mapRef.current, defaultLayers.vector.normal.map, {
-            center: { lat: 44.4361414, lng: 26.1027202 },
-            zoom: 17,
-            pixelRatio: window.devicePixelRatio || 1,
-        });
-
-        const behavior = new window.H.mapevents.Behavior(new window.H.mapevents.MapEvents(hMap));
-
-        const ui = window.H.ui.UI.createDefault(hMap, defaultLayers);
-
-        setMap(hMap);
-
-        return () => {
-            hMap.dispose();
-        };
-    }, [apiKey]);
+    //initializing the map
+    // useEffect(() => {
+    //     if (!window.H || !mapRef.current) return;
+    //
+    //     const platform = new window.H.service.Platform({
+    //         apikey: apiKey,
+    //     });
+    //
+    //     // Create only the normal vector layer
+    //     const normalLayer = platform.createDefaultLayers().vector.normal.map;
+    //
+    //     const hMap = new window.H.Map(mapRef.current, normalLayer, {
+    //         center: { lat: 44.4361414, lng: 26.1027202 },
+    //         zoom: 17,
+    //         pixelRatio: window.devicePixelRatio || 1,
+    //     });
+    //
+    //     const behavior = new window.H.mapevents.Behavior(new window.H.mapevents.MapEvents(hMap));
+    //
+    //     const mapUI = window.H.ui.UI.createDefault(hMap, normalLayer);
+    //
+    //     setUi(mapUI);
+    //     setMap(hMap);
+    //
+    //     return () => {
+    //         hMap.dispose();
+    //     };
+    // }, [apiKey, mapViewType]);
+    //
+    // //Hook for pointing the current location
+    // useEffect(() => {
+    //     if (!map) return;
+    //
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(
+    //             (position) => {
+    //                 const { latitude, longitude } = position.coords;
+    //                 setUserLocation({ lat: latitude, lng: longitude });
+    //
+    //                 const userMarker = new window.H.map.Marker({ lat: latitude, lng: longitude });
+    //                 map.addObject(userMarker);
+    //                 map.setCenter({ lat: latitude, lng: longitude });
+    //             },
+    //             (error) => {
+    //                 console.error('Error getting user location:', error);
+    //             }
+    //         );
+    //     } else {
+    //         console.log("Geolocation is not supported");
+    //     }
+    // }, [map]);
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
@@ -40,7 +69,25 @@ const Map = () => {
             }
         }
     };
+    const createInteractiveMarker = (coords, content, map, ui) => {
+        const marker = new window.H.map.Marker(coords);
 
+        // Add click/tap event listener
+        marker.addEventListener('tap', (evt) => {
+            // Clear previous bubbles
+            ui.getBubbles().forEach(bubble => ui.removeBubble(bubble));
+
+            // Create info bubble
+            const bubble = new window.H.ui.InfoBubble(evt.target.getGeometry(), {
+                content: `<div class="info-window">${content}</div>`,
+            });
+
+            // Add bubble to UI
+            ui.addBubble(bubble);
+        });
+
+        return marker;
+    };
     const geocodeAddress = (address) => {
         fetch(`https://geocode.search.hereapi.com/v1/geocode?q=${encodeURIComponent(address)}&apikey=${apiKey}`)
             .then((response) => response.json())
@@ -59,11 +106,23 @@ const Map = () => {
     };
 
     const centerMapOnCoordinates = (coords) => {
-        if (map) {
+        if (map && ui) {
             map.setCenter(coords);
-            map.setZoom(16
+            map.setZoom(16);
+
+            // Create interactive marker
+            const marker = createInteractiveMarker(
+                coords,
+                `
+        <h3>Searched Location</h3>
+        <p>Lat: ${coords.lat.toFixed(4)}</p>
+        <p>Lng: ${coords.lng.toFixed(4)}</p>
+        <a href="/details?lat=${coords.lat}&lng=${coords.lng}" target="_blank">View Details</a>
+      `,
+                map,
+                ui
             );
-            const marker = new window.H.map.Marker(coords);
+
             map.addObject(marker);
         }
     };

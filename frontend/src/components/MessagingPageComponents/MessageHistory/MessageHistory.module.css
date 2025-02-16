@@ -1,21 +1,46 @@
 .messageHistory {
     flex: 1;
+    overflow: hidden;
     padding: 1rem;
-    overflow-y: auto;
-    text-align: left;
 }
 
-.readOnlyBox {
-    width: 100%;
+.messagesContainer {
     height: 100%;
-    resize: none;
-    border: none;
-    background: #fff;
-    font-family: inherit;
-    font-size: inherit;
-    color: #333;
+    overflow-y: auto;
+    padding-right: 0.5rem;
 }
 
-textarea {
+.message {
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+    max-width: 70%;
+}
 
+.userMessage {
+    background-color: #007bff;
+    color: white;
+    margin-left: auto;
+}
+
+.userMessage .sender {
+    display: none; /* Hide sender name for user's own messages */
+}
+.messageHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.messageContent {
+    word-wrap: break-word;
+}
+
+.noMessages {
+    text-align: center;
+    color: #666;
+    padding: 2rem;
 }
