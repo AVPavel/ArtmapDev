@@ -10,56 +10,70 @@ const Map = () => {
     const apiKey = process.env.REACT_APP_HERE_API_KEY;
 
     //initializing the map
-    // useEffect(() => {
-    //     if (!window.H || !mapRef.current) return;
-    //
-    //     const platform = new window.H.service.Platform({
-    //         apikey: apiKey,
-    //     });
-    //
-    //     // Create only the normal vector layer
-    //     const normalLayer = platform.createDefaultLayers().vector.normal.map;
-    //
-    //     const hMap = new window.H.Map(mapRef.current, normalLayer, {
-    //         center: { lat: 44.4361414, lng: 26.1027202 },
-    //         zoom: 17,
-    //         pixelRatio: window.devicePixelRatio || 1,
-    //     });
-    //
-    //     const behavior = new window.H.mapevents.Behavior(new window.H.mapevents.MapEvents(hMap));
-    //
-    //     const mapUI = window.H.ui.UI.createDefault(hMap, normalLayer);
-    //
-    //     setUi(mapUI);
-    //     setMap(hMap);
-    //
-    //     return () => {
-    //         hMap.dispose();
-    //     };
-    // }, [apiKey, mapViewType]);
-    //
-    // //Hook for pointing the current location
-    // useEffect(() => {
-    //     if (!map) return;
-    //
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition(
-    //             (position) => {
-    //                 const { latitude, longitude } = position.coords;
-    //                 setUserLocation({ lat: latitude, lng: longitude });
-    //
-    //                 const userMarker = new window.H.map.Marker({ lat: latitude, lng: longitude });
-    //                 map.addObject(userMarker);
-    //                 map.setCenter({ lat: latitude, lng: longitude });
-    //             },
-    //             (error) => {
-    //                 console.error('Error getting user location:', error);
-    //             }
-    //         );
-    //     } else {
-    //         console.log("Geolocation is not supported");
-    //     }
-    // }, [map]);
+    useEffect(() => {
+        if (!window.H || !mapRef.current) return;
+
+        const platform = new window.H.service.Platform({
+            apikey: apiKey,
+        });
+
+        // Create only the normal vector layer
+        const normalLayer = platform.createDefaultLayers().vector.normal.map;
+
+        const hMap = new window.H.Map(mapRef.current, normalLayer, {
+            center: { lat: 44.4361414, lng: 26.1027202 },
+            zoom: 17,
+            pixelRatio: window.devicePixelRatio || 1,
+        });
+
+        const behavior = new window.H.mapevents.Behavior(new window.H.mapevents.MapEvents(hMap));
+
+        const mapUI = window.H.ui.UI.createDefault(hMap, normalLayer);
+
+        setUi(mapUI);
+        setMap(hMap);
+
+        return () => {
+            hMap.dispose();
+        };
+    }, [apiKey, mapViewType]);
+
+    //Hook for pointing the current location
+    useEffect(() => {
+        if (!map) return;
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setUserLocation({ lat: latitude, lng: longitude });
+
+                    // Create interactive marker
+                    const userMarker = createInteractiveMarker(
+                        { lat: latitude, lng: longitude },
+                        `
+            <div style="width: 450px; height: 225px; border: 1px solid #ccc; padding: 10px; overflow: hidden;">
+  <h3>Your Location</h3>
+  <p>Lat: ${latitude.toFixed(4)}</p>
+  <p>Lng: ${longitude.toFixed(4)}</p>
+  <a href="/details" target="_blank">View Details</a>
+</div>
+
+          `,
+                        map,
+                        ui
+                    );
+                    map.addObject(userMarker);
+                    map.setCenter({ lat: latitude, lng: longitude });
+                },
+                (error) => {
+                    console.error('Error getting user location:', error);
+                }
+            );
+        } else {
+            console.log("Geolocation is not supported");
+        }
+    }, [map]);
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {

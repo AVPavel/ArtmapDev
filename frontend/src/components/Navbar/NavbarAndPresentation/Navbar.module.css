@@ -1,0 +1,86 @@
+.navbarPresentation {
+    background-image: url("../../../assets/images/HomePage/Poza_fundal_iconite.png");
+    background-size: cover; /* Ensures the image covers the entire element */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    width: 100%; /* Ensures the element takes up the full width */
+    min-height: 90vh;
+}
+
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin: 0;
+    flex-wrap: wrap-reverse;
+    background: rgba(255,255,255,0.17);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 100;
+}
+
+.navSection {
+    flex: 1;
+    display: flex;
+    padding: 0 2%;
+}
+.navSection:first-of-type{
+    justify-content: flex-start;
+}
+.navSection:last-of-type{
+    justify-content: flex-end;
+    margin-left: auto;
+}
+.navLinks{
+    display: flex;
+    gap:30px;
+    list-style: none;
+}
+
+.navLinks li{
+    display: flex;
+    align-items: center;
+}
+
+.navLinks li a{
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+    font-size: 1.5rem;
+}
+
+.navLinks li a:hover{
+    color: #6c8ae6
+}
+
+.logoContainer{
+    flex: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logoImage{
+    height: 3vw;
+    width: auto;
+}
+
+.signInButton{
+    font-family: 'Roboto Flex', sans-serif;
+    font-size: 1.20vw;
+    font-weight: 500;
+    background-color: #e21818;
+    color: white;
+    border-radius: 30px;
+    border: none;
+    padding: 7px 25px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.signInButton:hover{
+    color: #e21818;
+    background-color: white;
+    transition: color 0.3s ease;
+}

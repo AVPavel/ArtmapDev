@@ -1,0 +1,132 @@
+/* Add this media query at the bottom of your CSS */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        padding: 15px 0;
+    }
+
+    .navSection {
+        width: 100%;
+        justify-content: center !important;
+        padding: 10px 0;
+    }
+
+    .navLinks {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .logoContainer {
+        order: -1; /* Move logo to top */
+        margin: 15px 0;
+    }
+
+    .logoImage {
+        height: 40px; /* Fixed size for mobile */
+        padding-top: 0;
+    }
+
+    .navLinks li a {
+        font-size: 1.1rem;
+    }
+
+    .signInButton {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+
+    /* Hide specific links on mobile if needed */
+    /* .navLinks li:nth-child(2),
+    .navLinks li:nth-child(3) {
+      display: none;
+    } */
+}
+
+/* Existing styles with modifications */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    flex-wrap: wrap-reverse;
+    background-color: #334f7b;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 100;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.navSection {
+    flex: 1;
+    display: flex;
+    padding: 0 2%;
+    min-width: 200px; /* Prevent too much squeezing */
+}
+
+.navSection:first-of-type {
+    justify-content: flex-start;
+}
+
+.navSection:last-of-type {
+    justify-content: flex-end;
+}
+
+.navLinks {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navLinks li {
+    display: flex;
+    align-items: center;
+}
+
+.navLinks li a {
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+    font-size: 1.2rem;
+    white-space: nowrap;
+}
+
+.logoImage {
+    height: 40px; /* Fallback for mobile */
+    width: auto;
+    transition: height 0.3s ease;
+}
+
+.signInButton {
+    font-family: 'Roboto Flex', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: #e21818;
+    color: white;
+    border-radius: 30px;
+    border: none;
+    padding: 8px 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Desktop specific styles */
+@media (min-width: 769px) {
+    .logoImage {
+        height: 2.5vw;
+        min-height: 30px;
+        max-height: 50px;
+    }
+
+    .navLinks li a {
+        font-size: 1.5rem;
+    }
+
+    .signInButton {
+        font-size: 1.2rem;
+        padding: 7px 25px;
+    }
+}

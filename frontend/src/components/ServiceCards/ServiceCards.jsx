@@ -9,10 +9,11 @@ const ServiceCards = () => {
     const services = [
         {icon: LogoMusic, description: "Concerte" },
         {icon: LogoTheater, description: "Piese de teatru" },
+        {icon: LogoArt, description: "Expozitii de arta" },
         {icon: LogoArt, description: "Expozitii de arta" }
     ];
     return (
-        <div className={styles.cards}>
+        <div className={styles.cardsWrapper}>
             {services.map((service, index) =>(
                 <ServiceCard
                     key={index}

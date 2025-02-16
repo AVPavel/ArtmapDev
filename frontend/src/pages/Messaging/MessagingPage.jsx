@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import styles from './MessagingPage.module.css';
-import Navbar from "../../components/Navbar/Navbar";
+import Navbar from "../../components/Navbar/Navbar/Navbar";
 
 import SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';

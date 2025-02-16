@@ -1,17 +1,17 @@
 import React from "react";
 import styles from "./Home.module.css";
-import HeroSection from "../../components/PresentationSection/HeroSection";
-import Navbar from "../../components/Navbar/Navbar";
+import NavbarAndPresentation from "../../components/Navbar/NavbarAndPresentation/NavbarAndPresentation";
 import MapSection from "../../components/MapSection/MapSection";
 import ServiceCards from "../../components/ServiceCards/ServiceCards"
+import Footer from "../../components/Footer/Footer";
 
 const Home = () => {
     return (
         <div className={styles.container}>
-            <Navbar/>
-            <HeroSection/>
+            <NavbarAndPresentation/>
             <MapSection/>
             <ServiceCards/>
+            <Footer/>
         </div>
     );
 };
