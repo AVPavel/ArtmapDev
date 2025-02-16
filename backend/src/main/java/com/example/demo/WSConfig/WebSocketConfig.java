@@ -2,6 +2,7 @@ package com.example.demo.WSConfig;
 
 import com.example.demo.Security.JwtTokenProvider;
 import com.example.demo.Services.Customs.CustomUserDetailsService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +34,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("*")
+                .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
 
@@ -48,8 +49,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         return new ChannelInterceptor() {
             @Override
             public Message<?> preSend(
-                    Message<?> message,
-                    MessageChannel channel){
+                    @NotNull Message<?> message,
+                    @NotNull MessageChannel channel){
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
                 //Checking if it is a CONNECT frame

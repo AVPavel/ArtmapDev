@@ -4,6 +4,7 @@ import com.example.demo.DTOs.Messages.MessageDTO;
 import com.example.demo.Services.DBServices.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +20,9 @@ public class MessagingRestController {
         this.messageService = messageService;
     }
 
-    @RequestMapping("/{eventId}")
-    public ResponseEntity<?> getMessages(@PathVariable Long eventId) {
+    @GetMapping("/{eventId}")
+    public ResponseEntity<List<MessageDTO>> getMessages(@PathVariable Long eventId) {
         List<MessageDTO> messageDTOS = messageService.getMessagesForEvent(eventId);
-
-        return null;
+        return ResponseEntity.ok(messageDTOS);
     }
 }

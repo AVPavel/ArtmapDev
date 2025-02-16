@@ -2,6 +2,7 @@ package com.example.demo.Services.DBServices;
 
 import com.example.demo.DBModels.Category;
 import com.example.demo.DBModels.Event;
+import com.example.demo.DBModels.User;
 import com.example.demo.DTOs.Events.EventRegisterDTO;
 import com.example.demo.Exceptions.Models.DuplicateResourceException;
 import com.example.demo.Exceptions.Models.EventNotFoundException;
@@ -20,11 +21,13 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
+    private final UserService userService;
 
     @Autowired
-    public EventService(EventRepository eventRepository, EventMapper eventMapper) {
+    public EventService(EventRepository eventRepository, EventMapper eventMapper, UserService userService) {
         this.eventRepository = eventRepository;
         this.eventMapper = eventMapper;
+        this.userService = userService;
     }
 
     @Transactional(readOnly = true)
@@ -34,11 +37,15 @@ public class EventService {
     }
 
     @Transactional
-    public Event addEvent(Event event) {
+    public Event addEvent(Event event, String username) {
+
+        User organizer = userService.getUserByUsername(username);
+
         if (eventRepository.searchEventByTitle(event.getTitle()).isPresent()) {
             throw new DuplicateResourceException("Event with title: " + event.getTitle() + " already exists");
         }
 
+        event.setCreatedBy(organizer);
 
         return eventRepository.save(event);
     }

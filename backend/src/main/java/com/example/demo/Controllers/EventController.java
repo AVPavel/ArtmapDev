@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -99,10 +101,13 @@ public class EventController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addEvent(@RequestBody EventRegisterDTO eventRegisterDTO) {
+    public ResponseEntity<?> addEvent(@RequestBody EventRegisterDTO eventRegisterDTO, Authentication authentication) {
         try {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+
             Event event = eventMapper.toEntity(eventRegisterDTO);
-            Event savedEvent = eventService.addEvent(event);
+            Event savedEvent = eventService.addEvent(event, username);
             EventResponseDTO responseDTO = eventMapper.toResponseDTO(savedEvent);
             LOGGER.info("addEvent - event found:{}", event);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
