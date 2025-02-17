@@ -1,7 +1,108 @@
-.cardsWrapper {
-    background-color: #efeeee;
+/* ServiceCards.module.css */
+.carouselContainer {
+    position: relative;
+    padding: 0 60px; /* Increased padding for arrows */
+    background-color: #00235b;
+    border: 3px solid white;
+    overflow: hidden;
+}
+
+.swiperContainer {
+    width: 100%;
+    padding: 20px 0;
+}
+
+.swiper-slide {
+    width: 250px !important;
+    height: auto;
+    transition: transform 0.3s ease;
+    flex-shrink: 0; /* Important for proper sizing */
+}
+
+.arrowButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    height: 100%;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.arrowButton:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.arrowButton.swiper-button-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.leftArrow {
+    left: 10px;
+}
+
+.rightArrow {
+    right: 10px;
+}
+
+/* Card styles */
+.card {
+    min-width: 250px;
+    max-width: 250px;
+    height: 650px;
+    background: white;
+    border-radius: 15px;
+    padding: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 768px) {
+    .carouselContainer {
+        padding: 0 40px;
+    }
+
+    .swiper-slide {
+        width: 200px !important;
+    }
+
+    .card {
+        min-width: 200px;
+        max-width: 200px;
+        height: 500px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carouselContainer {
+        padding: 0 30px;
+    }
+
+    .swiper-slide {
+        width: 180px !important;
+    }
+
+    .card {
+        min-width: 180px;
+        max-width: 180px;
+        height: 400px;
+    }
+}
+
+@media (hover: hover) {
+    .swiper-slide:hover {
+        transform: translateY(-5px);
+    }
 }
