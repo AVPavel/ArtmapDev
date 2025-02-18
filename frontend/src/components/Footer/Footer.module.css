@@ -1,4 +1,149 @@
 .footerContainer {
     background-color: #00235b;
     min-height: 50vh;
+    padding: 4rem 2rem;
+    color: white;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+}
+
+.leftContent {
+    flex: 1;
+    max-width: 500px;
+}
+
+.leftContent h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.leftContent p {
+    margin-bottom: 1.5rem;
+    margin-left: 2rem;
+    color: #cccccc;
+    line-height: 1.5;
+    font-size: 1rem;
+}
+
+.subscribeForm {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-left: 3rem;
+}
+
+.subscribeForm input {
+    flex-grow: 1;
+    border: none;
+    border-bottom: 1px solid white;
+    background: transparent;
+    padding: 0.5rem 0;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    width: 75%;
+}
+
+.subscribeForm input:focus::placeholder {
+    opacity: 0;
+}
+
+.subscribeForm input::placeholder {
+    color: #cccccc;
+    opacity: 1;
+}
+
+.subscribeButton {
+        width: 35%;
+        font-size: 1rem;
+        font-weight: 500;
+        background-color: #e21818;
+        color: white;
+        border-radius: 30px;
+        border: none;
+        padding: 8px 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+}
+
+.subscribeButton:hover {
+    opacity: 0.9;
+}
+
+.rightContent {
+    display: flex;
+    gap: 8rem;
+    align-items: center;
+    margin-right: 10rem;
+}
+
+.rightContent img {
+    width: 48px;
+    height: 48px;
+    transition: opacity 0.3s ease;
+}
+
+.rightContent img:hover {
+    opacity: 0.8;
+}
+
+.divider {
+    border: 0;
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    margin: 2rem 0;
+}
+
+.bottomLinks {
+    display: flex;
+    justify-content: center;
+    gap: 8rem;
+    flex-wrap: wrap;
+}
+
+.bottomLinks a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: opacity 0.3s ease;
+}
+
+.bottomLinks a:hover {
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2rem;
+    }
+
+    .rightContent {
+        align-self: flex-end;
+    }
+
+    .subscribeForm {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .subscribeButton {
+        width: 100%;
+        font-size: 1rem;
+        font-weight: 500;
+        background-color: #e21818;
+        color: white;
+        border-radius: 30px;
+        border: none;
+        padding: 8px 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 }
