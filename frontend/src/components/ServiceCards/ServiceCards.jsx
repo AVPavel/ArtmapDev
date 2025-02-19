@@ -1,8 +1,10 @@
 import React, { useRef } from 'react';
 import styles from './ServiceCards.module.css';
 import ServiceCard from "./ServiceCard/ServiceCard";
-import LogoMusic from '../../assets/images/HomePage/muzic.svg';
-import LogoTheater from '../../assets/images/HomePage/teatru.svg';
+import PozaOpera from '../../assets/images/HomePage/Poza_opera_articole.jpg';
+import PozeExpozitie from '../../assets/images/HomePage/poza_expozitie_articole.jpg';
+import PozaConcert from '../../assets/images/HomePage/Poza_concert_articole.jpg';
+import PozaBalet from '../../assets/images/HomePage/Poza_balet_articole.jpg';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
@@ -16,52 +18,42 @@ const ServiceCards = () => {
 
     const services = [
         {
-            image: LogoMusic,
-            title: "1",
-            date: "24 August 2024",
-            address: "Stadionul National, Bucuresti"
+            image: PozaOpera,
+            title: "Orchestra din Lyon vine in București!",
+            date: "04.12.2024",
+            address: "Bulevardul Mihail Kogălniceanu 70-72, București 050104"
         },
         {
-            image: LogoTheater,
-            title: "2",
-            date: "15 Septembrie 2024",
-            address: "Teatrul National, Bucuresti"
+            image: PozaBalet,
+            title: "Balet Romeo si Julieta",
+            date: "05.04.2025",
+            address: "Bulevardul Mihail Kogălniceanu 70-72, București 050104"
         },
         {
-            image: LogoMusic,
-            title: "3",
-            date: "24 August 2024",
-            address: "Stadionul National, Bucuresti"
+            image: PozeExpozitie,
+            title: "Expoziție nouă la MNAR",
+            date: "04.12.2024",
+            address: "Bulevardul Mihail Kogălniceanu 70-72, București 050104"
         },
         {
-            image: LogoTheater,
-            title: "4",
-            date: "15 Septembrie 2024",
-            address: "Teatrul National, Bucuresti"
+            image: PozaConcert,
+            title: "AC/DC Sosește la Arene Romane",
+            date: "09.12.2025",
+            address: "Bulevardul Mihail Kogălniceanu 70-72, București 050104"
         },
         {
-            image: LogoTheater,
-            title: "5",
-            date: "15 Septembrie 2024",
-            address: "Teatrul National, Bucuresti"
-        },
-        {
-            image: LogoTheater,
-            title: "6",
-            date: "15 Septembrie 2024",
-            address: "Teatrul National, Bucuresti"
-        },
-        {
-            image: LogoTheater,
-            title: "7",
-            date: "15 Septembrie 2024",
-            address: "Teatrul National, Bucuresti"
-        },
-
+            image: PozaConcert,
+            title: "AC/DC Sosește la Arene Romane",
+            date: "09.12.2025",
+            address: "Bulevardul Mihail Kogălniceanu 70-72, București 050104"
+        }
     ];
 
+
     return (
+
         <div className={styles.carouselContainer}>
+            <h2 className={styles.ArticlesTitle}>Articles</h2>
             <button
                 ref={prevRef}
                 className={`${styles.arrowButton} ${styles.leftArrow}`}

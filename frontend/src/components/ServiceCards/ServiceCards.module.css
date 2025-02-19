@@ -1,9 +1,9 @@
 /* ServiceCards.module.css */
 .carouselContainer {
     position: relative;
-    padding: 0 60px; /* Increased padding for arrows */
+    padding: 0 60px 100px;
     background-color: #00235b;
-    border: 3px solid white;
+    border-bottom: 500px solid white;
     overflow: hidden;
 }
 
@@ -16,7 +16,7 @@
     width: 250px !important;
     height: auto;
     transition: transform 0.3s ease;
-    flex-shrink: 0; /* Important for proper sizing */
+    flex-shrink: 0;
 }
 
 .arrowButton {
@@ -67,6 +67,11 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+}
+
+.ArticlesTitle{
+    color:white;
+    font-size: 2.2em;
 }
 
 @media (max-width: 768px) {
