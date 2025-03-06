@@ -1,9 +1,12 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.DBModels.Event;
 import com.example.demo.DBModels.Group;
 import com.example.demo.DTOs.Groups.*;
 import com.example.demo.Exceptions.Models.EventNotFoundException;
 import com.example.demo.Exceptions.Models.GroupNotFoundException;
+import com.example.demo.Services.DBServices.EventService;
+import com.example.demo.Services.DBServices.UserService;
 import com.example.demo.Services.Mappers.GroupMapper;
 import com.example.demo.Models.*;
 import com.example.demo.Services.DBServices.GroupService;
@@ -12,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -22,15 +26,17 @@ import java.util.stream.Collectors;
  * REST controller for managing Group entities.
  */
 @RestController
-@RequestMapping("/groups")
+@RequestMapping("api/groups")
 public class GroupController {
     private final static Logger LOGGER = LoggerFactory.getLogger(GroupController.class);
     private final GroupService groupService;
     private final GroupMapper groupMapper;
+    private final EventService eventService;
 
-    public GroupController(GroupService groupService, GroupMapper groupMapper) {
+    public GroupController(GroupService groupService, GroupMapper groupMapper, EventService eventService) {
         this.groupService = groupService;
         this.groupMapper = groupMapper;
+        this.eventService = eventService;
     }
 
     /**
@@ -42,7 +48,8 @@ public class GroupController {
     @PostMapping
     public ResponseEntity<?> createGroup(@Valid @RequestBody GroupRegisterDTO dto) {
         try {
-            Group createdGroup = groupService.createGroup(dto);
+            Event event = eventService.getEventById(dto.getEventId());
+            Group createdGroup = groupService.createGroup(dto, event);
             GroupResponseDTO responseDTO = groupMapper.toResponseDTO(createdGroup);
             LOGGER.info("createGroup - group created: {}", responseDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
@@ -117,7 +124,8 @@ public class GroupController {
      *
      * @return A list of Groups as response DTOs.
      */
-    @GetMapping
+    @Transactional
+    @GetMapping("/all")
     public ResponseEntity<?> getAllGroups() {
         try {
             List<Group> groups = groupService.getAllGroups();
@@ -137,7 +145,6 @@ public class GroupController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
-
     /**
      * Updates an existing Group entity.
      *
@@ -148,7 +155,8 @@ public class GroupController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateGroup(@PathVariable Long id, @Valid @RequestBody GroupRegisterDTO dto) {
         try {
-            Group updatedGroup = groupService.updateGroup(id, dto);
+            Event event = eventService.getEventById(dto.getEventId());
+            Group updatedGroup = groupService.updateGroup(id, dto,event);
             GroupResponseDTO responseDTO = groupMapper.toResponseDTO(updatedGroup);
             LOGGER.info("updateGroup - group updated: {}", responseDTO);
             return ResponseEntity.ok(responseDTO);

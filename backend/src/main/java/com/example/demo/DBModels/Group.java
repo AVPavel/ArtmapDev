@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "user_groups") // Modificat din "groups" in "user_groups"
+@Table(name = "`groups`") // Modificat din "groups" in "user_groups"
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,7 +24,7 @@ public class Group {
     // Un grup contine mai multi utilizatori
     @ManyToMany
     @JoinTable(
-            name = "group_members",
+            name = "user_groups",
             joinColumns = @JoinColumn(name = "group_id"), // corectat sa fie referinta corecta la "group_id"
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )

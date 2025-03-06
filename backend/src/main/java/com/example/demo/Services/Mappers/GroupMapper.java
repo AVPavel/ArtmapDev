@@ -13,18 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class GroupMapper {
     private final UserService userService;
-    private final EventService eventService;
 
     @Autowired
-    public GroupMapper(UserService userService, EventService eventService) {
+    public GroupMapper(UserService userService) {
         this.userService = userService;
-        this.eventService = eventService;
     }
 
     /**
@@ -33,21 +32,25 @@ public class GroupMapper {
      * @param dto The DTO containing group data.
      * @return A new Group entity populated with data from the DTO.
      */
-    public Group toEntity(GroupRegisterDTO dto) {
+    public Group toEntity(GroupRegisterDTO dto, Event event) {
         Group group = new Group();
-        group.setName(dto.getName());
-
-        // Set Event relationship
-        Event event = eventService.getEventById(dto.getEventId());
+        group.setName(dto.getName()); // Ensure the name is set from the DTO
         group.setEvent(event);
 
         // Set Members
+        Set<User> members = new HashSet<>();
         if (dto.getMemberIds() != null && !dto.getMemberIds().isEmpty()) {
-            Set<User> members = dto.getMemberIds().stream()
+            members = dto.getMemberIds().stream()
                     .map(userService::getUserById)
                     .collect(Collectors.toSet());
-            group.setMembers(members);
+        } else {
+            // If no members are provided, add the event organizer as the default member
+            User organizer = event.getCreatedBy();
+            if (organizer != null) {
+                members.add(organizer);
+            }
         }
+        group.setMembers(members);
 
         return group;
     }
@@ -90,22 +93,12 @@ public class GroupMapper {
      * @param dto   The DTO containing updated group data.
      * @param group The existing Group entity to update.
      */
-    public void updateEntityFromDTO(GroupRegisterDTO dto, Group group) {
+    public void updateEntityFromDTO(GroupRegisterDTO dto, Group group, Event event) {
         if (dto.getName() != null) {
             group.setName(dto.getName());
         }
 
-        if (dto.getEventId() != null) {
-            Event event = eventService.getEventById(dto.getEventId());
-            group.setEvent(event);
-        }
-
-        if (dto.getMemberIds() != null) {
-            Set<User> members = dto.getMemberIds().stream()
-                    .map(userService::getUserById)
-                    .collect(Collectors.toSet());
-            group.setMembers(members);
-        }
+        group.setEvent(event);
 
         group.setUpdatedAt(LocalDateTime.now());
     }

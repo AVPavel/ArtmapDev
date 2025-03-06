@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
     Optional<Group> findByEventId(Long eventId);
+    boolean existsByEventId(Long eventId);
 }

@@ -8,6 +8,7 @@ import com.example.demo.Exceptions.Models.DuplicateResourceException;
 import com.example.demo.Exceptions.Models.EventNotFoundException;
 import com.example.demo.Models.ErrorResponse;
 import com.example.demo.Services.DBServices.EventService;
+import com.example.demo.Services.DBServices.GroupService;
 import com.example.demo.Services.Mappers.EventMapper;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -62,7 +64,7 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
          }
     }
-
+    @Transactional
     @GetMapping("/search")
     public ResponseEntity<?> searchEvents(
             @RequestParam() String searchTerm,

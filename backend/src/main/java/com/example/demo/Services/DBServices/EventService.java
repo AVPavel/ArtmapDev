@@ -4,6 +4,7 @@ import com.example.demo.DBModels.Category;
 import com.example.demo.DBModels.Event;
 import com.example.demo.DBModels.User;
 import com.example.demo.DTOs.Events.EventRegisterDTO;
+import com.example.demo.DTOs.Groups.GroupRegisterDTO;
 import com.example.demo.Exceptions.Models.DuplicateResourceException;
 import com.example.demo.Exceptions.Models.EventNotFoundException;
 import com.example.demo.Repositories.EventRepository;
@@ -16,18 +17,22 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+
 @Service
 public class EventService {
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
     private final UserService userService;
+    private final GroupService groupService;
 
     @Autowired
-    public EventService(EventRepository eventRepository, EventMapper eventMapper, UserService userService) {
+    public EventService(EventRepository eventRepository, EventMapper eventMapper, UserService userService, GroupService groupService) {
         this.eventRepository = eventRepository;
         this.eventMapper = eventMapper;
         this.userService = userService;
+        this.groupService = groupService;
     }
 
     @Transactional(readOnly = true)
@@ -44,10 +49,19 @@ public class EventService {
         if (eventRepository.searchEventByTitle(event.getTitle()).isPresent()) {
             throw new DuplicateResourceException("Event with title: " + event.getTitle() + " already exists");
         }
-
         event.setCreatedBy(organizer);
+        Event savedEvent = eventRepository.save(event);
 
-        return eventRepository.save(event);
+        // Create a group for the event
+        GroupRegisterDTO groupDTO = new GroupRegisterDTO();
+        groupDTO.setName("Group for " + savedEvent.getTitle());
+        groupDTO.setEventId(savedEvent.getId());
+
+        groupDTO.setMemberIds(Set.of(organizer.getId()));
+
+        groupService.createGroup(groupDTO,savedEvent); // Link group to the event
+
+        return savedEvent;
     }
 
     @Transactional(readOnly = true)

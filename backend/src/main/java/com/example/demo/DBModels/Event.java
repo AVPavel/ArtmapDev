@@ -73,6 +73,12 @@ public class Event {
     )
     private Set<Genre> genres;
 
+    public Event(long l, String testEvent, Object o, Object o1, Object o2, Object o3, Object o4, Object o5, Object o6, Object o7, Object o8) {
+        setId(l);
+        setTitle(testEvent);
+        setDescription(o.toString());
+    }
+
     @PrePersist
     private void onCreated() {
         createdAt = LocalDateTime.now();

@@ -54,13 +54,14 @@ public class User {
     private Set<Event> eventsParticipating;
 
     // Many-to-Many relationship with Group
-    @ManyToMany
-    @JoinTable(
-            name = "user_groups",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "group_id")
-    )
+    @ManyToMany(mappedBy = "members") // Use mappedBy to avoid duplicate mapping
     private Set<Group> groups;
+
+    public User(long l, String user, String mail) {
+        setId(l);
+        setUsername(user);
+        setEmail(mail);
+    }
 
     @PrePersist
     private void onCreate(){

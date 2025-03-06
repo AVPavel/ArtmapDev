@@ -1,6 +1,8 @@
 package com.example.demo.Services.DBServices;
 
+import com.example.demo.DBModels.Event;
 import com.example.demo.DBModels.Group;
+import com.example.demo.DBModels.User;
 import com.example.demo.DTOs.Groups.*;
 import com.example.demo.Exceptions.Models.*;
 import com.example.demo.Services.Mappers.GroupMapper;
@@ -8,7 +10,10 @@ import com.example.demo.Repositories.GroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing Group entities.
@@ -18,10 +23,12 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
+    private final UserService userService;
 
-    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper) {
+    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper, UserService userService) {
         this.groupRepository = groupRepository;
         this.groupMapper = groupMapper;
+        this.userService = userService;
     }
 
     /**
@@ -31,8 +38,16 @@ public class GroupService {
      * @return The created Group entity.
      */
     @Transactional
-    public Group createGroup(GroupRegisterDTO dto) {
-        Group group = groupMapper.toEntity(dto);
+    public Group createGroup(GroupRegisterDTO dto,Event event) {
+        // Prevent duplicate groups for the same event
+        if (groupRepository.existsByEventId(event.getId())) {
+            throw new DuplicateResourceException("Event already has a group");
+        }
+        // Validate all member IDs exist
+        Set<User> members = validateAndGetMembers(dto.getMemberIds(), event);
+
+        Group group = groupMapper.toEntity(dto, event);
+        group.setMembers(members);
         return groupRepository.save(group);
     }
 
@@ -81,11 +96,16 @@ public class GroupService {
      * @throws GroupNotFoundException If the Group entity is not found.
      */
     @Transactional
-    public Group updateGroup(Long id, GroupRegisterDTO dto) {
-        Group existingGroup = groupRepository.findById(id)
-                .orElseThrow(() -> new GroupNotFoundException("Could not find group with id: " + id));
+    public Group updateGroup(Long id, GroupRegisterDTO dto, Event event) {
+        Group existingGroup = getGroupById(id);
+        // Prevent event ID modification
+        if (!existingGroup.getEvent().getId().equals(dto.getEventId())) {
+            throw new IllegalArgumentException("Cannot change event association");
+        }
 
-        groupMapper.updateEntityFromDTO(dto, existingGroup);
+        Set<User> members = validateAndGetMembers(dto.getMemberIds(), event);
+        existingGroup.setMembers(members);
+        groupMapper.updateEntityFromDTO(dto, existingGroup, event);
         return groupRepository.save(existingGroup);
     }
 
@@ -101,4 +121,18 @@ public class GroupService {
                 .orElseThrow(() -> new GroupNotFoundException("Could not find group with id: " + id));
         groupRepository.delete(existingGroup);
     }
+
+    private Set<User> validateAndGetMembers(Set<Long> memberIds, Event event) {
+        Set<User> members = new HashSet<>();
+        if (memberIds != null && !memberIds.isEmpty()) {
+            members = memberIds.stream()
+                    .map(userService::getUserById)
+                    .collect(Collectors.toSet());
+        } else {
+            // Default to event organizer
+            members.add(event.getCreatedBy());
+        }
+        return members;
+    }
+
 }

@@ -8,10 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
-
-    @Query("SELECT m FROM Message m " +
-            "JOIN m.group g " +
-            "JOIN g.event e " +
-            "WHERE e.id = :eventId")
-    List<Message> findAllMessagesByEventId(@Param("eventId") Long eventId);
+    // Simplified query with direct event relationship
+    @Query("SELECT m FROM Message m WHERE m.event.id = :eventId ORDER BY m.sentAt ASC")
+    List<Message> findAllByEventId(@Param("eventId") Long eventId);
 }

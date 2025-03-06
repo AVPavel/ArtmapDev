@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageDTO {
-
+    private Long id;
     @NotBlank(message = "Sender is mandatory")
     private String sender;
 
@@ -24,5 +24,12 @@ public class MessageDTO {
 
     private LocalDateTime timestamp;
 
-
+    // Add constructor
+    public MessageDTO(Long id, String content, String sender, LocalDateTime timestamp, Long eventId) {
+        this.id = id;
+        this.content = content;
+        this.sender = sender;
+        this.timestamp = timestamp;
+        this.eventId = eventId;
+    }
 }

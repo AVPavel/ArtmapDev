@@ -37,17 +37,23 @@ public class MessagingController {
 
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(MessageDTO messageDTO, Principal principal) {
+        logger.debug("Received message: {}", messageDTO);
         try {
             User sender = userService.getUserByUsername(principal.getName());
 
-            Long eventId = messageDTO.getEventId();
+            Message savedMessage = messageService.saveMessage(
+                    messageDTO.getContent(),
+                    messageDTO.getEventId(),
+                    sender
+            );
 
-            Message savedMessage = messageService.saveMessage(messageDTO.getContent(), eventId, sender);
-
-            messageTemplate.convertAndSend("/topic/events/" + eventId, messageMapper.toDTO(savedMessage));
+            messageTemplate.convertAndSend(
+                    "/topic/events/" + messageDTO.getEventId(),
+                    messageMapper.toDTO(savedMessage)
+            );
         }
-        catch(UserNotFoundException | IllegalArgumentException ex){
-            logger.error(ex.getMessage());
+        catch (UserNotFoundException | IllegalArgumentException e) {
+            logger.error("Message sending failed: {}", e.getMessage());
         }
     }
 

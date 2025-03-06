@@ -24,39 +24,13 @@ public class MessageMapper {
         this.groupService = groupService;
     }
 
-    public Message toEntity(MessageDTO messageDTO) {
-        Message message = new Message();
-
-        message.setContent(messageDTO.getContent());
-        try {
-            User user = userService.getUserByUsername(messageDTO.getSender());
-            message.setSender(user);
-        } catch (UserNotFoundException e) {
-            logger.error("MessageMapper toEntity(): {}", e.getMessage());
-            return null;
-        }
-
-        try {
-            Group group = groupService.getGroupByEventId(messageDTO.getEventId());
-            message.setGroup(group);
-        } catch(GroupNotFoundException ex) {
-            logger.error("MessageMapper toEntity(): {}", ex.getMessage());
-            return null;
-        }
-        message.setSentAt(messageDTO.getTimestamp());
-        message.setReadByAll(false);
-
-        return message;
-    }
-
-    public MessageDTO toDTO(Message message){
-        MessageDTO dto = new MessageDTO();
-
-        dto.setContent(message.getContent());
-        dto.setSender(message.getSender().getUsername());
-        dto.setTimestamp(message.getSentAt());
-        dto.setEventId(message.getGroup().getEvent().getId());
-
-        return dto;
+    public MessageDTO toDTO(Message message) {
+        return new MessageDTO(
+                message.getId(),
+                message.getContent(),
+                message.getSender().getUsername(),
+                message.getSentAt(),
+                message.getEvent().getId()
+        );
     }
 }
