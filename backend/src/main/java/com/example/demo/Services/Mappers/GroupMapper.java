@@ -109,7 +109,7 @@ public class GroupMapper {
      * @param user The User entity to convert.
      * @return A UserDTO populated with data from the entity.
      */
-    private UserDTOBase convertUserToDTO(User user) {
+    public UserDTOBase convertUserToDTO(User user) {
         UserDTOBase dto = new UserResponseDTO();
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());

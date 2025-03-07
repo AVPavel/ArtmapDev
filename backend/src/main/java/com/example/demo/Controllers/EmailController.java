@@ -81,7 +81,7 @@ public class EmailController {
                         .body("Path is not a regular file");
             }
 
-            if (!reportFile.getName().toLowerCase().endsWith(".pdf")) {
+            if (!reportFile.getName().toLowerCase().endsWith(".xml")) {
                 return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
                         .body("Only XML files are allowed");
             }

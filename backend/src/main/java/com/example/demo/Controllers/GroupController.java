@@ -6,7 +6,6 @@ import com.example.demo.DTOs.Groups.*;
 import com.example.demo.Exceptions.Models.EventNotFoundException;
 import com.example.demo.Exceptions.Models.GroupNotFoundException;
 import com.example.demo.Services.DBServices.EventService;
-import com.example.demo.Services.DBServices.UserService;
 import com.example.demo.Services.Mappers.GroupMapper;
 import com.example.demo.Models.*;
 import com.example.demo.Services.DBServices.GroupService;

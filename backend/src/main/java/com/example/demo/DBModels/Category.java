@@ -23,4 +23,9 @@ public class Category {
 
     @Column
     private boolean hasGenre = false;
+
+    public Category(Long testId, String testCategory) {
+        setId(testId);
+        setName(testCategory);
+    }
 }

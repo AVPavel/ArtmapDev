@@ -122,7 +122,7 @@ public class GroupService {
         groupRepository.delete(existingGroup);
     }
 
-    private Set<User> validateAndGetMembers(Set<Long> memberIds, Event event) {
+    public Set<User> validateAndGetMembers(Set<Long> memberIds, Event event) {
         Set<User> members = new HashSet<>();
         if (memberIds != null && !memberIds.isEmpty()) {
             members = memberIds.stream()

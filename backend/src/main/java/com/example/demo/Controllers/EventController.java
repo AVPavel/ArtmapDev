@@ -8,7 +8,6 @@ import com.example.demo.Exceptions.Models.DuplicateResourceException;
 import com.example.demo.Exceptions.Models.EventNotFoundException;
 import com.example.demo.Models.ErrorResponse;
 import com.example.demo.Services.DBServices.EventService;
-import com.example.demo.Services.DBServices.GroupService;
 import com.example.demo.Services.Mappers.EventMapper;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
