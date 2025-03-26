@@ -130,6 +130,7 @@ const Register = () => {
                     <button type="submit" className={styles.registerButton}>
                         Register
                     </button>
+                    <Link to="/user-preferences">UserPref? Log in</Link>
                 </form>
 
                 {error && <div className={styles.error}>{error}</div>}

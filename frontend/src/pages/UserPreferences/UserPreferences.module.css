@@ -1,0 +1,126 @@
+.preferencesPage {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem;
+}
+
+.imagePlaceholder {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 100px;
+    height: 50px;
+    border: 1px dashed #ccc;
+}
+
+.preferencesContainer {
+    max-width: 800px;
+    width: 100%;
+    padding: 40px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.preferencesTitle {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.description {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #666;
+}
+
+.section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+
+.toggleGroup {
+    margin-bottom: 1.5rem;
+}
+
+.toggleGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.toggleButtons {
+    display: flex;
+    gap: 1rem;
+}
+
+.toggleButton {
+    flex: 1;
+    padding: 0.8rem 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggleButton.active {
+    background-color: red;
+    color: white;
+    border-color: red;
+}
+
+.genreGroup {
+    margin-top: 1.5rem;
+}
+
+.genreGroup label {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.checkboxGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.checkboxLabel input {
+    margin: 0;
+    cursor: pointer;
+}
+
+.submitButton {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 14px 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 2rem;
+    transition: background-color 0.3s ease;
+}
+
+.submitButton:hover {
+    background-color: #cc0000;
+}

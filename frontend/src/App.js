@@ -9,6 +9,7 @@ import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import MessagingPage from "./pages/Messaging/MessagingPage";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import About from "./pages/About/About";
+import UserPreferences from "./pages/UserPreferences/UserPreferences";
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
               {/* Register Page */}
               <Route path = "/register" element={<Register />}/>
               <Route path = "/forgot-password" element={<ForgotPassword />}/>
+              <Route path = "/user-preferences" element={<UserPreferences />}/>
 
               {/* 404 Page Not Found */}
               <Route path="*" element={<h1>404 Not Found</h1>} />
