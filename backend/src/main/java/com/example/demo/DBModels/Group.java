@@ -30,7 +30,7 @@ public class Group {
     )
     private Set<User> members;
 
-    @ManyToOne
+    @ManyToOne(optional = true)
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 

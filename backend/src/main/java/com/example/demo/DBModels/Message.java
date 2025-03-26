@@ -28,4 +28,15 @@ public class Message {
     private String content;
 
     private LocalDateTime sentAt;
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", eventId=" + (event != null ? event.getId() : null) + // Only use IDs
+                ", senderId=" + (sender != null ? sender.getId() : null) +
+                ", sentAt=" + sentAt +
+                '}';
+    }
 }

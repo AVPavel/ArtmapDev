@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import styles from './MessageInput.module.css';
 
-const MessageInput = () => {
+const MessageInput = ({ onSend }) => {  // Receive onSend prop
     const [inputValue, setInputValue] = useState("");
 
     const handleSend = () => {
-        setInputValue("");
+        if (inputValue.trim()) {
+            onSend(inputValue);  // Call parent's send handler
+            setInputValue("");
+        }
+    }
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSend();
+        }
     }
 
     return (
@@ -15,6 +24,7 @@ const MessageInput = () => {
                 className={styles.inputField}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={handleKeyPress}  // Add Enter key support
                 placeholder="Type your message..."
             />
             <button className={styles.sendButton} onClick={handleSend}>

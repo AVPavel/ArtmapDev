@@ -86,4 +86,14 @@ public class Event {
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserEventInteraction> interactions;
+
+
+    // In Event.java
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", name='" + title + '\'' +
+                '}';
+    }
 }

@@ -11,6 +11,7 @@ import com.example.demo.Services.Mappers.MessageMapper;
 import org.slf4j.Logger;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
@@ -38,7 +39,11 @@ public class MessagingController {
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(MessageDTO messageDTO, Principal principal) {
         logger.debug("Received message: {}", messageDTO);
+
         try {
+            if (principal == null) {
+                throw new AccessDeniedException("Authentication required");
+            }
             User sender = userService.getUserByUsername(principal.getName());
 
             Message savedMessage = messageService.saveMessage(

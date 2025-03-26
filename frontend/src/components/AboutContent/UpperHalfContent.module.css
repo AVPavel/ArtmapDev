@@ -1,0 +1,23 @@
+.content {
+    display: flex;
+    flex-direction: row;
+}
+
+.paragraphSection {
+
+    width: 50%;
+    height: 25vh;
+    border: 2px solid red;
+    margin: 10rem;
+    text-align: right;
+    font-size: 1.3rem;
+    font-style: italic;
+    font-family: 'Roboto Flex';
+    word-wrap: break-word;
+}
+.imageSection {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    border: 2px solid green
+}

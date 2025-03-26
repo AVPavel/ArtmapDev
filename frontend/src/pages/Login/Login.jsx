@@ -1,47 +1,42 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styles from './Login.module.css';
-import {Link} from "react-router-dom"; // Scoped CSS
+import { Link } from "react-router-dom";
+import GoogleLogo from '../../assets/images/icons/Google_logo.png';
+
 
 const Login = () => {
-    // State to manage form inputs
     const [credentials, setCredentials] = useState({
-        username: '',
+        emailOrPhone: '',
         password: '',
     });
-
-    // State to manage feedback messages
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    // Handle input changes
     const handleChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setCredentials({
             ...credentials,
             [name]: value,
         });
     };
 
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setSuccess('');
 
         try {
-            const response = await fetch('http://localhost:8080/api/users/login', {
+            const response = await fetch('http://192.168.1.132:8080/api/users/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(credentials), // Send username and password
+                body: JSON.stringify(credentials),
             });
             if (response.ok) {
                 const data = await response.json();
-                // Store JWT in localStorage
                 localStorage.setItem('jwt', data.jwt);
                 setSuccess('Login successful!');
-                // Optionally, redirect to a protected route
             } else {
                 const errorData = await response.text();
                 setError(errorData || 'Login failed');
@@ -53,34 +48,54 @@ const Login = () => {
 
     return (
         <div className={styles.loginPage}>
+            <div className={styles.imagePlaceholder}></div>
+
             <div className={styles.loginContainer}>
-                <h2>Login</h2>
-                {error && <p className={styles.error}>{error}</p>}
-                {success && <p className={styles.success}>{success}</p>}
+                <h1 className={styles.LoginTitle}>Log in to your account</h1>
+                <Link to="/register" className={styles.createAccount}>Are you new here? Create account</Link>
+
+                <button className={styles.googleButton}>
+                    <img src={GoogleLogo} alt="Google Logo" className={styles.googleLogo} />
+                    Log in with Google
+                </button>
+
+                <div className={styles.separator}>
+                    <span className={styles.line}></span>
+                    <span className={styles.orText}>or</span>
+                    <span className={styles.line}></span>
+                </div>
+
                 <form onSubmit={handleSubmit}>
-                    <label>
-                        Username:
+                    <div className={styles.inputGroup}>
                         <input
                             type="text"
-                            name="username"
-                            value={credentials.username}
+                            name="emailOrPhone"
+                            placeholder="Email or phone"
+                            value={credentials.emailOrPhone}
                             onChange={handleChange}
                             required
                         />
-                    </label>
-                    <label>
-                        Password:
+                    </div>
+
+                    <div className={styles.inputGroup}>
                         <input
                             type="password"
                             name="password"
+                            placeholder="Password"
                             value={credentials.password}
                             onChange={handleChange}
                             required
                         />
-                    </label>
-                    <button type="submit">Login</button>
+                    </div>
+                    <button type="submit" className={styles.signInButton}>
+                        Sign in
+                    </button>
+                    <div className={styles.options}>
+                        <input type="checkbox" id="rememberMe" />
+                        <label htmlFor="rememberMe">Remember me</label>
+                        <Link to="/forgot-password" className={styles.forgotPassword}>Forgot password?</Link>
+                    </div>
                 </form>
-                <p>Go back to Home Page: <Link to="/">Home</Link></p>
             </div>
         </div>
     );

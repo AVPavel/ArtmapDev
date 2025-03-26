@@ -36,34 +36,37 @@ public class SecurityConfig {
         this.passwordEncoder = passwordEncoder;
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/api/users/register").permitAll()
                         .requestMatchers("/api/users/all").permitAll()
                         .requestMatchers("/api/users/login").permitAll()
                         .requestMatchers("/api/events/addEvent").hasRole("ADMIN")
                         .requestMatchers("/api/genres").permitAll()
-                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
-                                "/",
-                                "/index.html",
-                                "/static/**",
-                                "/favicon.ico",
-                                "/**/*.js",
-                                "/**/*.css",
-                                "/**/*.png",
-                                "/**/*.jpg",
-                                "/**/*.svg"
+                        "/",
+                        "/index.html",
+                        "/static/**",
+                        "/favicon.ico",
+                        "/**/*.js",
+                        "/**/*.css",
+                        "/**/*.png",
+                        "/**/*.jpg",
+                        "/**/*.svg"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        http.securityMatcher("/ws/**")
+                        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -87,6 +90,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization")); // Add this
+        configuration.addAllowedOriginPattern("*");  // For development only
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

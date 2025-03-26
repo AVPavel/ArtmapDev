@@ -1,9 +1,16 @@
 import React from 'react';
+import { useEffect } from 'react';
 import styles from './MessageHistory.module.css';
 
-const MessageHistory = ({ messages, currentUser }) => {
+const MessageHistory = ({ messages, currentUser, containerRef, endRef }) => {
+    useEffect(() => {
+        if (endRef.current) {
+            endRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
+
     return (
-        <div className={styles.messageHistory}>
+        <div className={styles.messageHistory} ref={containerRef}>
             <div className={styles.messagesContainer}>
                 {messages?.map((message, index) => {
                     const isUserMessage = message.sender === currentUser;
@@ -33,6 +40,7 @@ const MessageHistory = ({ messages, currentUser }) => {
                         No messages yet. Be the first to start the conversation!
                     </div>
                 )}
+                <div ref={endRef} />
             </div>
         </div>
     );

@@ -1,0 +1,119 @@
+.registerPage {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+.imagePlaceholder {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 100px;
+    height: 50px;
+    border: 1px dashed #ccc;
+}
+
+.registerContainer {
+    max-width: 450px; /* Wider container */
+    width: 100%;
+    padding: 60px 40px; /* More padding for height */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem; /* More vertical spacing */
+}
+
+.registerTitle {
+    font-size: 1.75rem; /* Slightly larger title */
+    margin: 0;
+    text-align: center;
+}
+
+.loginLink {
+    color: red;
+    text-decoration: underline;
+    font-size: 0.875rem;
+    margin-top: -1rem; /* Adjust spacing */
+}
+
+.googleButton {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 12px 20px; /* Slightly more padding */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.googleLogo {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.separator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.line {
+    flex: 1;
+    height: 1px;
+    background-color: #ccc;
+}
+
+.orText {
+    font-size: 0.875rem;
+    color: #888;
+}
+
+.inputGroup {
+    width: 100%;
+    margin-bottom: 1.5rem; /* More vertical spacing */
+}
+
+.inputGroup input {
+    width: 100%;
+    padding: 14px; /* Slightly more padding for larger input fields */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1.1rem; /* Slightly larger font */
+    background-color: lightgray; /* Light gray background */
+}
+
+.registerButton {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 14px 30px; /* Less wide, slightly more height */
+    font-size: 1.2rem; /* Slightly larger font */
+    cursor: pointer;
+    width: 80%; /* Less wide */
+}
+
+.error {
+    color: red;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+}
+
+.success {
+    color: green;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+}

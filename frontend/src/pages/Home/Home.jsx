@@ -4,6 +4,7 @@ import NavbarAndPresentation from "../../components/Navbar/NavbarAndPresentation
 import MapSection from "../../components/MapSection/MapSection";
 import ServiceCards from "../../components/ServiceCards/ServiceCards"
 import Footer from "../../components/Footer/Footer";
+import WhyArtmapSection from "../../components/WhyArtmapSection/WhyArtmapSection";
 
 const Home = () => {
     return (
@@ -11,6 +12,7 @@ const Home = () => {
             <NavbarAndPresentation/>
             <MapSection/>
             <ServiceCards/>
+            <WhyArtmapSection/>
             <Footer/>
         </div>
     );

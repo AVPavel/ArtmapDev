@@ -9,6 +9,7 @@ import com.example.demo.Repositories.EventRepository;
 import com.example.demo.Repositories.GroupRepository;
 import com.example.demo.Repositories.MessageRepository;
 import com.example.demo.Services.Mappers.MessageMapper;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,14 +45,24 @@ public class MessageService {
                 .orElseThrow(() -> new IllegalArgumentException("No Event found"));
 
         validateMessagingWindow(event);
+        try{
+            Message message = new Message();
+            message.setSender(sender);
+            message.setContent(content);
+            message.setEvent(event);
+            message.setSentAt(LocalDateTime.now());
+            Message savedMessage = messageRepository.save(message);
 
-        Message message = new Message();
-        message.setSender(sender);
-        message.setContent(content);
-        message.setEvent(event);
-        message.setSentAt(LocalDateTime.now());
-
-        return messageRepository.save(message);
+            // Initialize Event and User proxies if they exist
+            Hibernate.initialize(savedMessage.getEvent());
+            Hibernate.initialize(savedMessage.getSender());
+            
+            return savedMessage;
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     public List<MessageDTO> getMessagesForEvent(Long eventId){
@@ -74,7 +85,7 @@ public class MessageService {
         // Get the event date
         LocalDate eventDate = LocalDate.from(event.getDate());
 
-        if (!formattedNowDate.isAfter(eventDate.plusDays(2))) {
+        if (formattedNowDate.isAfter(eventDate.plusDays(2))) {
             throw new IllegalStateException("Messaging closed for this event");
         }
     }

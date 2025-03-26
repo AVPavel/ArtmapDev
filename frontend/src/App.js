@@ -7,6 +7,8 @@ import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import UnauthorizedPage from "./pages/UnauthorizedPage/UnauthorizedPage";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import MessagingPage from "./pages/Messaging/MessagingPage";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import About from "./pages/About/About";
 
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
 
               {/* Register Page */}
               <Route path = "/register" element={<Register />}/>
+              <Route path = "/forgot-password" element={<ForgotPassword />}/>
 
               {/* 404 Page Not Found */}
               <Route path="*" element={<h1>404 Not Found</h1>} />
@@ -34,12 +37,7 @@ function App() {
               {/* Redirect Favorites */}
               <Route path="/favorites" element={<PageNotReady />} />
 
-              {/* Redirect to Protected About Page */}
-              <Route path="/about"
-                     element={
-                        <ProtectedRoute element={<PageNotReady/>} />
-                     }
-              />
+              <Route path="/about" element={<About/>} />
 
               {/* Redirect Contact */}
               <Route path="/contact" element={<PageNotReady />} />
