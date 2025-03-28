@@ -1,0 +1,12 @@
+id,description,has_genre,name
+1,"Evenimente muzicale live",1,Concert
+2,"Piese de teatru pentru toate gusturile",1,Teatru
+3,"Festivaluri de muzica, arta si cultura",1,Festival
+4,"Ateliere de dezvoltare si invatare",0,Workshopuri
+5,"Evenimente educative si profesionale",0,Conferinte
+6,"Evenimente pentru toata familia",0,"Evenimente de familie"
+7,"Evenimente pentru curiozitate si explorare",0,"Targuri si expozitii"
+8,"Evenimente pentru sanatate si miscare",0,"Sport si activitati"
+9,"Evenimente dedicate gastronomiei",0,"Evenimente culinare"
+10,"Evenimente de film si cinematografie",0,"Proiectii de filme"
+11,"Evenimente de traditie si cultura",0,"Evenimente culturale si traditionale"
