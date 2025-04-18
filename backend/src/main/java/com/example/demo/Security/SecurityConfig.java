@@ -50,6 +50,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/login").permitAll()
                         .requestMatchers("/api/events/addEvent").hasRole("ADMIN")
                         .requestMatchers("/api/genres").permitAll()
+                        .requestMatchers("/api/preferences").permitAll()
+                        .requestMatchers("/api/users/google-login").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                         "/",

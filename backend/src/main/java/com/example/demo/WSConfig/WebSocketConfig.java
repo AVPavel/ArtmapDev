@@ -57,22 +57,22 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(authChannelInterceptor()); // Add this line
-        registration.interceptors(new ChannelInterceptor() {
-            @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    String token = accessor.getFirstNativeHeader("Authorization");
-                    // Validate JWT and set up security context
-                    Authentication auth = jwtTokenProvider.getAuthentication(token);
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                }
-                return message;
-                logger.debug("Processing command: {}", accessor.getCommand());
-                logger.debug("Received STOMP frame: {}", accessor);
-                return message;
-            }
-        });
+//        registration.interceptors(new ChannelInterceptor() {
+//            @Override
+//            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+//                StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+//                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+//                    String token = accessor.getFirstNativeHeader("Authorization");
+//                    // Validate JWT and set up security context
+//                    Authentication auth = jwtTokenProvider.getAuthentication(token);
+//                    SecurityContextHolder.getContext().setAuthentication(auth);
+//                }
+//                return message;
+//                logger.debug("Processing command: {}", accessor.getCommand());
+//                logger.debug("Received STOMP frame: {}", accessor);
+//                return message;
+//            }
+//        });
     }
     @Bean
     public ChannelInterceptor authChannelInterceptor() {

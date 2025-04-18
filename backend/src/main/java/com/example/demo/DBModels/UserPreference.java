@@ -19,10 +19,11 @@ public class UserPreference {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @JoinColumn(name = "category_id", nullable = false)
     @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @Column(name = "genre", length = 50, nullable = false)
-    private String genre;
+    @ManyToOne
+    @JoinColumn(name = "genre_id", nullable = false)
+    private Genre genre;
 }
