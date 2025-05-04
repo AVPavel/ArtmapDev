@@ -25,5 +25,6 @@ public class NewsRegisterDTO {
     @NotNull(message = "Creator ID is mandatory")
     private Long creatorId;
 
+    @NotNull(message = "Event ID is required")
     private Long eventId;
 }

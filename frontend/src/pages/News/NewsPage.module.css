@@ -1,0 +1,23 @@
+/* NewsPage.module.css */
+.pageContainer {
+    font-family: 'Roboto Flex', sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1;
+    padding: 20px;
+}
+
+.title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.newsList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

@@ -1,8 +1,12 @@
 package com.example.demo.Services.DBServices;
 
+import com.example.demo.DBModels.Event;
 import com.example.demo.DBModels.News;
+import com.example.demo.DBModels.User;
 import com.example.demo.DTOs.News.NewsRegisterDTO;
 import com.example.demo.Exceptions.Models.NewsNotFoundException;
+import com.example.demo.Repositories.EventRepository;
+import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Services.Mappers.NewsMapper;
 import com.example.demo.Repositories.NewsRepository;
 import org.springframework.stereotype.Service;
@@ -17,10 +21,17 @@ import java.util.List;
 public class NewsService {
 
     private final NewsRepository newsRepository;
+    private final UserRepository userRepository;  // Add these
+    private final EventRepository eventRepository;
     private final NewsMapper newsMapper;
 
-    public NewsService(NewsRepository newsRepository, NewsMapper newsMapper) {
+    public NewsService(NewsRepository newsRepository,
+                       UserRepository userRepository,
+                       EventRepository eventRepository,
+                       NewsMapper newsMapper) {
         this.newsRepository = newsRepository;
+        this.userRepository = userRepository;
+        this.eventRepository = eventRepository;
         this.newsMapper = newsMapper;
     }
 
@@ -32,7 +43,16 @@ public class NewsService {
      */
     @Transactional
     public News createNews(NewsRegisterDTO dto) {
+        User creator = userRepository.findById(dto.getCreatorId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Event event = eventRepository.findById(dto.getEventId())
+                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+
         News news = newsMapper.toEntity(dto);
+        news.setCreatedBy(creator);
+        news.setEvent(event);
+
         return newsRepository.save(news);
     }
 
@@ -71,6 +91,19 @@ public class NewsService {
     public News updateNews(Long id, NewsRegisterDTO dto) {
         News existingNews = newsRepository.findById(id)
                 .orElseThrow(() -> new NewsNotFoundException("Could not find news with id: " + id));
+
+        // Handle user/event updates
+        if(!dto.getCreatorId().equals(existingNews.getCreatedBy().getId())) {
+            User newCreator = userRepository.findById(dto.getCreatorId())
+                    .orElseThrow(() -> new IllegalArgumentException("New user not found"));
+            existingNews.setCreatedBy(newCreator);
+        }
+
+        if(!dto.getEventId().equals(existingNews.getEvent().getId())) {
+            Event newEvent = eventRepository.findById(dto.getEventId())
+                    .orElseThrow(() -> new IllegalArgumentException("New event not found"));
+            existingNews.setEvent(newEvent);
+        }
 
         newsMapper.updateEntityFromDTO(dto, existingNews);
         return newsRepository.save(existingNews);

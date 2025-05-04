@@ -1,0 +1,59 @@
+.eventContainer {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+}
+
+.eventImage {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 1rem;
+}
+
+.eventDetails {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.eventTitle {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.detailsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.detailItem {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.deleteButton {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+/* Added styles for checked and unchecked states */
+.deleteButton.checked {
+    color: red;
+}
+
+.deleteButton.unchecked {
+    color: gray;
+}

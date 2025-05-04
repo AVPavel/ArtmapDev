@@ -1,0 +1,40 @@
+.content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.benefitsSection {
+    width: 50%;
+    padding: 2rem;
+    margin: 1rem;
+    text-align: left;
+    font-size: 1.2rem;
+    font-family: 'Roboto Flex', sans-serif;
+}
+
+.benefitsSection ul {
+    list-style-type: disc;
+    padding-left: 2rem;
+}
+
+.benefitsSection li {
+    margin-bottom: 1rem;
+}
+
+.imageSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    margin: 1rem;
+    padding: 1rem;
+}
+
+.imageSection img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}

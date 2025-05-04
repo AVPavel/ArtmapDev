@@ -1,0 +1,33 @@
+.introContainer {
+    background-image: url('../../assets/images/icons/aboutIntroBackground.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+    margin-top: -32px;
+    width: 100vw;
+    height: 35vh;
+    font-family: 'Roboto Flex', sans-serif;
+}
+
+.title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.description {
+    font-size: 1.3rem;
+    max-width: 800px;
+    margin: 0 auto;
+}

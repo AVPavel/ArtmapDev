@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './Login.module.css';
 import { Link } from "react-router-dom";
 import GoogleLogo from '../../assets/images/icons/Google_logo.png';
-import {GoogleOAuthProvider} from "@react-oauth/google";
+import {GoogleLogin, GoogleOAuthProvider} from "@react-oauth/google";
 
 
 const Login = () => {
@@ -46,7 +46,7 @@ const Login = () => {
     };
 
     const handleGoogleLoginError = () => {
-        setError('Google login failed');
+        setError('Google login failed - either canceled by user or authentication error');
     };
 
     const handleSubmit = async (e) => {
@@ -84,14 +84,24 @@ const Login = () => {
                 <Link to="/register" className={styles.createAccount}>Are you new here? Create account</Link>
 
                 <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-                    {/* ... existing JSX ... */}
-                    <button className={styles.googleButton} onClick={() => {
-                        console.log("da")
-                    }}>
-                        <img src={GoogleLogo} alt="Google Logo" className={styles.googleLogo} />
-                        Log in with Google
-                    </button>
-                    {/* ... rest of the code ... */}
+                    // Add this import
+                    import { GoogleLogin } from '@react-oauth/google';
+
+                    // Replace your current Google button with:
+                    <GoogleLogin
+                        onSuccess={handleGoogleLoginSuccess}
+                        onError={handleGoogleLoginError}
+                        useOneTap
+                        render={({ onClick }) => (
+                            <button
+                                className={styles.googleButton}
+                                onClick={onClick}
+                            >
+                                <img src={GoogleLogo} alt="Google Logo" className={styles.googleLogo} />
+                                Log in with Google
+                            </button>
+                        )}
+                    />
                 </GoogleOAuthProvider>
 
                 <div className={styles.separator}>

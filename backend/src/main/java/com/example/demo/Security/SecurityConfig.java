@@ -48,10 +48,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/register").permitAll()
                         .requestMatchers("/api/users/all").permitAll()
                         .requestMatchers("/api/users/login").permitAll()
-                        .requestMatchers("/api/events/addEvent").hasRole("ADMIN")
+                        .requestMatchers("/api/events/add").hasRole("ADMIN")
                         .requestMatchers("/api/genres").permitAll()
                         .requestMatchers("/api/preferences").permitAll()
                         .requestMatchers("/api/users/google-login").permitAll()
+                        .requestMatchers("/api/**").authenticated()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                         "/",

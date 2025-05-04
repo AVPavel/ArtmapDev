@@ -1,0 +1,24 @@
+/* NewsPageElement.module.css */
+.newsContainer {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.newsContainer:hover {
+    transform: scale(1.015);
+}
+
+.newsTitle {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+}
+
+.newsDetails {
+    font-size: 1rem;
+    color: #555;
+}

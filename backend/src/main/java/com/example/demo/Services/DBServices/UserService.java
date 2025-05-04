@@ -1,8 +1,11 @@
 package com.example.demo.Services.DBServices;
 
+import com.example.demo.DBModels.Event;
 import com.example.demo.DBModels.User;
 import com.example.demo.Exceptions.Models.DuplicateResourceException;
+import com.example.demo.Exceptions.Models.ResourceNotFoundException;
 import com.example.demo.Exceptions.Models.UserNotFoundException;
+import com.example.demo.Repositories.EventRepository;
 import com.example.demo.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,11 +22,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EventRepository eventRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, EventRepository eventRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.eventRepository = eventRepository;
     }
 
     //Inregistrare utilizator
@@ -131,5 +136,47 @@ public class UserService {
         Pageable pageable = PageRequest.of(page, size,
                 sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending());
         return userRepository.findAll(pageable);
+    }
+    // Add this method to your UserService
+    @Transactional
+    public User registerSocialUser(User user) {
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new DuplicateResourceException("Email already exists");
+        }
+
+        // No password encoding needed for social users
+        user.setPassword(user.getPassword()); // Store as-is
+
+        if (user.getRole() == null) {
+            user.setRole(User.Role.USER);
+        }
+
+        return userRepository.save(user);
+    }
+
+    public User getUserWithFavoriteEvents(String username) {
+        // This method should fetch the user along with their eventsParticipating
+        return userRepository.findByUsernameWithEventsParticipating(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+    @Transactional
+    public void addFavoriteEvent(String username, Long eventId) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+
+        user.getEventsParticipating().add(event);
+        userRepository.save(user);
+    }
+    @Transactional
+    public void removeFavoriteEvent(String username, Long eventId) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+
+        user.getEventsParticipating().remove(event);
+        userRepository.save(user);
     }
 }

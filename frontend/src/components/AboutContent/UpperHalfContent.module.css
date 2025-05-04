@@ -1,23 +1,34 @@
 .content {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
 }
 
 .paragraphSection {
-
     width: 50%;
-    height: 25vh;
-    border: 2px solid red;
-    margin: 10rem;
+    height: auto;
+    margin: 1rem;
     text-align: right;
     font-size: 1.3rem;
     font-style: italic;
-    font-family: 'Roboto Flex';
+    font-family: 'Roboto Flex', sans-serif;
     word-wrap: break-word;
+    padding: 1rem;
 }
+
 .imageSection {
     display: flex;
     justify-content: center;
-    width: 50%;
-    border: 2px solid green
+    align-items: center;
+    width: 25%;
+    margin: 1rem;
+    padding: 1rem;
+}
+
+.imageSection img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 50%;
 }

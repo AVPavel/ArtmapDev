@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/news")
+@RequestMapping("/api/news")
 public class NewsController {
     private final static Logger LOGGER = LoggerFactory.getLogger(NewsController.class);
     private final NewsService newsService;
@@ -36,7 +36,7 @@ public class NewsController {
      * @param dto The DTO containing news data.
      * @return The created News as a response DTO.
      */
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<?> createNews(@Valid @RequestBody NewsRegisterDTO dto) {
         try {
             News createdNews = newsService.createNews(dto);

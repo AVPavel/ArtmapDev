@@ -5,6 +5,8 @@ import com.example.demo.DBModels.News;
 import com.example.demo.DBModels.User;
 import com.example.demo.DTOs.News.NewsRegisterDTO;
 import com.example.demo.DTOs.News.NewsResponseDTO;
+import com.example.demo.Repositories.EventRepository;
+import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Services.DBServices.EventService;
 import com.example.demo.Services.DBServices.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +20,13 @@ import java.time.LocalDateTime;
 @Service
 public class NewsMapper {
 
-    private final UserService userService;
-    private final EventService eventService;
+    private final UserRepository userRepo;
+    private final EventRepository eventRepo;
 
     @Autowired
-    public NewsMapper(UserService userService, EventService eventService) {
-        this.userService = userService;
-        this.eventService = eventService;
+    public NewsMapper(UserRepository ur, EventRepository er) {
+        this.userRepo = ur;
+        this.eventRepo = er;
     }
 
     /**
@@ -38,19 +40,14 @@ public class NewsMapper {
         news.setTitle(dto.getTitle());
         news.setContent(dto.getContent());
 
-        // Set relationships
-        User creator = userService.getUserById(dto.getCreatorId());
-        news.setCreatedBy(creator);
+        // Fetch entities directly
+        news.setCreatedBy(userRepo.findById(dto.getCreatorId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid creator ID")));
 
-        if (dto.getEventId() != null) {
-            Event event = eventService.getEventById(dto.getEventId());
-            news.setEvent(event);
-        }
+        news.setEvent(eventRepo.findById(dto.getEventId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid event ID")));
 
-        // Set timestamps
-        news.setCreatedAt(LocalDateTime.now());
-        news.setUpdatedAt(LocalDateTime.now());
-
+        // Timestamps handled by entity lifecycle
         return news;
     }
 
@@ -89,26 +86,18 @@ public class NewsMapper {
      * @param news  The existing News entity to update.
      */
     public void updateEntityFromDTO(NewsRegisterDTO dto, News news) {
-        if (dto.getTitle() != null) {
-            news.setTitle(dto.getTitle());
+        if (dto.getTitle() != null) news.setTitle(dto.getTitle());
+        if (dto.getContent() != null) news.setContent(dto.getContent());
+
+        // Update relationships
+        if (!news.getCreatedBy().getId().equals(dto.getCreatorId())) {
+            news.setCreatedBy(userRepo.findById(dto.getCreatorId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid creator ID")));
         }
 
-        if (dto.getContent() != null) {
-            news.setContent(dto.getContent());
+        if (!news.getEvent().getId().equals(dto.getEventId())) {
+            news.setEvent(eventRepo.findById(dto.getEventId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid event ID")));
         }
-
-        // Update relationships if provided
-        if (dto.getCreatorId() != null) {
-            User creator = userService.getUserById(dto.getCreatorId());
-            news.setCreatedBy(creator);
-        }
-
-        if (dto.getEventId() != null) {
-            Event event = eventService.getEventById(dto.getEventId());
-            news.setEvent(event);
-        }
-
-        // Update the updatedAt timestamp
-        news.setUpdatedAt(LocalDateTime.now());
     }
 }

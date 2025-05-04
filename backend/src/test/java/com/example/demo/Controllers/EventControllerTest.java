@@ -181,7 +181,7 @@ class EventControllerTest {
         when(eventService.addEvent(testEvent, "testuser")).thenReturn(testEvent);
         when(eventMapper.toResponseDTO(testEvent)).thenReturn(testResponseDTO);
 
-        ResponseEntity<?> response = eventController.addEvent(testRegisterDTO, authentication);
+        ResponseEntity<?> response = eventController.addEvent(testRegisterDTO);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(testResponseDTO, response.getBody());
@@ -194,7 +194,7 @@ class EventControllerTest {
         when(eventService.addEvent(testEvent, "testuser"))
                 .thenThrow(new DuplicateResourceException("Event exists"));
 
-        ResponseEntity<?> response = eventController.addEvent(testRegisterDTO, authentication);
+        ResponseEntity<?> response = eventController.addEvent(testRegisterDTO);
 
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
         assertTrue(response.getBody() instanceof ErrorResponse);
@@ -206,7 +206,7 @@ class EventControllerTest {
         when(eventService.addEvent(testEvent, "testuser"))
                 .thenThrow(new IllegalArgumentException("Invalid prices"));
 
-        ResponseEntity<?> response = eventController.addEvent(testRegisterDTO, authentication);
+        ResponseEntity<?> response = eventController.addEvent(testRegisterDTO);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertInstanceOf(ErrorResponse.class, response.getBody());
@@ -218,7 +218,7 @@ class EventControllerTest {
         when(eventService.addEvent(testEvent, "testuser"))
                 .thenThrow(new RuntimeException("Database error"));
 
-        ResponseEntity<?> response = eventController.addEvent(testRegisterDTO, authentication);
+        ResponseEntity<?> response = eventController.addEvent(testRegisterDTO);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertTrue(response.getBody() instanceof ErrorResponse);

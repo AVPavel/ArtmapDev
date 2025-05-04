@@ -10,6 +10,11 @@ import MessagingPage from "./pages/Messaging/MessagingPage";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import About from "./pages/About/About";
 import UserPreferences from "./pages/UserPreferences/UserPreferences";
+import UnderConstructionPage from "./pages/UnderConstructionPage/UnderConstructionPage";
+import ContactPage from "./pages/Contact/ContactPage";
+import FavoritePage from "./pages/Favorites/FavoritePage";
+import NewsPage from "./pages/News/NewsPage";
+import SingleNewsPage from "./pages/SingleNewsPage/SingleNewsPage";
 
 
 function App() {
@@ -34,18 +39,21 @@ function App() {
               <Route path="/messages" element={<MessagingPage />} />
 
               {/* Redirect Recommendations */}
-              <Route path="/recommendations" element={<PageNotReady />} />
+              <Route path="/recommendations" element={<UnderConstructionPage />} />
 
               {/* Redirect Favorites */}
-              <Route path="/favorites" element={<PageNotReady />} />
+              <Route path="/favorites" element={<FavoritePage />} />
 
               <Route path="/about" element={<About/>} />
 
               {/* Redirect Contact */}
-              <Route path="/contact" element={<PageNotReady />} />
+              <Route path="/contact" element={<ContactPage />} />
 
               {/* Redirect News */}
-              <Route path="/news" element={<PageNotReady />} />
+              <Route path="/news" element={<NewsPage />} />
+
+              {/* Single News Page */}
+              <Route path="/news/:id" element={<SingleNewsPage />} />
 
               {/* Unauthorized */}
               <Route path="/unauthorized" element={<UnauthorizedPage />} />

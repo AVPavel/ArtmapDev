@@ -10,6 +10,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +24,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.google.api.client.json.jackson2.JacksonFactory;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Map;
@@ -34,6 +38,9 @@ public class LoginController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService customUserDetailsService;
+
+    @Value("${google.client-id}")
+    private String googleClientId;
 
     @Autowired
     public LoginController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, CustomUserDetailsService customUserDetailsService) {
@@ -71,35 +78,53 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
     }
-    // LoginController.java
     @PostMapping("/google-login")
     public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> payload) {
         try {
             String token = payload.get("token");
             GoogleIdToken.Payload googleUser = verifyGoogleToken(token);
 
-            // Check if user exists in your system
+            if (!googleUser.getEmailVerified()) {
+                throw new RuntimeException("Email not verified by Google");
+            }
+
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(googleUser.getEmail());
 
             // If user doesn't exist, create new user
             if (userDetails == null) {
-                userDetails = createNewUserFromGoogle(googleUser);
+                userDetails = customUserDetailsService.createUserFromGoogle(googleUser);
             }
 
             String jwt = jwtTokenProvider.generateToken(userDetails.getUsername());
-            // ... rest of JWT response code ...
+            long expiration = jwtTokenProvider.getExpirationFromToken(jwt);
+            String role = userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .findFirst()
+                    .orElse("USER");
 
-            return ResponseEntity.ok(new AuthResponse(...));
+            return ResponseEntity.ok(new AuthResponse(
+                    jwt,
+                    userDetails.getUsername(),
+                    role,
+                    expiration
+            ));
+
         } catch (Exception e) {
-            // Handle errors
+            ErrorResponse errorResponse = new ErrorResponse(
+                    401,
+                    "Google authentication failed: " + e.getMessage(),
+                    "Google Authentication",
+                    LocalDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
     }
 
-    private GoogleIdToken.Payload verifyGoogleToken(String token) throws Exception {
+    private GoogleIdToken.Payload verifyGoogleToken(String token) throws GeneralSecurityException, IOException {
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
                 new NetHttpTransport(),
-                JacksonFactory.getDefaultInstance())
-                .setAudience(Collections.singletonList("YOUR_GOOGLE_CLIENT_ID"))
+                new JacksonFactory())
+                .setAudience(Collections.singletonList(googleClientId))
                 .build();
 
         GoogleIdToken idToken = verifier.verify(token);
@@ -107,12 +132,5 @@ public class LoginController {
             throw new RuntimeException("Invalid Google token");
         }
         return idToken.getPayload();
-    }
-    private UserDetails createNewUserFromGoogle(GoogleIdToken.Payload googleUser) {
-        User newUser = new User();
-        newUser.setEmail(googleUser.getEmail());
-        newUser.setUsername(googleUser.getEmail());
-        // Set other fields as needed
-        return customUserDetailsService.createUser(newUser);
     }
 }

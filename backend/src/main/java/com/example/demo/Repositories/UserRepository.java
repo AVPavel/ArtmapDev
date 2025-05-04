@@ -18,9 +18,6 @@ public interface UserRepository extends JpaRepository<User,Long>, JpaSpecificati
 
     Page<User> findByRole(User.Role role, Pageable pageable);
 
-    Optional<User> findByUsernameAndRole(String username, User.Role role);
-
-    Optional<User> findByIdAndRole(Long id, User.Role role);
 
     @Query("SELECT u from User u where LOWER(u.username) like LOWER(CONCAT('%',:searchTerm,'%'))" +
             "OR LOWER(u.email) like LOWER(CONCAT('%',:searchTerm,'%')) ")
@@ -28,4 +25,7 @@ public interface UserRepository extends JpaRepository<User,Long>, JpaSpecificati
 
     @Query("SELECT u from User u join u.eventsParticipating e where e.id = :eventId")
     Page<User> findUsersByParticipatingEvent(@Param("eventId") String eventId, Pageable pageable);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.eventsParticipating WHERE u.username = :username")
+    Optional<User> findByUsernameWithEventsParticipating(String username);
 }
