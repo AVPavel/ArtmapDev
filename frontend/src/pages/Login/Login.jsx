@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import styles from './Login.module.css';
 import { Link } from "react-router-dom";
-import GoogleLogo from '../../assets/images/icons/Google_logo.png';
-import {GoogleLogin, GoogleOAuthProvider} from "@react-oauth/google";
-
 
 const Login = () => {
     const [credentials, setCredentials] = useState({
@@ -20,33 +17,6 @@ const Login = () => {
             ...credentials,
             [name]: value,
         });
-    };
-    const handleGoogleLoginSuccess = async (credentialResponse) => {
-        try {
-            const response = await fetch('http://localhost:8080/api/users/google-login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ token: credentialResponse.credential }),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem('jwt', data.jwt);
-                setSuccess('Google login successful!');
-                // Optional: Redirect user
-            } else {
-                const errorData = await response.text();
-                setError(errorData || 'Google login failed');
-            }
-        } catch (err) {
-            setError('Something went wrong with Google login');
-        }
-    };
-
-    const handleGoogleLoginError = () => {
-        setError('Google login failed - either canceled by user or authentication error');
     };
 
     const handleSubmit = async (e) => {
@@ -83,27 +53,6 @@ const Login = () => {
                 <h1 className={styles.LoginTitle}>Log in to your account</h1>
                 <Link to="/register" className={styles.createAccount}>Are you new here? Create account</Link>
 
-                <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-                    // Add this import
-                    import { GoogleLogin } from '@react-oauth/google';
-
-                    // Replace your current Google button with:
-                    <GoogleLogin
-                        onSuccess={handleGoogleLoginSuccess}
-                        onError={handleGoogleLoginError}
-                        useOneTap
-                        render={({ onClick }) => (
-                            <button
-                                className={styles.googleButton}
-                                onClick={onClick}
-                            >
-                                <img src={GoogleLogo} alt="Google Logo" className={styles.googleLogo} />
-                                Log in with Google
-                            </button>
-                        )}
-                    />
-                </GoogleOAuthProvider>
-
                 <div className={styles.separator}>
                     <span className={styles.line}></span>
                     <span className={styles.orText}>or</span>
@@ -115,7 +64,7 @@ const Login = () => {
                         <input
                             type="text"
                             name="username"
-                            placeholder="username"
+                            placeholder="Username"
                             value={credentials.username}
                             onChange={handleChange}
                             required

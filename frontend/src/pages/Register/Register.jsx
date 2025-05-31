@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './Register.module.css';
-import { Link } from 'react-router-dom';
-import GoogleLogo from '../../assets/images/icons/Google_logo.png';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaSpinner } from 'react-icons/fa'; // Import spinner icon
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -13,6 +13,9 @@ const Register = () => {
 
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [currentStep, setCurrentStep] = useState('');
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -24,13 +27,19 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+        setSuccess('');
+        setIsLoading(true);
 
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match');
+            setIsLoading(false);
             return;
         }
 
         try {
+            // Step 1: Registration
+            setCurrentStep('Registering account...');
             const response = await fetch('http://localhost:8080/api/users/register', {
                 method: 'POST',
                 headers: {
@@ -43,23 +52,39 @@ const Register = () => {
                 }),
             });
 
-            if (response.ok) {
-                setSuccess('Registration successful! Please log in.');
-                setFormData({
-                    username: '',
-                    email: '',
-                    password: '',
-                    confirmPassword: '',
-                });
-                setError('');
-            } else {
+            if (!response.ok) {
                 const errorData = await response.json();
-                setError(errorData.message || 'Registration failed');
-                setSuccess('');
+                throw new Error(errorData.message || 'Registration failed');
             }
+
+            // Step 2: Automatic login
+            setCurrentStep('Logging you in...');
+            const loginResponse = await fetch('http://localhost:8080/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: formData.username,
+                    password: formData.password,
+                }),
+            });
+
+            if (!loginResponse.ok) {
+                throw new Error('Registration successful but automatic login failed');
+            }
+
+            // Step 3: Store token and redirect
+            const data = await loginResponse.json();
+            localStorage.setItem('jwt', data.jwt);
+
+            setSuccess('Registration successful! Redirecting to preferences...');
+            setTimeout(() => navigate('/user-preferences'), 1500);
+
         } catch (err) {
-            setError('Something went wrong. Please try again later.');
-            setSuccess('');
+            setError(err.message || 'Something went wrong. Please try again later.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -70,11 +95,6 @@ const Register = () => {
             <div className={styles.registerContainer}>
                 <h1 className={styles.registerTitle}>Create your account</h1>
                 <Link to="/login" className={styles.loginLink}>Already have an account? Log in</Link>
-
-                <button className={styles.googleButton}>
-                    <img src={GoogleLogo} alt="Google Logo" className={styles.googleLogo} />
-                    Sign up with Google
-                </button>
 
                 <div className={styles.separator}>
                     <span className={styles.line}></span>
@@ -91,6 +111,7 @@ const Register = () => {
                             value={formData.username}
                             onChange={handleChange}
                             required
+                            disabled={isLoading}
                         />
                     </div>
 
@@ -102,6 +123,7 @@ const Register = () => {
                             value={formData.email}
                             onChange={handleChange}
                             required
+                            disabled={isLoading}
                         />
                     </div>
 
@@ -113,6 +135,7 @@ const Register = () => {
                             value={formData.password}
                             onChange={handleChange}
                             required
+                            disabled={isLoading}
                         />
                     </div>
 
@@ -124,14 +147,32 @@ const Register = () => {
                             value={formData.confirmPassword}
                             onChange={handleChange}
                             required
+                            disabled={isLoading}
                         />
                     </div>
 
-                    <button type="submit" className={styles.registerButton}>
-                        Register
+                    <button
+                        type="submit"
+                        className={styles.registerButton}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <div className={styles.loadingContainer}>
+                                <FaSpinner className={styles.spinner} />
+                                {currentStep}
+                            </div>
+                        ) : 'Register'}
                     </button>
-                    <Link to="/user-preferences">UserPref? Log in</Link>
                 </form>
+
+                {isLoading && (
+                    <div className={styles.progressContainer}>
+                        <div className={styles.progressBar}>
+                            <div className={styles.progressFill}></div>
+                        </div>
+                        <div className={styles.progressText}>{currentStep}</div>
+                    </div>
+                )}
 
                 {error && <div className={styles.error}>{error}</div>}
                 {success && <div className={styles.success}>{success}</div>}

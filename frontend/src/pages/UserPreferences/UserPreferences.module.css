@@ -1,126 +1,211 @@
 .preferencesPage {
     display: flex;
     min-height: 100vh;
-    background-color: #f0f2f5;
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 2rem 1rem;
     justify-content: center;
-    align-items: center;
-    font-family: 'Roboto', sans-serif;
-    padding: 2rem;
-}
-
-.imagePlaceholder {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 100px;
-    height: 50px;
-    border: 1px dashed #ccc;
 }
 
 .preferencesContainer {
-    max-width: 800px;
     width: 100%;
-    padding: 40px;
+    max-width: 900px;
     background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    padding: 2rem;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.logoPlaceholder {
+    width: 120px;
+    height: 40px;
+    margin: 0 auto 1rem;
+    background-color: #f0f0f0;
+    border-radius: 4px;
 }
 
 .preferencesTitle {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-    text-align: center;
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
 }
 
 .description {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #666;
+    color: #6c757d;
+    font-size: 1.1rem;
+    line-height: 1.5;
 }
 
-.section {
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    border: 1px solid #eee;
-    border-radius: 8px;
-}
-
-.toggleGroup {
-    margin-bottom: 1.5rem;
-}
-
-.toggleGroup label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-}
-
-.toggleButtons {
+.preferencesForm {
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cardHeader h2 {
+    font-size: 1.3rem;
+    color: #2c3e50;
+    margin: 0;
+    font-weight: 600;
+}
+
+.toggleContainer {
+    display: flex;
+    gap: 0.5rem;
 }
 
 .toggleButton {
-    flex: 1;
-    padding: 0.8rem 1.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid #dee2e6;
+    border-radius: 20px;
     background-color: white;
+    color: #495057;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.toggleButton.active {
-    background-color: red;
-    color: white;
-    border-color: red;
-}
-
-.genreGroup {
-    margin-top: 1.5rem;
-}
-
-.genreGroup label {
-    display: block;
-    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
     font-weight: 500;
 }
 
-.checkboxGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
+.toggleButton.active {
+    background-color: #e74c3c;
+    color: white;
+    border-color: #e74c3c;
 }
 
-.checkboxLabel {
+.genreSelection {
+    margin-top: 1rem;
+}
+
+.genreSelection p {
+    color: #495057;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.genreGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.75rem;
+}
+
+.genreLabel {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    background-color: #f8f8f8;
-    border-radius: 4px;
+    padding: 0.6rem 0.8rem;
+    background-color: #f8f9fa;
+    border-radius: 6px;
     cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
 }
 
-.checkboxLabel input {
-    margin: 0;
-    cursor: pointer;
+.genreLabel:hover {
+    background-color: #e9ecef;
+}
+
+.genreLabel input {
+    margin-right: 0.6rem;
+    accent-color: #e74c3c;
+}
+
+.genreName {
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+.genreLabel input:checked + .genreName {
+    font-weight: 600;
+    color: #2c3e50;
 }
 
 .submitButton {
-    background-color: red;
+    background-color: #e74c3c;
     color: white;
     border: none;
-    border-radius: 25px;
-    padding: 14px 30px;
-    font-size: 1.2rem;
+    border-radius: 30px;
+    padding: 1rem;
+    font-size: 1.1rem;
     cursor: pointer;
     width: 100%;
-    margin-top: 2rem;
-    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .submitButton:hover {
-    background-color: #cc0000;
+    background-color: #c0392b;
+    transform: translateY(-1px);
+}
+
+.submitButton:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .preferencesContainer {
+        padding: 1.5rem;
+    }
+
+    .genreGrid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .toggleContainer {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .toggleButton {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .preferencesTitle {
+        font-size: 1.5rem;
+    }
+
+    .genreGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .cardHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
 }

@@ -30,7 +30,12 @@ function App() {
               {/* Register Page */}
               <Route path = "/register" element={<Register />}/>
               <Route path = "/forgot-password" element={<ForgotPassword />}/>
-              <Route path = "/user-preferences" element={<UserPreferences />}/>
+              <Route
+                  path="/user-preferences"
+                  element={
+                      <ProtectedRoute element={<UserPreferences />} />
+                  }
+              />
 
               {/* 404 Page Not Found */}
               <Route path="*" element={<h1>404 Not Found</h1>} />

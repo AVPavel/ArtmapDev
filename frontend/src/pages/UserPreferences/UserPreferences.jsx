@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from './UserPreferences.module.css';
-import GoogleLogo from '../../assets/images/icons/Google_logo.png';
 
 const UserPreferences = () => {
     const [preferences, setPreferences] = useState({
@@ -13,25 +12,25 @@ const UserPreferences = () => {
         alteEvenimente: []
     });
 
-    const musicGenres = ['Rock', 'Pop', 'Jazz', 'Electro', 'Hip-Hop', 'Manele', 'Metal', 'Muzică clasică', 'Latino', 'Folk', 'Reggaeton', 'Muzica populară'];
+    const musicGenres = ['Rock', 'Pop', 'Jazz', 'Electro', 'Hip-Hop', 'Manele', 'Metal', 'Muzică clasică', 'Latino', 'Folk', 'Reggaeton', 'Muzică populară'];
     const theaterGenres = ['Dramă', 'Comedie', 'Musical', 'Monodramă', 'Satiră', 'Experimental'];
-    const festivalTypes = ['Muzică', 'Film', 'Artă vizuală', 'Cultură', 'Gastronomie', 'Artă stradala'];
+    const festivalTypes = ['Muzică', 'Film', 'Artă vizuală', 'Cultură', 'Gastronomie', 'Artă stradală'];
     const otherEvents = [
-        'Workshop-uri (Design, programare, fotografie, etc.)',
+        'Workshop-uri',
         'Conferințe',
         'Evenimente de familie',
         'Târguri și expoziții',
-        'Sport și Activități fizice',
+        'Sport și activități fizice',
         'Evenimente culinare',
         'Proiecții de filme',
-        'Evenimente culturale și tradiționale'
+        'Evenimente culturale'
     ];
 
     const handleToggle = (field) => {
         setPreferences(prev => ({
             ...prev,
             [field]: !prev[field],
-            [`${field}Genres`]: [] // Reset genres when toggling
+            [`${field}Genres`]: []
         }));
     };
 
@@ -46,26 +45,25 @@ const UserPreferences = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission here
         console.log(preferences);
     };
 
     return (
         <div className={styles.preferencesPage}>
-            <div className={styles.imagePlaceholder}></div>
-
             <div className={styles.preferencesContainer}>
-                <h1 className={styles.preferencesTitle}>Preferințe Evenimente</h1>
-                <p className={styles.description}>
-                    Selectează tipurile de evenimente care te interesează:
-                </p>
+                <div className={styles.header}>
+                    <div className={styles.logoPlaceholder}></div>
+                    <h1 className={styles.preferencesTitle}>Preferințe Evenimente</h1>
+                    <p className={styles.description}>
+                        Selectează tipurile de evenimente care te interesează pentru a primi recomandări personalizate.
+                    </p>
+                </div>
 
-                <form onSubmit={handleSubmit}>
-                    {/* Concerts Section */}
-                    <div className={styles.section}>
-                        <div className={styles.toggleGroup}>
-                            <label>Te atrag concertele?</label>
-                            <div className={styles.toggleButtons}>
+                <form onSubmit={handleSubmit} className={styles.preferencesForm}>
+                    <div className={styles.card}>
+                        <div className={styles.cardHeader}>
+                            <h2>Concerte</h2>
+                            <div className={styles.toggleContainer}>
                                 <button
                                     type="button"
                                     className={`${styles.toggleButton} ${preferences.concerte ? styles.active : ''}`}
@@ -84,17 +82,17 @@ const UserPreferences = () => {
                         </div>
 
                         {preferences.concerte && (
-                            <div className={styles.genreGroup}>
-                                <label>Genuri muzicale preferate:</label>
-                                <div className={styles.checkboxGrid}>
+                            <div className={styles.genreSelection}>
+                                <p>Selectează genurile muzicale preferate:</p>
+                                <div className={styles.genreGrid}>
                                     {musicGenres.map(genre => (
-                                        <label key={genre} className={styles.checkboxLabel}>
+                                        <label key={genre} className={styles.genreLabel}>
                                             <input
                                                 type="checkbox"
                                                 checked={preferences.concertGenres.includes(genre)}
                                                 onChange={() => handleGenreChange(genre, 'concertGenres')}
                                             />
-                                            {genre}
+                                            <span className={styles.genreName}>{genre}</span>
                                         </label>
                                     ))}
                                 </div>
@@ -102,11 +100,10 @@ const UserPreferences = () => {
                         )}
                     </div>
 
-                    {/* Theater Section */}
-                    <div className={styles.section}>
-                        <div className={styles.toggleGroup}>
-                            <label>Îți place teatrul?</label>
-                            <div className={styles.toggleButtons}>
+                    <div className={styles.card}>
+                        <div className={styles.cardHeader}>
+                            <h2>Teatru</h2>
+                            <div className={styles.toggleContainer}>
                                 <button
                                     type="button"
                                     className={`${styles.toggleButton} ${preferences.teatru ? styles.active : ''}`}
@@ -125,17 +122,17 @@ const UserPreferences = () => {
                         </div>
 
                         {preferences.teatru && (
-                            <div className={styles.genreGroup}>
-                                <label>Genuri de teatru preferate:</label>
-                                <div className={styles.checkboxGrid}>
+                            <div className={styles.genreSelection}>
+                                <p>Selectează genurile de teatru preferate:</p>
+                                <div className={styles.genreGrid}>
                                     {theaterGenres.map(genre => (
-                                        <label key={genre} className={styles.checkboxLabel}>
+                                        <label key={genre} className={styles.genreLabel}>
                                             <input
                                                 type="checkbox"
                                                 checked={preferences.teatruGenres.includes(genre)}
                                                 onChange={() => handleGenreChange(genre, 'teatruGenres')}
                                             />
-                                            {genre}
+                                            <span className={styles.genreName}>{genre}</span>
                                         </label>
                                     ))}
                                 </div>
@@ -143,11 +140,10 @@ const UserPreferences = () => {
                         )}
                     </div>
 
-                    {/* Festivals Section */}
-                    <div className={styles.section}>
-                        <div className={styles.toggleGroup}>
-                            <label>Îți plac festivalurile?</label>
-                            <div className={styles.toggleButtons}>
+                    <div className={styles.card}>
+                        <div className={styles.cardHeader}>
+                            <h2>Festivaluri</h2>
+                            <div className={styles.toggleContainer}>
                                 <button
                                     type="button"
                                     className={`${styles.toggleButton} ${preferences.festivaluri ? styles.active : ''}`}
@@ -166,17 +162,17 @@ const UserPreferences = () => {
                         </div>
 
                         {preferences.festivaluri && (
-                            <div className={styles.genreGroup}>
-                                <label>Tipuri de festivaluri preferate:</label>
-                                <div className={styles.checkboxGrid}>
+                            <div className={styles.genreSelection}>
+                                <p>Selectează tipurile de festivaluri preferate:</p>
+                                <div className={styles.genreGrid}>
                                     {festivalTypes.map(genre => (
-                                        <label key={genre} className={styles.checkboxLabel}>
+                                        <label key={genre} className={styles.genreLabel}>
                                             <input
                                                 type="checkbox"
                                                 checked={preferences.festivalGenres.includes(genre)}
                                                 onChange={() => handleGenreChange(genre, 'festivalGenres')}
                                             />
-                                            {genre}
+                                            <span className={styles.genreName}>{genre}</span>
                                         </label>
                                     ))}
                                 </div>
@@ -184,19 +180,21 @@ const UserPreferences = () => {
                         )}
                     </div>
 
-                    {/* Other Events */}
-                    <div className={styles.section}>
-                        <div className={styles.genreGroup}>
-                            <label>Alte evenimente preferate:</label>
-                            <div className={styles.checkboxGrid}>
+                    <div className={styles.card}>
+                        <div className={styles.cardHeader}>
+                            <h2>Alte Evenimente</h2>
+                        </div>
+                        <div className={styles.genreSelection}>
+                            <p>Selectează alte tipuri de evenimente care te interesează:</p>
+                            <div className={styles.genreGrid}>
                                 {otherEvents.map(event => (
-                                    <label key={event} className={styles.checkboxLabel}>
+                                    <label key={event} className={styles.genreLabel}>
                                         <input
                                             type="checkbox"
                                             checked={preferences.alteEvenimente.includes(event)}
                                             onChange={() => handleGenreChange(event, 'alteEvenimente')}
                                         />
-                                        {event}
+                                        <span className={styles.genreName}>{event}</span>
                                     </label>
                                 ))}
                             </div>
