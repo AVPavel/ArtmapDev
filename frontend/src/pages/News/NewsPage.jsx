@@ -21,7 +21,8 @@ const NewsPage = () => {
                 const mappedNews = response.data.map(newsItem => ({
                     id: newsItem.id, // Include the news ID
                     title: newsItem.title,
-                    details: newsItem.content ? newsItem.content.substring(0, 100) + '...' : 'No content available.' // Show a preview of the news details or a default message
+                    details: newsItem.content ? newsItem.content.substring(0, 100) + '...' : 'No content available.', // Show a preview of the news details or a default message
+                    photo: newsItem.photo // Include the photo
                 }));
 
                 setNews(mappedNews);
@@ -56,6 +57,7 @@ const NewsPage = () => {
                             title={newsItem.title}
                             details={newsItem.details}
                             newsId={newsItem.id}
+                            photo={newsItem.photo} // Pass the photo to NewsPageElement
                         />
                     ))}
                 </div>

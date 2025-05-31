@@ -19,6 +19,7 @@ public class NewsResponseDTO {
     private Long creatorId;
     private String creatorUsername;
     private Long eventId;
+    private byte[] photo;
     private String eventTitle;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

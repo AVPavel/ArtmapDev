@@ -57,20 +57,21 @@
   box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
 }
 
-/* Map.module.css */
-.info-window {
-  padding: 12px;
-  min-width: 200px;
+.infoWindow {
+  width: 450px;
+  height: auto;
+  padding: 10px;
+  overflow: hidden;
 }
 
-.info-window h3 {
-  margin: 0 0 8px 0;
-  font-size: 16px;
+.infoWindow h3 {
+  margin-top: 0;
+  color: #2c3e50;
 }
 
-.info-window a {
-  color: #007bff;
-  text-decoration: none;
+.infoWindow a {
   display: inline-block;
-  margin-top: 8px;
+  margin-top: 10px;
+  color: #3498db;
+  text-decoration: none;
 }

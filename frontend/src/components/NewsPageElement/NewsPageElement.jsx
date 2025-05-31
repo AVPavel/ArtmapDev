@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './NewsPageElement.module.css';
 
-const NewsPageElement = ({ title, details, newsId }) => {
+const NewsPageElement = ({ title, details, newsId, photo }) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -12,8 +12,21 @@ const NewsPageElement = ({ title, details, newsId }) => {
 
     return (
         <div className={styles.newsContainer} onClick={handleClick}>
-            <h2 className={styles.newsTitle}>{title}</h2>
-            <p className={styles.newsDetails}>{details}</p>
+            <div className={styles.newsImageContainer}>
+                {photo ? (
+                    <img
+                        src={`data:image/jpeg;base64,${photo}`}
+                        alt={title}
+                        className={styles.newsImage}
+                    />
+                ) : (
+                    <div className={styles.noImage}>No photo available</div>
+                )}
+            </div>
+            <div className={styles.newsTextContainer}>
+                <h2 className={styles.newsTitle}>{title}</h2>
+                <p className={styles.newsDetails}>{details}</p>
+            </div>
         </div>
     );
 };

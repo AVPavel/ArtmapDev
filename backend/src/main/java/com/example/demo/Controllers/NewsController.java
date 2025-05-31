@@ -13,7 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,15 +36,28 @@ public class NewsController {
      * Creates a new News entity.
      *
      * @param dto The DTO containing news data.
+     * @param photo The photo file.
      * @return The created News as a response DTO.
      */
     @PostMapping("/add")
-    public ResponseEntity<?> createNews(@Valid @RequestBody NewsRegisterDTO dto) {
+    public ResponseEntity<?> createNews(@Valid @RequestBody NewsRegisterDTO dto, @RequestParam("photo") MultipartFile photo) {
         try {
+            if (photo != null && !photo.isEmpty()) {
+                dto.setPhoto(photo.getBytes());
+            }
             News createdNews = newsService.createNews(dto);
             NewsResponseDTO responseDTO = newsMapper.toResponseDTO(createdNews);
             LOGGER.info("createNews - News created: {}", responseDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        } catch (IOException e) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.BAD_REQUEST.value(),
+                    "Failed to process photo",
+                    "News",
+                    LocalDateTime.now()
+            );
+            LOGGER.error("createNews - photo processing failed: {}", errorResponse);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (IllegalArgumentException e) {
             ErrorResponse errorResponse = new ErrorResponse(
                     HttpStatus.BAD_REQUEST.value(),
@@ -124,20 +139,39 @@ public class NewsController {
         }
     }
 
-    /**
-     * Updates an existing News entity.
-     *
-     * @param id  The ID of the News entity to update.
-     * @param dto The DTO containing updated news data.
-     * @return The updated News as a response DTO.
-     */
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateNews(@PathVariable Long id, @Valid @RequestBody NewsRegisterDTO dto) {
+    public ResponseEntity<?> updateNews(
+            @PathVariable Long id,
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("creatorId") Long creatorId,
+            @RequestParam("eventId") Long eventId,
+            @RequestParam("photo") MultipartFile photo) {
+
         try {
+            NewsRegisterDTO dto = new NewsRegisterDTO();
+            dto.setTitle(title);
+            dto.setContent(content);
+            dto.setCreatorId(creatorId);
+            dto.setEventId(eventId);
+
+            if (photo != null && !photo.isEmpty()) {
+                dto.setPhoto(photo.getBytes());
+            }
+
             News updatedNews = newsService.updateNews(id, dto);
             NewsResponseDTO responseDTO = newsMapper.toResponseDTO(updatedNews);
             LOGGER.info("updateNews - News updated: {}", responseDTO);
             return ResponseEntity.ok(responseDTO);
+        } catch (IOException e) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.BAD_REQUEST.value(),
+                    "Failed to process photo",
+                    "News",
+                    LocalDateTime.now()
+            );
+            LOGGER.error("updateNews - photo processing failed: {}", errorResponse);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (NewsNotFoundException e) {
             ErrorResponse errorResponse = new ErrorResponse(
                     HttpStatus.NOT_FOUND.value(),

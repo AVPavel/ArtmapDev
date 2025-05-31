@@ -7,12 +7,8 @@ import com.example.demo.DTOs.News.NewsRegisterDTO;
 import com.example.demo.DTOs.News.NewsResponseDTO;
 import com.example.demo.Repositories.EventRepository;
 import com.example.demo.Repositories.UserRepository;
-import com.example.demo.Services.DBServices.EventService;
-import com.example.demo.Services.DBServices.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 /**
  * Mapper service for converting between News entities and DTOs.
@@ -39,6 +35,7 @@ public class NewsMapper {
         News news = new News();
         news.setTitle(dto.getTitle());
         news.setContent(dto.getContent());
+        news.setPhoto(dto.getPhoto()); // Set the photo
 
         // Fetch entities directly
         news.setCreatedBy(userRepo.findById(dto.getCreatorId())
@@ -62,6 +59,7 @@ public class NewsMapper {
         dto.setId(news.getId());
         dto.setTitle(news.getTitle());
         dto.setContent(news.getContent());
+        dto.setPhoto(news.getPhoto()); // Set the photo
 
         // Set relationships
         dto.setCreatorId(news.getCreatedBy().getId());
@@ -88,6 +86,7 @@ public class NewsMapper {
     public void updateEntityFromDTO(NewsRegisterDTO dto, News news) {
         if (dto.getTitle() != null) news.setTitle(dto.getTitle());
         if (dto.getContent() != null) news.setContent(dto.getContent());
+        if (dto.getPhoto() != null) news.setPhoto(dto.getPhoto()); // Update the photo
 
         // Update relationships
         if (!news.getCreatedBy().getId().equals(dto.getCreatorId())) {

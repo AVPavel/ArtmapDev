@@ -73,7 +73,15 @@ const SingleNewsPage = () => {
             <div className={styles.container}>
                 <h1 className={styles.title}>{currentNews.title}</h1>
                 <div className={styles.content}>
-                    <img src={currentNews.image} alt={currentNews.title} className={styles.image} />
+                    {currentNews.photo ? (
+                        <img
+                            src={`data:image/jpeg;base64,${currentNews.photo}`}
+                            alt={currentNews.title}
+                            className={styles.image}
+                        />
+                    ) : (
+                        <div>No photo available</div>
+                    )}
                     <p className={styles.details}>{currentNews.content}</p>
                 </div>
                 <div className={styles.navigation}>

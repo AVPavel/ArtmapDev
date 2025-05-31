@@ -24,6 +24,10 @@ public class News {
     @Lob
     private String content;
 
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] photo; // New field for photo
+
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private User createdBy;

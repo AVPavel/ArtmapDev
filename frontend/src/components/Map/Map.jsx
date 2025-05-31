@@ -140,7 +140,41 @@ const Map = () => {
             map.addObject(marker);
         }
     };
+    useEffect(() => {
+        if (!map || !ui) return;
 
+        const fetchEvents = async () => {
+            try {
+                const response = await fetch(`/api/events/search?searchTerm=&page=0&size=50`);
+                if (!response.ok) throw new Error('Failed to fetch events');
+                const data = await response.json();
+
+                data.content.forEach(event => {
+                    if (event.latitude && event.longitude) {
+                        const coords = {
+                            lat: event.latitude.valueOf(),
+                            lng: event.longitude.valueOf()
+                        };
+                        const content = `
+                            <div class="${styles.infoWindow}">
+                                <h3>${event.title}</h3>
+                                <p>${event.description}</p>
+                                <p><strong>Location:</strong> ${event.location}</p>
+                                <p><strong>Date:</strong> ${new Date(event.date).toLocaleDateString()}</p>
+                                <a href="/events/${event.id}" target="_blank">View Details</a>
+                            </div>
+                        `;
+                        const marker = createInteractiveMarker(coords, content, map, ui);
+                        map.addObject(marker);
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
+        };
+
+        fetchEvents();
+    }, [map, ui]);
     return (
         <div className={styles.mapContainer}>
             <input
