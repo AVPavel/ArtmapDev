@@ -24,7 +24,7 @@ const MessageInput = ({ onSend }) => {  // Receive onSend prop
                 className={styles.inputField}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}  // Add Enter key support
+                onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
             />
             <button className={styles.sendButton} onClick={handleSend}>

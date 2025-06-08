@@ -47,7 +47,7 @@
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 4px;
-    padding: 12px 20px; /* Slightly more padding */
+    padding: 12px 20px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -56,11 +56,16 @@
     cursor: pointer;
 }
 
-.googleLogo {
-    width: 20px;
-    height: 20px;
-    background-size: contain;
-    background-repeat: no-repeat;
+.logoContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.logo {
+    height: 60px;
+    width: auto;
+    max-width: 200px;
 }
 
 .separator {

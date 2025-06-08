@@ -20,7 +20,6 @@ const MessagingPage = () => {
     const currentUser = localStorage.getItem("username");
     const stompClientRef = useRef(null);
 
-    // Fetch groups from backend
     useEffect(() => {
         const fetchGroups = async () => {
             try {
@@ -30,11 +29,10 @@ const MessagingPage = () => {
                     }
                 });
 
-                // Transform groups to include event ID
                 const transformedGroups = response.data.map(group => ({
                     id: group.id,
-                    groupName: group.name,  // Renamed for clarity
-                    eventId: group.eventId, // This is the CRUCIAL link to messages
+                    groupName: group.name,
+                    eventId: group.eventId,
                     eventName: group.eventName
                 }));
 
@@ -50,7 +48,6 @@ const MessagingPage = () => {
         fetchGroups();
     }, []);
 
-    // WebSocket connection
     useEffect(() => {
         const socket = new SockJS('http://localhost:8080/ws');
         const stompClient = new Client({
@@ -77,15 +74,13 @@ const MessagingPage = () => {
         };
     }, []);
 
-    // Message subscription (CHANGED TO USE EVENT ID)
     useEffect(() => {
         if (!selectedGroup || !stompClientRef.current) return;
 
         setMessages([]);
 
-        // Subscribe to the EVENT'S message topic
         const subscription = stompClientRef.current.subscribe(
-            `/topic/events/${selectedGroup.eventId}`, // Now using event ID
+            `/topic/events/${selectedGroup.eventId}`,
             (message) => {
                 const msgBody = JSON.parse(message.body);
                 console.log("Received WebSocket message:", msgBody);
@@ -103,11 +98,10 @@ const MessagingPage = () => {
             }
         );
 
-        // Fetch message history for the EVENT (CHANGED TO USE EVENT ID)
         const fetchMessages = async () => {
             try {
                 const response = await fetch(
-                    `http://localhost:8080/api/messages/${selectedGroup.eventId}`, // Direct event ID
+                    `http://localhost:8080/api/messages/${selectedGroup.eventId}`,
                     {
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem("jwt")}`
@@ -128,7 +122,7 @@ const MessagingPage = () => {
         return () => subscription.unsubscribe();
     }, [selectedGroup]);
 
-    const handleGroupClick = (group) => { // Renamed from handleEventClick
+    const handleGroupClick = (group) => {
         setSelectedGroup(group);
     };
 
@@ -192,7 +186,7 @@ const MessagingPage = () => {
 
                         console.log('Final STOMP Frame:', stompFrame);
 
-                        // Send using the STOMP client's publish method
+
                         stompClientRef.current.publish({
                             destination: '/app/chat.sendMessage',
                             headers: {

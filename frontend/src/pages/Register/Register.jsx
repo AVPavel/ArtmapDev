@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './Register.module.css';
+import Logo from "../../assets/images/HomePage/LOGO_artmap.svg";
 import { Link, useNavigate } from 'react-router-dom';
 import { FaSpinner } from 'react-icons/fa'; // Import spinner icon
 
@@ -93,6 +94,10 @@ const Register = () => {
             <div className={styles.imagePlaceholder}></div>
 
             <div className={styles.registerContainer}>
+                <div className={styles.logoContainer}>
+                    <img src={Logo} alt="Artmap Logo" className={styles.logo} />
+                </div>
+
                 <h1 className={styles.registerTitle}>Create your account</h1>
                 <Link to="/login" className={styles.loginLink}>Already have an account? Log in</Link>
 

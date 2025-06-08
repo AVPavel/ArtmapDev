@@ -1,0 +1,2 @@
+id,address,cheapest_ticket,created_at,date,description,latitude,location,longitude,ticket_prices,title,updated_at,category_id,created_by,recommendation_score
+"1,""123 Main St, Cityville"",75.00,""2025-03-07 19:04:05.900321"",""2025-08-08 17:00:00.000000"",""A thrilling rock concert featuring popular bands."",37.774900,""Downtown Arena"",-122.419400,""{""prices"": {""VIP"": 150.0, ""General"": 75.0}}"",""Live Rock Concert v4"",""2025-03-07 19:04:05.900321"",1,4",,,,,,,,,,,,,,0

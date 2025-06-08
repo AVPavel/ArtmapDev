@@ -16,7 +16,6 @@ public class AuthHandshakeInterceptor implements HandshakeInterceptor {
             WebSocketHandler wsHandler,
             Map<String, Object> attributes
     ) throws Exception {
-        // Capture SecurityContext from the HTTP handshake thread
         if (request instanceof ServletServerHttpRequest) {
             ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
             attributes.put("user", SecurityContextHolder.getContext().getAuthentication());

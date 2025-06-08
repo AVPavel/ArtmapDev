@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './Login.module.css';
+import Logo from "../../assets/images/HomePage/LOGO_artmap.svg";
 import { Link } from "react-router-dom";
 
 const Login = () => {
@@ -50,6 +51,10 @@ const Login = () => {
             <div className={styles.imagePlaceholder}></div>
 
             <div className={styles.loginContainer}>
+                <div className={styles.logoContainer}>
+                    <img src={Logo} alt="Artmap Logo" className={styles.logo} />
+                </div>
+
                 <h1 className={styles.LoginTitle}>Log in to your account</h1>
                 <Link to="/register" className={styles.createAccount}>Are you new here? Create account</Link>
 

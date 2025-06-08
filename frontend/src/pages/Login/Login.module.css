@@ -55,11 +55,16 @@
     cursor: pointer;
 }
 
-.googleLogo {
-    width: 20px;
-    height: 20px;
-    background-size: contain;
-    background-repeat: no-repeat;
+.logoContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.logo {
+    height: 60px;
+    width: auto;
+    max-width: 200px;
 }
 
 .separator {

@@ -23,14 +23,25 @@
     padding-bottom: 1rem;
     border-bottom: 1px solid #eee;
 }
-
-.logoPlaceholder {
-    width: 120px;
-    height: 40px;
-    margin: 0 auto 1rem;
-    background-color: #f0f0f0;
-    border-radius: 4px;
+.logoContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
 }
+
+.logo {
+    height: 60px;
+    width: auto;
+    max-width: 200px;
+}
+
+@media (max-width: 480px) {
+    .logo {
+        height: 50px;
+    }
+}
+
 
 .preferencesTitle {
     font-size: 2rem;

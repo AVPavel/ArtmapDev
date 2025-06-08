@@ -114,37 +114,28 @@ class EventControllerTest {
     // searchEvents Tests
     @Test
     void searchEvents_WithValidParameters_ReturnsPageOfEvents() {
-        // Arrange
-        // Create a full test category object
         Category testCategory = new Category(1L, "CONCERT");
         testCategory.setDescription("Music concerts");
         testCategory.setHasGenre(true);
 
-        // Create a page of events with the test event
         Page<Event> page = new PageImpl<>(List.of(testEvent));
 
-        // Mock event service to return the page of events
         when(eventService.searchEvents("test", testCategory, 0, 50, "date", "asc"))
                 .thenReturn(page);
 
-        // Mock mapper to return the response DTO
         when(eventMapper.toResponseDTO(testEvent)).thenReturn(testResponseDTO);
 
-        // Act
         ResponseEntity<?> response = eventController.searchEvents(
-                "test", testCategory, 0, 50, "date", "asc"  // Pass the full Category object
+                "test", testCategory, 0, 50, "date", "asc"
         );
 
-        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode(), "Status code should be OK");
         assertNotNull(response.getBody(), "Response body should not be null");
         assertTrue(response.getBody() instanceof Page, "Response body should be a Page");
 
-        // Verify service interactions
         verify(eventService).searchEvents("test", testCategory, 0, 50, "date", "asc");
         verify(eventMapper).toResponseDTO(testEvent);
 
-        // Verify no more interactions
         verifyNoMoreInteractions(eventService, eventMapper);
     }
 

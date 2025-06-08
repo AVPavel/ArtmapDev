@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styles from './UserPreferences.module.css';
+import Logo from "../../assets/images/HomePage/LOGO_artmap.svg";
+
 
 const UserPreferences = () => {
     const [preferences, setPreferences] = useState({
@@ -52,7 +54,9 @@ const UserPreferences = () => {
         <div className={styles.preferencesPage}>
             <div className={styles.preferencesContainer}>
                 <div className={styles.header}>
-                    <div className={styles.logoPlaceholder}></div>
+                    <div className={styles.logoContainer}>
+                        <img src={Logo} alt="Artmap Logo" className={styles.logo} />
+                    </div>
                     <h1 className={styles.preferencesTitle}>Preferințe Evenimente</h1>
                     <p className={styles.description}>
                         Selectează tipurile de evenimente care te interesează pentru a primi recomandări personalizate.
