@@ -55,3 +55,19 @@
   border-color: #999999;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+input[type="text"] {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #cccccc;
+  background-color: #00235b;
+  color: white;
+  font-size: 1.2rem;
+  min-width: 300px;
+  min-height: 40px;
+  font-weight: 300;
+}
+
+input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}

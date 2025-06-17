@@ -19,14 +19,6 @@ const NavbarAndPresentation = () => {
     return (
         <div className={styles.navbarPresentation}>
             <nav className={styles.navbar}>
-                {/* Mobile Menu Button */}
-                <button
-                    className={styles.mobileMenuButton}
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    aria-label="Toggle menu"
-                >
-                    {isMobileMenuOpen ? "✕" : "☰"}
-                </button>
 
                 {/* Left Nav Section */}
                 <div className={styles.navSection}>
