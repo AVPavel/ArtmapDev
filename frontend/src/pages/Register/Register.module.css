@@ -17,9 +17,9 @@
 }
 
 .registerContainer {
-    max-width: 450px; /* Wider container */
+    max-width: 450px;
     width: 100%;
-    padding: 60px 40px; /* More padding for height */
+    padding: 60px 40px;
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -27,11 +27,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem; /* More vertical spacing */
+    gap: 2rem;
 }
 
 .registerTitle {
-    font-size: 1.75rem; /* Slightly larger title */
+    font-size: 1.75rem;
     margin: 0;
     text-align: center;
 }
@@ -40,7 +40,7 @@
     color: red;
     text-decoration: underline;
     font-size: 0.875rem;
-    margin-top: -1rem; /* Adjust spacing */
+    margin-top: -1rem;
 }
 
 .googleButton {
@@ -88,16 +88,16 @@
 
 .inputGroup {
     width: 100%;
-    margin-bottom: 1.5rem; /* More vertical spacing */
+    margin-bottom: 1.5rem;
 }
 
 .inputGroup input {
     width: 100%;
-    padding: 14px; /* Slightly more padding for larger input fields */
+    padding: 14px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 1.1rem; /* Slightly larger font */
-    background-color: lightgray; /* Light gray background */
+    font-size: 1.1rem;
+    background-color: lightgray;
 }
 
 .registerButton {
@@ -105,10 +105,10 @@
     color: white;
     border: none;
     border-radius: 25px;
-    padding: 14px 30px; /* Less wide, slightly more height */
-    font-size: 1.2rem; /* Slightly larger font */
+    padding: 14px 30px;
+    font-size: 1.2rem;
     cursor: pointer;
-    width: 80%; /* Less wide */
+    width: 80%;
 }
 
 .error {

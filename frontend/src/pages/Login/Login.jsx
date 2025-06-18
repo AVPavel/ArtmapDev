@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styles from './Login.module.css';
 import Logo from "../../assets/images/HomePage/LOGO_artmap.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
+import { FaSpinner } from 'react-icons/fa'; // Import spinner icon
 
 const Login = () => {
     const [credentials, setCredentials] = useState({
@@ -10,10 +11,12 @@ const Login = () => {
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [isLoading, setIsLoading] = useState(false); // New loading state
+    const [currentStep, setCurrentStep] = useState(''); // New step message state
+    const navigate = useNavigate(); // Initialize useNavigate
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        console.log(name, value);
         setCredentials({
             ...credentials,
             [name]: value,
@@ -24,7 +27,9 @@ const Login = () => {
         e.preventDefault();
         setError('');
         setSuccess('');
-        console.log(credentials)
+        setIsLoading(true); // Start loading
+        setCurrentStep('Logging you in...'); // Set initial step message
+
         try {
             const response = await fetch('http://localhost:8080/api/users/login', {
                 method: 'POST',
@@ -33,16 +38,22 @@ const Login = () => {
                 },
                 body: JSON.stringify(credentials),
             });
+
             if (response.ok) {
                 const data = await response.json();
-                localStorage.setItem('jwt', data.jwt);
-                setSuccess('Login successful!');
+                localStorage.setItem('jwt', data.jwt); // Store the JWT token
+
+                setSuccess('Login successful! Redirecting to home page...');
+                setCurrentStep('Login successful!'); // Update step for success
+                setTimeout(() => navigate('/'), 1500); // Redirect to home page after 1.5 seconds
             } else {
-                const errorData = await response.text();
-                setError(errorData || 'Login failed');
+                const errorData = await response.json(); // Assume JSON error response
+                setError(errorData.message || 'Login failed. Please check your credentials.');
             }
         } catch (err) {
-            setError('Something went wrong. Please try again.');
+            setError(err.message || 'Something went wrong. Please try again later.');
+        } finally {
+            setIsLoading(false); // End loading
         }
     };
 
@@ -73,6 +84,7 @@ const Login = () => {
                             value={credentials.username}
                             onChange={handleChange}
                             required
+                            disabled={isLoading} // Disable input when loading
                         />
                     </div>
 
@@ -84,17 +96,39 @@ const Login = () => {
                             value={credentials.password}
                             onChange={handleChange}
                             required
+                            disabled={isLoading} // Disable input when loading
                         />
                     </div>
-                    <button type="submit" className={styles.signInButton} onClick={handleSubmit}>
-                        Sign in
+
+                    <button
+                        type="submit"
+                        className={styles.signInButton}
+                        disabled={isLoading} // Disable button when loading
+                    >
+                        {isLoading ? (
+                            <div className={styles.loadingContainer}>
+                                <FaSpinner className={styles.spinner} />
+                                {currentStep}
+                            </div>
+                        ) : 'Sign in'}
                     </button>
+
                     <div className={styles.options}>
                         <input type="checkbox" id="rememberMe" />
                         <label htmlFor="rememberMe">Remember me</label>
                         <Link to="/forgot-password" className={styles.forgotPassword}>Forgot password?</Link>
                     </div>
                 </form>
+
+                {isLoading && (
+                    <div className={styles.progressContainer}>
+                        <div className={styles.progressText}>{currentStep}</div>
+                    </div>
+                )}
+
+                {/* Error and Success messages */}
+                {error && <div className={styles.error}>{error}</div>}
+                {success && <div className={styles.success}>{success}</div>}
             </div>
         </div>
     );

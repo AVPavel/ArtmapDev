@@ -1,0 +1,147 @@
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: #495057 !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.addEventPage {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 2rem 1rem;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.addEventContainer {
+    width: 100%;
+    max-width: 800px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.logoContainer {
+    margin-bottom: 1.5rem;
+}
+
+.logo {
+    height: 50px;
+}
+
+.title {
+    font-size: 2rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.description {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+.eventForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.card {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #495057;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.input, .textarea, .select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #495057;
+    background-color: #fdfdff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 1.2rem;
+}
+
+.input:focus, .textarea:focus, .select:focus {
+    outline: none;
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
+}
+
+.textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.submitButton {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 1rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    text-transform: uppercase;
+}
+
+.submitButton:hover {
+    background-color: #c0392b;
+}
+
+.errorMessage, .successMessage {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+}
+
+.errorMessage {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.successMessage {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    .addEventContainer {
+        padding: 1.5rem;
+    }
+}

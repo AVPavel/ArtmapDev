@@ -15,6 +15,7 @@ import ContactPage from "./pages/Contact/ContactPage";
 import FavoritePage from "./pages/Favorites/FavoritePage";
 import NewsPage from "./pages/News/NewsPage";
 import SingleNewsPage from "./pages/SingleNewsPage/SingleNewsPage";
+import AddEvent from "./components/AddEvent/AddEvent";
 
 
 function App() {
@@ -45,6 +46,8 @@ function App() {
 
               {/* Redirect Recommendations */}
               <Route path="/recommendations" element={<UnderConstructionPage />} />
+
+              <Route path="/add-event" element={<AddEvent />} />
 
               {/* Redirect Favorites */}
               <Route path="/favorites" element={<FavoritePage />} />

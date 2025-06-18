@@ -151,3 +151,47 @@
         padding: 7px 25px;
     }
 }
+
+.profileIcon {
+    width: 40px;
+    height: 40px;
+    background-color: #e3e6ec;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #00235b;
+}
+.profileMenuContainer {
+    position: relative;
+}
+.profileDropdown {
+     position: absolute;
+     top: 55px;
+     right: 0;
+     background-color: white;
+     border-radius: 8px;
+     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+     width: 200px;
+     z-index: 1000;
+     overflow: hidden;
+     border: 1px solid #eee;
+ }
+.dropdownItem {
+    padding: 12px 20px;
+    color: #00235b;
+    font-size: 1rem;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dropdownItem:hover {
+    background-color: #f0f8ff;
+    color: #00235b;
+}

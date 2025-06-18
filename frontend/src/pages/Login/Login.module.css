@@ -27,7 +27,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3rem; /* More vertical spacing */
+    gap: 2rem; /* Adjusted gap to match register for consistency */
 }
 
 .LoginTitle {
@@ -40,6 +40,7 @@
     color: red;
     text-decoration: underline;
     font-size: 0.875rem;
+    margin-top: -1rem; /* Adjust spacing to match register */
 }
 
 .googleButton {
@@ -108,18 +109,29 @@
     font-size: 1.2rem; /* Slightly larger font */
     cursor: pointer;
     width: 80%; /* Less wide */
+    display: flex; /* Added for spinner alignment */
+    justify-content: center; /* Center content */
+    align-items: center; /* Center content vertically */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.signInButton:disabled {
+    background-color: #d1d1d1; /* Lighter grey when disabled */
+    cursor: not-allowed;
 }
 
 .options {
     display: flex;
     align-items: center;
     justify-content: space-around; /* Horizontally space out the options */
-    gap: 3rem; /* More horizontal spacing */
+    gap: 2rem; /* Adjusted gap for consistency */
     font-size: 0.875rem;
+    width: 100%; /* Ensure it takes full width */
+    margin-top: 1rem; /* Added margin-top */
 }
 
 .options input {
-    margin-top: 2rem;
+    /* Removed margin-top: 2rem; to align with label */
     accent-color: gray; /* Gray checkbox */
 }
 
@@ -128,4 +140,45 @@
     color: #007bff;
     text-decoration: underline;
     cursor: pointer;
+}
+
+/* New styles for loading indicator */
+.loadingContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.progressContainer {
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+.progressText {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.error {
+    color: red;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.success {
+    color: green;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    text-align: center;
 }
