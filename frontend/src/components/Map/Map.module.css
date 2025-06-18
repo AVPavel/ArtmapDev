@@ -57,21 +57,102 @@
   box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
 }
 
-.infoWindow {
-  width: 450px;
-  height: auto;
-  padding: 10px;
+/* Elimină stilurile vechi pentru .infoWindow și adaugă-le pe acestea */
+
+/* Containerul principal al cardului de informații */
+.infoCard {
+  width: 350px; /* O lățime mai compactă */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  border-radius: 12px;
+  overflow: hidden; /* Asigură că tot conținutul respectă colțurile rotunjite */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  background-color: #fff;
+  /* Elimină padding-ul de aici pentru a controla fiecare secțiune individual */
+}
+
+/* Antetul cardului */
+.infoCardHeader {
+  padding: 16px 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.infoCardHeader h3 {
+  margin: 0;
+  color: #2c3e50; /* O culoare închisă, profesională */
+  font-size: 1.25rem; /* Mărime mai proeminentă */
+  font-weight: 600;
+}
+
+/* Corpul cardului, unde stau descrierea și detaliile */
+.infoCardBody {
+  padding: 16px 20px;
+}
+
+/* Stil pentru descrierea evenimentului */
+.infoCardDescription {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #6c757d; /* O culoare gri pentru text secundar */
+  margin-top: 0;
+  margin-bottom: 20px;
+
+  /* Truc pentru a limita textul la 3 rânduri și a adăuga "..." */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.infoWindow h3 {
-  margin-top: 0;
-  color: #2c3e50;
+/* Lista cu detalii (locație, dată, preț) */
+.infoCardDetails {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Spațiu între elementele listei */
 }
 
-.infoWindow a {
+.infoCardDetails li {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+/* Stil pentru iconițe */
+.infoCardDetails li i {
+  color: #e74c3c; /* Culoarea primară a temei tale */
+  font-size: 1rem;
+  width: 25px; /* Aliniază textul indiferent de lățimea iconiței */
+  text-align: center;
+  margin-right: 8px;
+}
+
+/* Footer-ul cu butonul de acțiune */
+.infoCardFooter {
+  padding: 16px 20px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  text-align: center;
+}
+
+.infoCardFooter a {
   display: inline-block;
-  margin-top: 10px;
-  color: #3498db;
+  width: 100%;
+  padding: 12px;
+  background-color: #e74c3c;
+  color: white !important; /* Suprascrie culoarea default a link-ului */
   text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.infoCardFooter a:hover {
+  background-color: #c0392b; /* O nuanță mai închisă la hover */
+  transform: translateY(-1px);
 }

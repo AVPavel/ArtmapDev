@@ -1,51 +1,72 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./Navbar.module.css";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Logo from "../../../assets/images/HomePage/wrg42.png";
 import { jwtDecode } from 'jwt-decode';
+
 const NavbarAndPresentation = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [userRole, setUserRole] = useState(null);
+    const [userRole, setUserRole] = useState(null); // Va stoca rolul utilizatorului (ex: 'ADMIN', 'USER')
+
     const navigate = useNavigate();
+    const location = useLocation(); // Obține obiectul de locație curent
 
     const dropdownRef = useRef(null);
+
+    // Efect pentru verificarea și setarea rolului utilizatorului
+    // Va rula la montarea componentei și ori de câte ori calea URL-ului se schimbă
     useEffect(() => {
-        const verifyAndDecodeToken = async () => {
+        const verifyAndSetUserRole = async () => {
             const token = localStorage.getItem("jwt");
+
             if (!token) {
+                // Dacă nu există token, utilizatorul nu este autentificat și nu are un rol
+                setIsAuthenticated(false);
                 setUserRole(null);
                 return;
             }
 
             try {
-                const response = await fetch('http://localhost:8080/api/verifyJWT/isValid', {
+                // Pasul 1: Verifică validitatea token-ului cu backend-ul
+                const verifyResponse = await fetch('http://localhost:8080/api/verifyJWT/isValid', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(token)
+                    body: JSON.stringify(token) // Trimite token-ul ca șir de caractere
                 });
 
-                if (response.ok) {
+                if (verifyResponse.ok) {
                     setIsAuthenticated(true);
+
+                    // MODIFICARE AICI: Simplifică verificarea rolului bazată pe username-ul din JWT
                     const decodedToken = jwtDecode(token);
-                    setUserRole(decodedToken.role);
+                    const username = decodedToken.sub; // Asumăm că 'sub' conține username-ul
+
+                    if (username === 'pavel' || username === 'admin') {
+                        setUserRole('ADMIN');
+                    } else {
+                        setUserRole('USER');
+                    }
+
                 } else {
-                   localStorage.removeItem("jwt");
+                    // Dacă token-ul nu este valid conform backend-ului, șterge-l și resetează stările
+                    localStorage.removeItem("jwt");
                     setIsAuthenticated(false);
                     setUserRole(null);
                 }
             } catch (error) {
-                console.error("Eroare la verificarea sau decodificarea token-ului:", error);
+                console.error("Eroare la verificarea token-ului sau la decodificare:", error);
+                // În caz de eroare la orice pas, asumă că nu este autentificat
                 setIsAuthenticated(false);
                 setUserRole(null);
             }
         };
-        verifyAndDecodeToken();
-    }, []);
 
+        verifyAndSetUserRole();
+    }, [location.pathname]); // Dependența pe location.pathname va forța re-rularea la schimbările de rută
+
+    // Efect pentru închiderea dropdown-ului la clic în afara acestuia
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -58,14 +79,16 @@ const NavbarAndPresentation = () => {
         };
     }, []);
 
+    // Funcție pentru delogare
     const handleLogout = () => {
-        localStorage.removeItem("jwt");
-        setIsAuthenticated(false);
-        setIsDropdownOpen(false);
-        setUserRole(null);
-        window.location.reload();
+        localStorage.removeItem("jwt"); // Șterge token-ul
+        setIsAuthenticated(false); // Setează starea de neautentificat
+        setIsDropdownOpen(false); // Închide dropdown-ul
+        setUserRole(null); // Resetează rolul utilizatorului
+        window.location.reload(); // Reîmprospătează pagina pentru a asigura resetarea completă a stării
     };
 
+    // Efect pentru închiderea meniului mobil la clic în afara acestuia (dacă este necesar)
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (isMobileMenuOpen && !e.target.closest(`.${styles.navbar}`)) {
@@ -73,13 +96,20 @@ const NavbarAndPresentation = () => {
             }
         };
 
-        document.addEventListener("click", handleClickOutside);
-        return () => document.removeEventListener("click", handleClickOutside);
-    }, [isMobileMenuOpen]);
+        // Adaugă listener-ul doar dacă meniul mobil este deschis
+        if (isMobileMenuOpen) {
+            document.addEventListener("click", handleClickOutside);
+        }
+
+        // Curățare: elimină listener-ul la demontarea componentei sau la închiderea meniului
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, [isMobileMenuOpen]); // Dependența pe isMobileMenuOpen
+
     return (
         <div className={styles.navbarPresentation}>
             <nav className={styles.navbar}>
-
                 <div className={styles.navSection}>
                     <ul className={`${styles.navLinks} ${isMobileMenuOpen ? styles.mobileOpen : ""}`}>
                         <li>
@@ -118,9 +148,11 @@ const NavbarAndPresentation = () => {
                                         className={styles.profileIcon}
                                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                                     >
+                                        {/* Poți adăuga o iconiță de utilizator aici, ex: <FaUserCircle /> */}
                                     </div>
                                     {isDropdownOpen && (
                                         <div className={styles.profileDropdown}>
+                                            {/* Afișează butonul "Adaugă eveniment" doar dacă rolul este 'ADMIN' */}
                                             {userRole === 'ADMIN' && (
                                                 <Link to="/add-event" className={styles.dropdownItem} onClick={() => setIsDropdownOpen(false)}>
                                                     Adaugă eveniment

@@ -167,17 +167,17 @@
     position: relative;
 }
 .profileDropdown {
-     position: absolute;
-     top: 55px;
-     right: 0;
-     background-color: white;
-     border-radius: 8px;
-     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-     width: 200px;
-     z-index: 1000;
-     overflow: hidden;
-     border: 1px solid #eee;
- }
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 250px; /* Increased width */
+    z-index: 1000;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
 .dropdownItem {
     padding: 12px 20px;
     color: #00235b;
@@ -186,9 +186,7 @@
     display: block;
     text-decoration: none;
     transition: background-color 0.2s ease, color 0.2s ease;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* Removed white-space, overflow, and text-overflow for better display */
 }
 
 .dropdownItem:hover {

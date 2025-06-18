@@ -2,8 +2,10 @@
 .input:-webkit-autofill:hover,
 .input:-webkit-autofill:focus,
 .input:-webkit-autofill:active {
+    /* Force background to white and text color */
     -webkit-box-shadow: 0 0 0 30px white inset !important;
     -webkit-text-fill-color: #495057 !important;
+    background-color: white !important; /* Explicitly set to white */
     transition: background-color 5000s ease-in-out 0s;
 }
 
@@ -24,6 +26,8 @@
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     padding: 2.5rem;
+    margin-top: 2rem; /* Added margin-top for top spacing */
+    margin-bottom: 2rem; /* Added margin-bottom for bottom spacing */
 }
 
 .header {
@@ -55,13 +59,14 @@
 .eventForm {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.5rem; /* Consistent gap between form cards/sections */
 }
 
 .card {
     background-color: #fff;
     padding: 1rem;
     border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Slightly more prominent card shadow */
 }
 
 .label {
@@ -79,9 +84,9 @@
     border-radius: 6px;
     font-size: 1rem;
     color: #495057;
-    background-color: #fdfdff;
+    background-color: white;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    margin-bottom: 1.2rem;
+    /* margin-bottom is now controlled by .grid > div */
 }
 
 .input:focus, .textarea:focus, .select:focus {
@@ -98,8 +103,30 @@
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: 1.5rem; /* Consistent gap between grid items */
 }
+
+/* Ensure labels and inputs are grouped cleanly within grid cells */
+.grid > div {
+    display: flex; /* Added flex to structure label and input vertically */
+    flex-direction: column; /* Stack label above input */
+    margin-bottom: 1.2rem; /* Apply margin-bottom here for consistent spacing between grid rows */
+}
+
+/* Remove margin-bottom from the last element in a grid row to avoid extra space */
+.grid > div:last-child {
+    margin-bottom: 0;
+}
+/* For the last column in a grid row on desktop */
+@media (min-width: 769px) {
+    .grid > div:nth-last-child(2) { /* Adjusted for 2 columns: select the second to last div in the row */
+        margin-bottom: 0;
+    }
+    .grid > div:nth-last-child(1) { /* Select the last div in the row */
+        margin-bottom: 0;
+    }
+}
+
 
 .submitButton {
     background-color: #e74c3c;
@@ -114,10 +141,18 @@
     font-weight: 600;
     transition: background-color 0.2s ease;
     text-transform: uppercase;
+    display: flex; /* Added for spinner alignment */
+    justify-content: center; /* Center content */
+    align-items: center; /* Center content vertically */
 }
 
 .submitButton:hover {
     background-color: #c0392b;
+}
+
+.submitButton:disabled {
+    background-color: #d1d1d1;
+    cursor: not-allowed;
 }
 
 .errorMessage, .successMessage {
@@ -137,11 +172,42 @@
     color: #155724;
 }
 
+/* New styles for loading indicator */
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* For full page loading */
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.loadingContainerButton {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+    font-size: 1.5rem; /* Size for spinner inside button */
+    color: white; /* Color for spinner inside button */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 @media (max-width: 768px) {
     .grid {
         grid-template-columns: 1fr;
     }
     .addEventContainer {
         padding: 1.5rem;
+    }
+    .grid > div:last-child {
+        margin-bottom: 0;
     }
 }

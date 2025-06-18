@@ -39,10 +39,17 @@ public class UserPreferencesController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addPreference(@RequestBody PreferenceRequest request,
-                                           Authentication authentication) {
+    public ResponseEntity<?> addPreference(@RequestBody PreferenceRequest request) {
         try {
-            // Get authenticated user
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println("Received PreferenceRequest: CategoryId=" + request.getCategoryId() + ", GenreId=" + request.getGenreId());
+            if (authentication != null && authentication.isAuthenticated()) {
+                System.out.println("Authenticated User: " + authentication.getName());
+            } else {
+                System.out.println("User not authenticated for this request.");
+            }
+
+
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             User user = userRepository.findByUsername(userDetails.getUsername())
                     .orElseThrow(() -> new RuntimeException("User not found"));
@@ -55,6 +62,7 @@ public class UserPreferencesController {
 
             return ResponseEntity.ok(preference);
         } catch (RuntimeException e) {
+            System.err.println("Error adding preference: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
@@ -62,14 +70,12 @@ public class UserPreferencesController {
     @GetMapping("/my-preferences")
     public ResponseEntity<?> getUserPreferences() {
         try {
-            // Get authentication from Security Context (set by JwtAuthenticationFilter)
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (authentication == null || !authentication.isAuthenticated()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not authenticated");
             }
 
-            // Extract username from principal
             String username = authentication.getName();
 
             User user = userRepository.findByUsername(username)

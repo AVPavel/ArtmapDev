@@ -202,15 +202,34 @@ const Map = ({ filters }) => {
 
 
                         const content = `
-                            <div class="${styles.infoWindow}">
-                                <h3>${event.title || 'No title'}</h3>
-                                <p>${event.description || 'No description'}</p>
-                                <p><strong>Location:</strong> ${event.location || 'Unknown'}</p>
-                                <p><strong>Date:</strong> ${event.date ? new Date(event.date).toLocaleDateString() : 'Unknown'}</p>
-                                <p><strong>Price:</strong> ${event.price ? `${event.price} RON` : 'Free'}</p>
-                                <a href="/events/${event.id}" target="_blank">View Details</a>
-                            </div>
-                        `;
+    <div class="${styles.infoCard}">
+        <div class="${styles.infoCardHeader}">
+            <h3>${event.title || 'Fără titlu'}</h3>
+        </div>
+        <div class="${styles.infoCardBody}">
+            <p class="${styles.infoCardDescription}">
+                ${event.description || 'Fără descriere.'}
+            </p>
+            <ul class="${styles.infoCardDetails}">
+                <li>
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>${event.location || 'Locație necunoscută'}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>${event.date ? new Date(event.date).toLocaleDateString('ro-RO') : 'Dată necunoscută'}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-tag"></i>
+                    <span>${event.price > 0 ? `${event.price} RON` : 'Gratuit'}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="${styles.infoCardFooter}">
+            <a href="/events/${event.id}" target="_blank">Vezi detalii</a>
+        </div>
+    </div>
+`;
 
                         const marker = createInteractiveMarker(coords, content, map, ui, iconUrl);
                         map.addObject(marker);
