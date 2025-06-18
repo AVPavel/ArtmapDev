@@ -80,7 +80,6 @@ const NavbarAndPresentation = () => {
         <div className={styles.navbarPresentation}>
             <nav className={styles.navbar}>
 
-                {/* Left Nav Section */}
                 <div className={styles.navSection}>
                     <ul className={`${styles.navLinks} ${isMobileMenuOpen ? styles.mobileOpen : ""}`}>
                         <li>
@@ -95,14 +94,12 @@ const NavbarAndPresentation = () => {
                     </ul>
                 </div>
 
-                {/* Logo */}
                 <div className={styles.logoContainer}>
                     <Link to="/">
                         <img src={Logo} alt="logo" className={styles.logoImage}/>
                     </Link>
                 </div>
 
-                {/* Right Nav Section */}
                 <div className={styles.navSection}>
                     <ul className={`${styles.navLinks} ${isMobileMenuOpen ? styles.mobileOpen : ""}`}>
                         <li>

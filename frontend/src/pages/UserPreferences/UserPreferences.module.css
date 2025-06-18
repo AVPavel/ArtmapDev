@@ -5,6 +5,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 2rem 1rem;
     justify-content: center;
+    align-items: flex-start; /* Align to top for longer content */
 }
 
 .preferencesContainer {
@@ -15,6 +16,8 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     overflow: hidden;
     padding: 2rem;
+    margin-top: 2rem; /* Added margin-top to give space from top */
+    margin-bottom: 2rem; /* Added margin-bottom to give space from bottom */
 }
 
 .header {
@@ -109,6 +112,11 @@
     font-weight: 500;
 }
 
+.toggleButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .toggleButton.active {
     background-color: #e74c3c;
     color: white;
@@ -151,6 +159,11 @@
     accent-color: #e74c3c;
 }
 
+.genreLabel input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .genreName {
     font-size: 0.9rem;
     color: #495057;
@@ -175,6 +188,9 @@
     transition: background-color 0.2s ease, transform 0.1s ease;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    display: flex; /* Added for spinner alignment */
+    justify-content: center; /* Center content */
+    align-items: center; /* Center content vertically */
 }
 
 .submitButton:hover {
@@ -184,6 +200,66 @@
 
 .submitButton:active {
     transform: translateY(0);
+}
+
+.submitButton:disabled {
+    background-color: #d1d1d1;
+    cursor: not-allowed;
+}
+
+/* New styles for loading indicator and messages */
+.loadingContainer {
+    display: flex;
+    flex-direction: column; /* Stack spinner and text */
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+    font-size: 2rem; /* Larger spinner */
+    color: #e74c3c;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.progressContainer {
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+.progressText {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.error {
+    color: #e74c3c; /* Red color for errors */
+    background-color: #fce7e7; /* Light red background */
+    border: 1px solid #e74c3c;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.success {
+    color: #28a745; /* Green color for success */
+    background-color: #e7f5ed; /* Light green background */
+    border: 1px solid #28a745;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    text-align: center;
 }
 
 @media (max-width: 768px) {
