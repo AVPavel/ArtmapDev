@@ -34,14 +34,12 @@ public class EventRegisterDTO {
     private BigDecimal latitude;
     private BigDecimal longitude;
 
-    @NotNull(message = "Organizer ID is mandatory")
     private Long organizerId;
 
     @NotNull(message = "Category ID is mandatory")
     private Long categoryId;
 
-    @NotBlank(message = "Genre is mandatory")
-    private Set<Long> genreId;
+    private Set<Long> genreIds ;
 
     private String ticketPrices; // JSON string
 

@@ -42,7 +42,7 @@ public class EventMapper {
         event.setDate(eventRegisterDTO.getDate());
 
         // Retrieve and set genres by IDs
-        Set<Genre> genres = eventRegisterDTO.getGenreId().stream()
+        Set<Genre> genres = eventRegisterDTO.getGenreIds().stream()
                 .map(genreService::getGenreById)
                 .collect(Collectors.toSet());
         event.setGenres(genres);
@@ -157,8 +157,8 @@ public class EventMapper {
             event.setDate(eventRegisterDTO.getDate());
         }
 
-        if (eventRegisterDTO.getGenreId() != null && !eventRegisterDTO.getGenreId().isEmpty()) {
-            Set<Genre> genres = eventRegisterDTO.getGenreId().stream()
+        if (eventRegisterDTO.getGenreIds() != null && !eventRegisterDTO.getGenreIds().isEmpty()) {
+            Set<Genre> genres = eventRegisterDTO.getGenreIds().stream()
                     .map(genreService::getGenreById)
                     .collect(Collectors.toSet());
             event.setGenres(genres);

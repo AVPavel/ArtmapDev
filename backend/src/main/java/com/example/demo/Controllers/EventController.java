@@ -2,12 +2,14 @@ package com.example.demo.Controllers;
 
 import com.example.demo.DBModels.Category;
 import com.example.demo.DBModels.Event;
+import com.example.demo.DBModels.User;
 import com.example.demo.DTOs.Events.EventRegisterDTO;
 import com.example.demo.DTOs.Events.EventResponseDTO;
 import com.example.demo.Exceptions.Models.DuplicateResourceException;
 import com.example.demo.Exceptions.Models.EventNotFoundException;
 import com.example.demo.Models.ErrorResponse;
 import com.example.demo.Services.DBServices.EventService;
+import com.example.demo.Services.DBServices.UserService;
 import com.example.demo.Services.Mappers.EventMapper;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -29,11 +31,14 @@ public class EventController {
     private final static Logger LOGGER = LoggerFactory.getLogger(EventController.class);
     private final EventService eventService;
     private final EventMapper eventMapper;
+    private final UserService userService;
+
 
     @Autowired
-    public EventController(EventService eventService, EventMapper eventMapper) {
+    public EventController(EventService eventService, EventMapper eventMapper, UserService userService) {
         this.eventService = eventService;
         this.eventMapper = eventMapper;
+        this.userService = userService;
     }
     @GetMapping("{id}")
     public ResponseEntity<?> getEventById(@PathVariable Long id) {
@@ -104,9 +109,13 @@ public class EventController {
     @PostMapping("/add")
     public ResponseEntity<?> addEvent(@RequestBody EventRegisterDTO eventRegisterDTO) {
         try {
+
             var authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String username = userDetails.getUsername();
+
+            User currentUser = userService.getUserByUsername(username);
+            eventRegisterDTO.setOrganizerId(currentUser.getId());
 
             Event event = eventMapper.toEntity(eventRegisterDTO);
             Event savedEvent = eventService.addEvent(event, username);
@@ -126,7 +135,7 @@ public class EventController {
             ErrorResponse errorResponse = new ErrorResponse(
                     HttpStatus.BAD_REQUEST.value(),
                     e.getMessage(),
-                    "Prices of mapWrapper",
+                    "Invalid Request Data",
                     LocalDateTime.now()
             );
             LOGGER.error("addEvent - request not valid:{}", errorResponse);
@@ -136,13 +145,14 @@ public class EventController {
             ErrorResponse errorResponse = new ErrorResponse(
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     e.getMessage(),
-                    "Error",
+                    "Unexpected Error",
                     LocalDateTime.now()
             );
             LOGGER.error("addEvent - unexpected error:{}", errorResponse);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateEvent(

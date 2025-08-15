@@ -3,45 +3,46 @@ import styles from "./Navbar.module.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Logo from "../../../assets/images/HomePage/wrg42.png";
 import { jwtDecode } from 'jwt-decode';
+import { FaUserCircle } from 'react-icons/fa';
 
 const NavbarAndPresentation = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [userRole, setUserRole] = useState(null); // Va stoca rolul utilizatorului (ex: 'ADMIN', 'USER')
+    const [userRole, setUserRole] = useState(null); // Stores user role (e.g., 'ADMIN', 'USER')
+    const [profileImageUrl, setProfileImageUrl] = useState(null); // NEW: State for profile image URL
 
     const navigate = useNavigate();
-    const location = useLocation(); // Obține obiectul de locație curent
+    const location = useLocation(); // Get the current location object
 
     const dropdownRef = useRef(null);
 
-    // Efect pentru verificarea și setarea rolului utilizatorului
-    // Va rula la montarea componentei și ori de câte ori calea URL-ului se schimbă
     useEffect(() => {
         const verifyAndSetUserRole = async () => {
             const token = localStorage.getItem("jwt");
 
             if (!token) {
-                // Dacă nu există token, utilizatorul nu este autentificat și nu are un rol
+                // If no token, user is not authenticated and has no role
                 setIsAuthenticated(false);
                 setUserRole(null);
+                setProfileImageUrl(null); // Reset profile image on logout/no token
                 return;
             }
 
             try {
-                // Pasul 1: Verifică validitatea token-ului cu backend-ul
+                // Step 1: Verify token validity with the backend
                 const verifyResponse = await fetch('http://localhost:8080/api/verifyJWT/isValid', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(token) // Trimite token-ul ca șir de caractere
+                    body: JSON.stringify(token) // Send token as a string
                 });
 
                 if (verifyResponse.ok) {
                     setIsAuthenticated(true);
 
-                    // MODIFICARE AICI: Simplifică verificarea rolului bazată pe username-ul din JWT
+                    // MODIFICATION HERE: Simplify role verification based on username from JWT
                     const decodedToken = jwtDecode(token);
-                    const username = decodedToken.sub; // Asumăm că 'sub' conține username-ul
+                    const username = decodedToken.sub; // Assume 'sub' contains the username
 
                     if (username === 'pavel' || username === 'admin') {
                         setUserRole('ADMIN');
@@ -49,24 +50,37 @@ const NavbarAndPresentation = () => {
                         setUserRole('USER');
                     }
 
+                    // Example: Set a profile image based on username.
+                    // In a real application, you would fetch this URL from the backend
+                    // after user authentication, e.g., from the user profile object.
+                    if (username === 'pavel') {
+                        setProfileImageUrl('https://placehold.co/40x40/FF6347/ffffff?text=P'); // Placeholder image for 'pavel'
+                    } else if (username === 'admin') {
+                        setProfileImageUrl('https://placehold.co/40x40/00CED1/ffffff?text=A'); // Placeholder image for 'admin'
+                    } else {
+                        setProfileImageUrl(null); // Use fallback if no specific image
+                    }
+
                 } else {
-                    // Dacă token-ul nu este valid conform backend-ului, șterge-l și resetează stările
+                    // If token is invalid according to backend, remove it and reset states
                     localStorage.removeItem("jwt");
                     setIsAuthenticated(false);
                     setUserRole(null);
+                    setProfileImageUrl(null); // Reset profile image
                 }
             } catch (error) {
-                console.error("Eroare la verificarea token-ului sau la decodificare:", error);
-                // În caz de eroare la orice pas, asumă că nu este autentificat
+                console.error("Error verifying or decoding token:", error);
+                // In case of error at any step, assume not authenticated
                 setIsAuthenticated(false);
                 setUserRole(null);
+                setProfileImageUrl(null);
             }
         };
 
         verifyAndSetUserRole();
-    }, [location.pathname]); // Dependența pe location.pathname va forța re-rularea la schimbările de rută
+    }, [location.pathname]); // Dependency on location.pathname will force re-run on route changes
 
-    // Efect pentru închiderea dropdown-ului la clic în afara acestuia
+    // Effect for closing the dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -79,16 +93,17 @@ const NavbarAndPresentation = () => {
         };
     }, []);
 
-    // Funcție pentru delogare
+    // Logout function
     const handleLogout = () => {
-        localStorage.removeItem("jwt"); // Șterge token-ul
-        setIsAuthenticated(false); // Setează starea de neautentificat
-        setIsDropdownOpen(false); // Închide dropdown-ul
-        setUserRole(null); // Resetează rolul utilizatorului
-        window.location.reload(); // Reîmprospătează pagina pentru a asigura resetarea completă a stării
+        localStorage.removeItem("jwt"); // Remove token
+        setIsAuthenticated(false); // Set unauthenticated state
+        setIsDropdownOpen(false); // Close dropdown
+        setUserRole(null); // Reset user role
+        setProfileImageUrl(null); // Reset profile image on logout
+        window.location.reload(); // Reload page to ensure full state reset
     };
 
-    // Efect pentru închiderea meniului mobil la clic în afara acestuia (dacă este necesar)
+    // Effect for closing mobile menu on outside click (if necessary)
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (isMobileMenuOpen && !e.target.closest(`.${styles.navbar}`)) {
@@ -96,16 +111,16 @@ const NavbarAndPresentation = () => {
             }
         };
 
-        // Adaugă listener-ul doar dacă meniul mobil este deschis
+        // Add listener only if mobile menu is open
         if (isMobileMenuOpen) {
             document.addEventListener("click", handleClickOutside);
         }
 
-        // Curățare: elimină listener-ul la demontarea componentei sau la închiderea meniului
+        // Cleanup: remove listener on component unmount or menu close
         return () => {
             document.removeEventListener("click", handleClickOutside);
         };
-    }, [isMobileMenuOpen]); // Dependența pe isMobileMenuOpen
+    }, [isMobileMenuOpen]); // Dependency on isMobileMenuOpen
 
     return (
         <div className={styles.navbarPresentation}>
@@ -148,11 +163,19 @@ const NavbarAndPresentation = () => {
                                         className={styles.profileIcon}
                                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                                     >
-                                        {/* Poți adăuga o iconiță de utilizator aici, ex: <FaUserCircle /> */}
+                                        {profileImageUrl ? (
+                                            <img
+                                                src={profileImageUrl}
+                                                alt="Imagine Profil"
+                                                className={styles.profileImage} // New class for profile image
+                                                onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/40x40/cccccc/000000?text=?" }} // Fallback on error
+                                            />
+                                        ) : (
+                                            <FaUserCircle className={styles.fallbackProfileIcon} /> // Generic fallback icon
+                                        )}
                                     </div>
                                     {isDropdownOpen && (
                                         <div className={styles.profileDropdown}>
-                                            {/* Afișează butonul "Adaugă eveniment" doar dacă rolul este 'ADMIN' */}
                                             {userRole === 'ADMIN' && (
                                                 <Link to="/add-event" className={styles.dropdownItem} onClick={() => setIsDropdownOpen(false)}>
                                                     Adaugă eveniment

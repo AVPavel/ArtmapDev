@@ -31,7 +31,6 @@ public class UserService {
         this.eventRepository = eventRepository;
     }
 
-    //Inregistrare utilizator
     @Transactional
     public User registerUser(User user) {
         //Caut un user similar deja existent
